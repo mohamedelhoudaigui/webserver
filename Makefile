@@ -16,7 +16,7 @@ all: $(NAME)
 $(NAME): $(OBJS)
 	$(CC) $(CFLAGS) -o $(NAME) $(OBJS)
 
-%.o: %.cpp $(HAED)
+%.o: %.cpp $(HEAD)
 	echo "Building $<..."
 	$(CC) $(CFLAGS) -c $< -o $@
 

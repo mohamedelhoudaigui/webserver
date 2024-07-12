@@ -1,24 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   parse_req.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/09 00:22:32 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/07/12 02:08:07 by mel-houd         ###   ########.fr       */
+/*   Created: 2024/07/11 22:01:42 by mel-houd          #+#    #+#             */
+/*   Updated: 2024/07/11 22:17:23 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "sock.hpp"
+#include <vector>
+#include <string>
+#include <iostream>
+#include <map>
 
-int main()
+class	Parse_req
 {
-
-	// change ip address
-	int	ports[2] = {4545, 4546};
-    Sock server(ports, "10.13.11.5");
-	server.init_server();
-	server.close_sock();
-    return 0;
-}
+	public:
+		Parse_req(std::string req);
+		void	split_args();
+		~Parse_req();
+	private:
+		std::string	req;
+};
