@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 01:11:53 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/07/12 02:06:56 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/07/12 03:46:49 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,7 @@ void	Sock::recv_data(int client_sock)
 	else
 	{
 		buffer[valread] = '\0';
+		this->requests.push_back(std::string(buffer));
 		std::cout << "Client " << client_sock << " :\n" << buffer << "\n";
 	}
 }

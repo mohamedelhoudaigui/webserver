@@ -1,7 +1,7 @@
 # Source files
-SRCS = main.cpp sock.cpp
+SRCS = main.cpp sock.cpp parse_config.cpp
 
-HEAD = sock.hpp
+HEAD = sock.hpp pare_config.hpp
 
 OBJS = $(SRCS:.cpp=.o)
 
