@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 23:52:36 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/07/13 10:16:00 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/07/13 11:06:56 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,22 +160,6 @@ void	Parse_config::parse()
 	{
 		while (std::getline(this->file_strm, line))
 		{
-			// std::string	trimmed;
-			// int			i = 0;
-
-			// while (i < line.size())
-			// {
-			// 	if (line[i] != SPACE || line[i] != TAB)
-			// 		break ;
-			// 	i++;
-			// }
-			// while (i < line.size())
-			// {
-			// 	if (line[i] == SPACE || line[i] == TAB)
-			// 		break ;
-			// 	trimmed.push_back(line[i]);
-			// 	i++;
-			// }
 			if (line == "server:")
 			{
 				server_config server;

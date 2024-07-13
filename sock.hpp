@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 00:21:24 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/07/12 23:48:06 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/07/13 12:00:45 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,23 +24,21 @@
 #include <fcntl.h>
 #include <poll.h>
 
-#define MAX_CLIENTS 1000
-#define N_SERVERS 1
-#define IP "10.13.10.4"
-#define PORT 4545
+#include "parse_config.hpp"
+
+#define MAX_CLIENTS 100
 
 class   Sock
 {
 	public:
-		int							sock_ent[N_SERVERS];
-		sockaddr_in					sock_addr[N_SERVERS];
-		std::string					ip_addr;
-		int							*ports;
-		struct pollfd				fds[MAX_CLIENTS + N_SERVERS];
+		std::vector<int>			sock_ent;
+		std::vector<sockaddr_in>	sock_addr;
+		struct pollfd				fds[MAX_CLIENTS];
 		std::vector<std::string>	requests;
+		std::vector<server_config>	servers;
 
 
-		Sock(int *ports, std::string ip_addr = "0.0.0.0");
+		Sock(std::vector<server_config>& servers);
 		~Sock();
 		int		bind_sock();
 		int		listen_sock();

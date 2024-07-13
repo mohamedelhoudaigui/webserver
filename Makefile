@@ -1,12 +1,11 @@
-# Source files
 SRCS = main.cpp sock.cpp parse_config.cpp
 
 HEAD = sock.hpp pare_config.hpp
 
 OBJS = $(SRCS:.cpp=.o)
 
-# Compiler and flags
 CC = c++
+
 CFLAGS = -Wall -Wextra -Werror -std=c++98
 
 NAME = webserv
