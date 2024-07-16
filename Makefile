@@ -1,6 +1,6 @@
-SRCS = main.cpp sock.cpp parse_config.cpp
+SRCS = main.cpp ./server/sock.cpp
 
-HEAD = sock.hpp pare_config.hpp
+HEAD = ./server/sock.hpp
 
 OBJS = $(SRCS:.cpp=.o)
 

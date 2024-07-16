@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 01:11:53 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/07/13 12:04:53 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/07/15 23:25:19 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ Sock::Sock(std::vector<server_config>& servers) : servers(servers)
 {
 	this->sock_addr.resize(servers.size());
 	this->sock_ent.resize(servers.size());
-	for (int i = 0; i < servers.size(); i++)
+	for (unsigned long i = 0; i < servers.size(); i++)
 	{
 		this->sock_ent[i] = socket(AF_INET, SOCK_STREAM, 0);
 		if (this->sock_ent[i] == -1)
@@ -41,7 +41,7 @@ Sock::Sock(std::vector<server_config>& servers) : servers(servers)
 
 int	Sock::bind_sock()
 {
-	for (int i = 0; i < servers.size(); i++)
+	for (unsigned long i = 0; i < servers.size(); i++)
 	{
 		if (bind(this->sock_ent[i] ,(struct sockaddr *)&this->sock_addr[i], sizeof(this->sock_addr[i])) == -1)
 		{
@@ -50,7 +50,7 @@ int	Sock::bind_sock()
 		}
 		std::cout << "socket bind " << this->servers[i].host << ":" << htons(this->sock_addr[i].sin_port) << "\n";
 	}
-	for (int i = 0; i < servers.size(); i++)
+	for (unsigned long i = 0; i < servers.size(); i++)
 	{
 		this->fds[i].fd = this->sock_ent[i];
 		this->fds[i].events = POLLIN;
@@ -63,7 +63,7 @@ int	Sock::bind_sock()
 
 int	Sock::listen_sock()
 {
-	for (int i = 0; i< servers.size(); i++)
+	for (unsigned long i = 0; i< servers.size(); i++)
 	{
 		if (listen(sock_ent[i], SOMAXCONN) == -1)
 		{
@@ -71,7 +71,7 @@ int	Sock::listen_sock()
 			exit(1);
 		}
 	}
-	for (int i = 0; i < servers.size(); i++)
+	for (unsigned long i = 0; i < servers.size(); i++)
 	{
 		std::cout << "listenning on port " << this->servers[i].port << "\n";
 	}
@@ -93,7 +93,7 @@ int	Sock::accept_sock(int server_fd)
 	inet_ntop(AF_INET, &client_addr.sin_addr, ip, INET_ADDRSTRLEN);
 	std::cout << "Client connected: " << ip << "\n";
 	send(client_socket, "ACK!\n", 5, 0);
-	for (int i = servers.size(); i < MAX_CLIENTS; i++)
+	for (unsigned long i = servers.size(); i < MAX_CLIENTS; i++)
 	{
 		if (this->fds[i].fd == -1)
 		{
@@ -133,7 +133,7 @@ void	Sock::recv_data(int client_sock)
 
 void	Sock::close_sock()
 {
-	for (int i = 0; i < servers.size(); i++)
+	for (unsigned long i = 0; i < servers.size(); i++)
 		close(this->sock_ent[i]);
 	std::cout << "socket closed\n";
 }
@@ -149,11 +149,11 @@ void	Sock::init_server()
 		if (ret == -1)
 		{
 			std::cerr << "poll failed\n";
-			for (int i = 0; i < servers.size(); i++)
+			for (unsigned long i = 0; i < servers.size(); i++)
 				close(this->sock_ent[i]);
 			exit(1);
 		}
-		for (int i = 0; i < MAX_CLIENTS; i++)
+		for (unsigned long i = 0; i < MAX_CLIENTS; i++)
 		{
 			if (this->fds[i].revents & POLLIN)
 			{

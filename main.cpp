@@ -6,56 +6,36 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 00:22:32 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/07/13 12:05:17 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/07/16 03:29:37 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "sock.hpp"
-#include "parse_config.hpp"
+#include "./server/sock.hpp"
 
-// void	print_info(Parse_config& init_serv)
-// {
-// 	for (int i = 0; i < init_serv.servers.size(); i++)
-// 	{
-// 		std::cout << "server number " << i << " :\n";
-// 		std::cout << "port : " << init_serv.servers[i].port << "\n";
-// 		std::cout << "host : " << init_serv.servers[i].host << "\n";
-// 		std::cout << "body size : " << init_serv.servers[i].body_size << "\n";
-// 		for (const auto& pair : init_serv.servers[i].routes)
-// 		{
-// 			bool gg = true;
-// 			std::cout << "route :" << pair.first << "\n";
-// 			for (const auto& elem : init_serv.servers[i].routes[pair.first])
-// 			{
-// 				if (gg)
-// 				{
-// 					std::cout << "path : " << elem << "\n";
-// 					gg = false;
-// 				}
-// 				else
-// 				{
-// 					std::cout << "method : " << elem << "\n";
-// 				}
-// 			}
-// 		}
-// 		for (const auto& pair : init_serv.servers[i].error_pages) {
-// 			std::cout << pair.first << ": " << pair.second << std::endl;
-// 		}
-// 		std::cout << "\n";
-// 	}
-// }
-
-int main(int ac, char **av)
+void	gen_server(std::string host, std::vector<int> ports, std::vector<server_config>& servers)
 {
-	if (ac != 2)
+	for (size_t i = 0; i < ports.size(); i++)
 	{
-		std::cerr << "args error\n";
-		exit(1);
+		server_config server;
+		server.port = ports[i];
+		server.host = host;
+		servers.push_back(server);
 	}
-	Parse_config	init_serv(av[1]);
-	init_serv.parse();
-	Sock server(init_serv.servers);
-	server.init_server();
-	server.close_sock();
+}
+
+
+int main(void)
+{
+	std::vector<server_config>	servers;
+	std::string	host = "127.0.0.1";
+	std::vector<int>			ports;
+	ports.push_back(9999);
+	ports.push_back(9998);
+
+	gen_server(host, ports, servers);
+
+	Sock sockets(servers);
+	sockets.init_server();
+	sockets.close_sock();
     return 0;
 }

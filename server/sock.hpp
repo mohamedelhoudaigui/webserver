@@ -1,21 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse_config.hpp                                      :+:      :+:    :+:   */
+/*   sock.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/11 22:01:42 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/07/12 23:51:45 by mel-houd         ###   ########.fr       */
+/*   Created: 2024/07/09 00:21:24 by mel-houd          #+#    #+#             */
+/*   Updated: 2024/07/16 03:29:59 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PARSE_CONFIG_HPP
-#define PARSE_CONFIG_HPP
+#ifndef SOCK_HPP
+#define SOCK_HPP
 
 #include <iostream>
 #include <vector>
-#include <map>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -24,42 +23,57 @@
 #include <arpa/inet.h>
 #include <fcntl.h>
 #include <poll.h>
-#include <sstream>
-#include <fstream>
-#include <algorithm>
+#include <map>
 
+#define MAX_CLIENTS 100
 #define MAX_PORT 65535
 #define MIN_PORT 0
 #define MIN_STATUS 100
 #define MAX_STATUS 599
 #define MAX_BODY_SIZE 10000000
-#define GET "GET"
-#define POST "POST"
-#define DELETE "DELETE"
-#define TAB '\t'
-#define SPACE ' '
+
+typedef struct
+{
+	std::vector<std::string>	index;
+	bool						auto_index;
+	std::vector<std::string>	methods;
+	std::string					path;
+}		route;
 
 typedef	struct
 {
 	std::string							host;
 	int									port;
-	std::map<int, std::string>			error_pages;
-	std::map<std::string, std::vector<std::string> >	routes; // first param is vector is path other are allowed methods
-	unsigned int						body_size;
-}		server_config;			
+}		server_config;
 
-class	Parse_config
+typedef	struct
+
+{
+	std::vector<server_config> servers;
+	std::map<int, std::string> error_pages;
+}	config_file;
+
+class   Sock
 {
 	public:
+		std::vector<int>			sock_ent;
+		std::vector<sockaddr_in>	sock_addr;
+		struct pollfd				fds[MAX_CLIENTS];
+		std::vector<std::string>	requests;
 		std::vector<server_config>	servers;
 
-		Parse_config(std::string file_name);
-		~Parse_config();
 
-		void	parse();
-
-	private:
-		std::ifstream				file_strm;
+		Sock(std::vector<server_config>& servers);
+		~Sock();
+		int		bind_sock();
+		int		listen_sock();
+		int		accept_sock(int server_fd);
+		void	close_sock();
+		void	recv_data(int client_sock);
+		void	init_server();
+		
 };
+
+
 
 #endif
