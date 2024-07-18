@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 00:22:32 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/07/16 03:29:37 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/07/18 22:50:12 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,18 @@ void	gen_server(std::string host, std::vector<int> ports, std::vector<server_con
 }
 
 
-int main(void)
+int main(int ac, char **av)
 {
+	if (ac != 2)
+	{
+		std::cerr << "need port\n";
+		exit(1);
+	}
 	std::vector<server_config>	servers;
-	std::string	host = "127.0.0.1";
+	std::string	host =			"127.0.0.1";
 	std::vector<int>			ports;
-	ports.push_back(9999);
-	ports.push_back(9998);
 
+	ports.push_back(std::atoi(av[1]));
 	gen_server(host, ports, servers);
 
 	Sock sockets(servers);

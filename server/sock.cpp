@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 01:11:53 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/07/15 23:25:19 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/07/18 23:21:45 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ int	Sock::accept_sock(int server_fd)
 	}
 	inet_ntop(AF_INET, &client_addr.sin_addr, ip, INET_ADDRSTRLEN);
 	std::cout << "Client connected: " << ip << "\n";
-	send(client_socket, "ACK!\n", 5, 0);
+	// send(client_socket, "ACK!\n", 5, 0);
 	for (unsigned long i = servers.size(); i < MAX_CLIENTS; i++)
 	{
 		if (this->fds[i].fd == -1)
@@ -126,8 +126,13 @@ void	Sock::recv_data(int client_sock)
 	else
 	{
 		buffer[valread] = '\0';
-		this->requests.push_back(std::string(buffer));
-		std::cout << "Client " << client_sock << " :\n" << buffer << "\n";
+		Request req(buffer);
+		this->requests.push(req);
+		Response	res(req);
+		send(client_sock, res.res.c_str(), res.res.size(), 0);
+		// std::cout << res.res_buffer << "\n";
+		// req.print_req();
+		
 	}
 }
 

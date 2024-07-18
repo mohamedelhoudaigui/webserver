@@ -1,12 +1,12 @@
-SRCS = main.cpp ./server/sock.cpp
+SRCS = main.cpp ./server/sock.cpp ./request_response/Request.cpp ./request_response/Response.cpp
 
-HEAD = ./server/sock.hpp
+HEAD = ./server/sock.hpp ./request_response/Request.hpp ./request_response/Response.hpp
 
 OBJS = $(SRCS:.cpp=.o)
 
 CC = c++
 
-CFLAGS = -Wall -Wextra -Werror -std=c++98
+CFLAGS =  -std=c++98
 
 NAME = webserv
 

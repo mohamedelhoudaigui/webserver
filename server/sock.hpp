@@ -6,12 +6,15 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 00:21:24 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/07/16 03:29:59 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/07/18 22:59:06 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SOCK_HPP
 #define SOCK_HPP
+
+#include "../request_response/Request.hpp"
+#include "../request_response/Response.hpp"
 
 #include <iostream>
 #include <vector>
@@ -24,6 +27,7 @@
 #include <fcntl.h>
 #include <poll.h>
 #include <map>
+#include <queue>
 
 #define MAX_CLIENTS 100
 #define MAX_PORT 65535
@@ -32,26 +36,12 @@
 #define MAX_STATUS 599
 #define MAX_BODY_SIZE 10000000
 
-typedef struct
-{
-	std::vector<std::string>	index;
-	bool						auto_index;
-	std::vector<std::string>	methods;
-	std::string					path;
-}		route;
-
 typedef	struct
 {
 	std::string							host;
 	int									port;
 }		server_config;
 
-typedef	struct
-
-{
-	std::vector<server_config> servers;
-	std::map<int, std::string> error_pages;
-}	config_file;
 
 class   Sock
 {
@@ -59,7 +49,7 @@ class   Sock
 		std::vector<int>			sock_ent;
 		std::vector<sockaddr_in>	sock_addr;
 		struct pollfd				fds[MAX_CLIENTS];
-		std::vector<std::string>	requests;
+		std::queue<Request>		requests;
 		std::vector<server_config>	servers;
 
 
