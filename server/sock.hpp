@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 00:21:24 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/07/19 07:05:00 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/07/19 08:54:49 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ class   Sock
 		std::vector<int>			sock_ent;
 		std::vector<sockaddr_in>	sock_addr;
 		struct pollfd				fds[MAX_CLIENTS];
-		std::queue<Request>			requests;
 		std::vector<server_config>	servers;
 		std::map<int, int>			clients;
 

@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 01:11:53 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/07/19 07:53:24 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/07/19 09:38:36 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,12 +131,13 @@ void	Sock::recv_data(int client_sock, server_config server)
 		buffer[valread] = '\0';
 		Request req(buffer, server);
 		req.parse_req();
-		req.print_req();
-		// this->requests.push(req);
-		// Response	res(req);
-		// send(client_sock, res.res.c_str(), res.res.size(), 0);
-		// close(client_sock);
-		
+		if (!req.valid_req)
+		{
+			std::cout << "Invalid request, code = " << req.err << "\n";
+		}
+		Response	res(req);
+		send(client_sock, res.res.c_str(), res.res.size(), 0);
+		close(client_sock);
 	}
 }
 

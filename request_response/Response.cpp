@@ -6,19 +6,19 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 11:25:29 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/07/19 03:36:04 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/07/19 09:34:38 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Response.hpp"
 
 
-void    Response::gen_error_res(std::string& err, int error_code)
+void    Response::gen_res(std::string& status, int status_code)
 {   
-	Generator  gen(err, error_code);
+	Generator  gen(status, status_code);
 	this->status_line.push_back(HTTP_V);
-	this->status_line.push_back(itos(error_code));
-	this->status_line.push_back(err);
+	this->status_line.push_back(itos(status_code));
+	this->status_line.push_back(status);
 	this->headers[C_TYPE] = TEXT_CTYPE;
 	this->headers[C_LEN] = gen.body.size();
 	this->body = gen.body;
@@ -43,8 +43,7 @@ void    Response::gen_error_res(std::string& err, int error_code)
 
 Response::Response(Request req)
 {
-	std::string	err = "Not Found";
-	gen_error_res(err, 404);
+	gen_res(req.err, req.err_code);
 }
 
 Response::~Response()

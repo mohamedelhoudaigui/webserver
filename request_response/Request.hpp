@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 05:20:47 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/07/19 08:24:49 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/07/19 09:32:48 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,11 @@
 #include "../utils/utils.hpp"
 #include "../structes.hpp"
 
-#define GET "GET"
-#define POST "POST"
-#define DELETE "DELETE"
-#define HTTP_V "HTTP/1.1"
+#define GET "get"
+#define POST "post"
+#define DELETE "delete"
+#define HTTP_V "http/1.1"
+#define HOST "host"
 #define BAD_REQ		400
 #define NOT_FOUND	404
 #define	HTTP_V_NSUP	505
@@ -41,6 +42,7 @@ class	Request
 
 		void	parse_req();
 		void	parse_req_line();
+		void	set_req_prop(std::string err, int err_code);
 		void	parse_header(std::string& buffer);
 		void	print_req();
 
@@ -52,12 +54,11 @@ class	Request
 		std::string							err;
 		int									err_code;
 		server_config						server;
-
 };
 
-std::string 				trim(const std::string &s);
-std::vector<std::string>	split(const std::string &buffer, char delimiter);
-void						string_lower(const std::string& input);
-int							find_item(std::vector<std::string>& vector, std::string& needle);
+std::string 				trim(std::string& s);
+std::vector<std::string>	split(std::string buffer, char delimiter);
+void						string_lower(std::string& input);
+int							find_item(std::vector<std::string> vector, std::string needle);
 
 #endif

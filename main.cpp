@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 00:22:32 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/07/19 08:07:36 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/07/19 09:10:33 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@ void	gen_server(std::string host, std::vector<int> ports, std::vector<server_con
 	std::vector<std::string>	methods;
 
 	routes.push_back("/");
-	methods.push_back("GET");
-	methods.push_back("POST");
-	methods.push_back("DELETE");
+	methods.push_back("get");
+	methods.push_back("post");
+	methods.push_back("delete");
 	for (size_t i = 0; i < ports.size(); i++)
 	{
 		server_config server;
