@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 01:11:53 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/07/18 23:21:45 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/07/19 07:53:24 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ Sock::Sock(std::vector<server_config>& servers) : servers(servers)
 		}
 		this->sock_addr[i].sin_family = AF_INET;
 		this->sock_addr[i].sin_port = htons(servers[i].port);
-		if (inet_pton(AF_INET, servers[i].host.c_str(), &this->sock_addr[i].sin_addr) <= 0) {
+		if (inet_pton(AF_INET, servers[i].host.c_str(), &this->sock_addr[i].sin_addr) <= 0)
+		{
 			std::cerr << "Invalid address/ Address not supported\n";
 			exit(1);
 		}	
@@ -52,6 +53,8 @@ int	Sock::bind_sock()
 	}
 	for (unsigned long i = 0; i < servers.size(); i++)
 	{
+		// add server fd fo server_config structe
+		this->servers[i].fd = this->sock_ent[i];
 		this->fds[i].fd = this->sock_ent[i];
 		this->fds[i].events = POLLIN;
 	}
@@ -106,7 +109,7 @@ int	Sock::accept_sock(int server_fd)
 	return (client_socket);  // Return the client socket
 }
 
-void	Sock::recv_data(int client_sock)
+void	Sock::recv_data(int client_sock, server_config server)
 {
 	char buffer[1024];
 	int valread = read(client_sock, buffer, 1024);
@@ -126,12 +129,13 @@ void	Sock::recv_data(int client_sock)
 	else
 	{
 		buffer[valread] = '\0';
-		Request req(buffer);
-		this->requests.push(req);
-		Response	res(req);
-		send(client_sock, res.res.c_str(), res.res.size(), 0);
-		// std::cout << res.res_buffer << "\n";
-		// req.print_req();
+		Request req(buffer, server);
+		req.parse_req();
+		req.print_req();
+		// this->requests.push(req);
+		// Response	res(req);
+		// send(client_sock, res.res.c_str(), res.res.size(), 0);
+		// close(client_sock);
 		
 	}
 }
@@ -165,6 +169,8 @@ void	Sock::init_server()
 				if (i < servers.size())
 				{
 					int client_sock = accept_sock(i);
+					// map client socket to the server index/fd in fds array
+					this->clients[client_sock] = i;
 					if (client_sock == -1)
 					{
 						std::cerr << "Failed to accept client\n";
@@ -173,7 +179,7 @@ void	Sock::init_server()
 				}
 				else
 				{
-					recv_data(this->fds[i].fd);
+					recv_data(fds[i].fd, this->servers[clients[fds[i].fd]]);
 				}
 			}
 		}

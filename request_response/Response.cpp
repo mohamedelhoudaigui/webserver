@@ -6,72 +6,48 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 11:25:29 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/07/18 23:20:58 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/07/19 03:36:04 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Response.hpp"
 
-std::string Response::getCurrentDate() {
-    time_t now = time(0);
-    struct tm tm_struct;
-    char buf[80];
 
-    gmtime_r(&now, &tm_struct);
-    strftime(buf, sizeof(buf), "%a, %d %b %Y %H:%M:%S GMT", &tm_struct);
-
-    return std::string(buf);
+void    Response::gen_error_res(std::string& err, int error_code)
+{   
+	Generator  gen(err, error_code);
+	this->status_line.push_back(HTTP_V);
+	this->status_line.push_back(itos(error_code));
+	this->status_line.push_back(err);
+	this->headers[C_TYPE] = TEXT_CTYPE;
+	this->headers[C_LEN] = gen.body.size();
+	this->body = gen.body;
+	for (int i = 0; i < 3; i++)
+	{
+		this->res.append(this->status_line[i]);
+		if (i != 2)
+			this->res.append(" ");
+		else
+			this->res.append("\r\n");
+	}
+	for (std::map<std::string, std::string>::iterator it = this->headers.begin(); it != this->headers.end(); ++it)
+	{
+		this->res.append(it->first);
+		this->res.append(it->second);
+		this->res.append("\r\n");
+	}
+	this->res.append("\r\n");
+	this->res.append(this->body);
 }
+
 
 Response::Response(Request req)
 {
-    std::ifstream  file("./www/index.html");
-    std::stringstream fileContents;
-
-     if (!file)
-    {
-        std::cerr << "Could not open the file!" << std::endl;
-        exit(1);
-    }
-    fileContents << file.rdbuf();
-    // Set the status line
-    this->status_line.push_back("HTTP/1.1");
-    this->status_line.push_back("200");
-    this->status_line.push_back("OK\r\n");
-
-    // Set the headers
-    this->headers["Date: "] = getCurrentDate();
-    this->headers["Date: "].append("\r\n");
-    this->headers["Server: "] = "webserve /1.0 (unix)\r\n";
-    
-    this->headers["Content-Type: "] = "text/html; charset=UTF-8\r\n";
-    this->headers["Connection: "] = "close\r\n";
-
-    // Set the body
-    this->body = fileContents.str();
-    file.close();
-    this->headers["Content-Length: "] = std::to_string(this->body.length());
-    this->headers["Content-Length: "].append("\r\n");;
-    
-    for (int i = 0; i < this->status_line.size(); i++)
-    {
-        res.append(this->status_line[i]);
-        if (i != this->status_line.size() - 1)
-            res.append(" ");
-    }
-    for (auto& pair : this->headers)
-    {
-        std::string tmp;
-        tmp.append(pair.first);
-        tmp.append(pair.second);
-        res.append(tmp);
-    }
-    res.append("\r\n");
-    res.append(this->body);
-    this->res_buffer = res.c_str();
+	std::string	err = "Not Found";
+	gen_error_res(err, 404);
 }
 
 Response::~Response()
 {
-    
+	
 }

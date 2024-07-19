@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 11:25:25 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/07/18 23:20:55 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/07/19 04:43:10 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 #define RESPONSE_HPP
 
 #include "Request.hpp"
+#include "../utils/utils.hpp"
+#include "../gen_template/Generator.hpp"
 
 #include <iostream>
 #include <vector>
@@ -23,16 +25,21 @@
 #include <sstream>
 #include <fstream>
 
+#define HTTP_V "HTTP/1.1"
+#define TEXT_CTYPE "text/html; charset=UTF-8"
+#define C_TYPE "Content-Type :"
+#define C_LEN "Content-Lenght :"
+
 class	Response
 {
 	public:
 		Response(Request req);
 		~Response();
-		std::string	getCurrentDate();
+		void		gen_error_res(std::string& err, int error_code);
+
 		std::vector<std::string>			status_line;
 		std::map<std::string, std::string>	headers;
 		std::string							body;
-		const char							*res_buffer;
 		std::string							res;
 };
 

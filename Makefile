@@ -1,6 +1,8 @@
-SRCS = main.cpp ./server/sock.cpp ./request_response/Request.cpp ./request_response/Response.cpp
+SRCS = main.cpp ./server/sock.cpp ./request_response/Request.cpp ./request_response/Response.cpp \
+		./gen_template/Generator.cpp ./utils/convert.cpp
 
-HEAD = ./server/sock.hpp ./request_response/Request.hpp ./request_response/Response.hpp
+HEAD = ./server/sock.hpp ./request_response/Request.hpp ./request_response/Response.hpp \
+		./gen_template/Generator.hpp ./utils/utils.hpp ./structes.hpp
 
 OBJS = $(SRCS:.cpp=.o)
 
