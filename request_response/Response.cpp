@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 11:25:29 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/07/20 04:58:34 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/07/20 08:28:24 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 void    Response::gen_res(std::string& status, int status_code)
 {   
 	Generator  gen(status, status_code);
-	this->status_line.push_back("HTTP/1.1");
+	this->status_line.push_back(HTTP_V);
 	this->status_line.push_back(itos(status_code));
 	this->status_line.push_back(status);
 	this->headers[C_TYPE] = TEXT_CTYPE;
@@ -42,7 +42,7 @@ void    Response::gen_res(std::string& status, int status_code)
 
 Response::Response(Request req)
 {
-	gen_res(req.err, req.err_code);
+	gen_res(req.status, req.status_code);
 }
 
 Response::~Response()

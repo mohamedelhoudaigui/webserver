@@ -1,0 +1,1 @@
+check more from requests : connection type maybe ?

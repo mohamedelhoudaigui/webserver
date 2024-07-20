@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 05:20:47 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/07/19 09:32:48 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/07/20 08:25:34 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ class	Request
 
 		void	parse_req();
 		void	parse_req_line();
-		void	set_req_prop(std::string err, int err_code);
+		void	set_req_prop(std::string err, int status_code);
 		void	parse_header(std::string& buffer);
 		void	print_req();
 
@@ -51,14 +51,9 @@ class	Request
 		std::map<std::string, std::string>	headers;
 		std::string							body;
 		bool								valid_req;
-		std::string							err;
-		int									err_code;
+		std::string							status;
+		int									status_code;
 		server_config						server;
 };
-
-std::string 				trim(std::string& s);
-std::vector<std::string>	split(std::string buffer, char delimiter);
-void						string_lower(std::string& input);
-int							find_item(std::vector<std::string> vector, std::string needle);
 
 #endif

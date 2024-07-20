@@ -6,69 +6,23 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 05:25:13 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/07/19 09:33:29 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/07/20 08:26:16 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Request.hpp"
 
-//----------------tools---------------
 
-void string_lower(std::string &str)
-{
-    for (size_t i = 0; i < str.size(); ++i)
-	{
-        str[i] = tolower(static_cast<unsigned char>(str[i]));
-    }
-}
-
-
-std::vector<std::string> split(std::string buffer, char delimiter)
-{
-	std::vector<std::string> result;
-	std::string token;
-	std::istringstream tokenStream(buffer);
-
-	while (std::getline(tokenStream, token, delimiter))
-	{
-		if (!token.empty())
-		{
-			result.push_back(token);
-		}
-	}
-	return (result);
-}
-
-std::string	trim(std::string& s)
-{
-	size_t start = s.find_first_not_of(" \t\r\n");
-	size_t end = s.find_last_not_of(" \t\r\n");
-	return(s.substr(start, end - start + 1));
-}
-
-int	find_item(std::vector<std::string> vector, std::string needle)
-{
-	for (int i = 0; i < vector.size(); i++)
-	{
-		if (vector[i] == needle)
-			return (i);
-	}
-	return (-1);
-}
-
-//---------------Main---------------------
-
-
-Request::Request(char *req, server_config server) : request(req), server(server), valid_req(true), err_code(200), err("Ok")
+Request::Request(char *req, server_config server) : request(req), server(server), valid_req(true), status_code(200), status("Ok")
 {
 
 }
 
-void	Request::set_req_prop(std::string err, int err_code)
+void	Request::set_req_prop(std::string err, int status_code)
 {
 	this->valid_req = false;
-	this->err = err;
-	this->err_code = err_code;
+	this->status = err;
+	this->status_code = status_code;
 }
 
 void	Request::parse_req_line()

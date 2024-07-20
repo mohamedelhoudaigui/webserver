@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 01:32:08 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/07/19 02:08:13 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/07/20 08:25:34 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 class	Generator
 {
 	public:
-		Generator(std::string& err, int err_code);
+		Generator(std::string& err, int status_code);
 		std::ifstream	html_temp;
 		std::string		body;
 		~Generator();
