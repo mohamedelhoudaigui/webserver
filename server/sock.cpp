@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 01:11:53 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/07/20 06:41:32 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/07/20 06:45:50 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,10 @@ void	Sock::handle_req(char *buffer, int client_sock, server_config server)
 	Request req(buffer, server);
 	req.parse_req();
 	if (!req.valid_req)
+	{
 		this->log_file.write("Invalid request, code = " + req.err + "\n");
+		this->log_file.write(req.request);
+	}
 	else
 		this->log_file.write(req.request);
 	Response	res(req);
