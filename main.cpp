@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 00:22:32 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/07/20 03:53:58 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/07/20 06:22:24 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,9 @@ int main(int ac, char **av)
 
 	ports.push_back(std::atoi(av[1]));
 	gen_server(host, ports, servers);
-
-	Sock sockets(servers);
-	sockets.init_server();
-	sockets.close_sock();
+	{
+		Sock sockets(servers);
+		sockets.init_server();
+	}
     return 0;
 }
