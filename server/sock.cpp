@@ -6,14 +6,14 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 01:11:53 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/07/19 09:38:36 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/07/20 05:22:11 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sock.hpp"
 
 
-Sock::Sock(std::vector<server_config>& servers) : servers(servers)
+Sock::Sock(std::vector<server_config>& servers) : servers(servers), log_file(LOG_FILE)
 {
 	this->sock_addr.resize(servers.size());
 	this->sock_ent.resize(servers.size());
@@ -127,17 +127,19 @@ void	Sock::recv_data(int client_sock, server_config server)
 		}
 	}
 	else
-	{
+	{ // terminate buffer and handle req, res and log to a file
 		buffer[valread] = '\0';
 		Request req(buffer, server);
 		req.parse_req();
 		if (!req.valid_req)
-		{
-			std::cout << "Invalid request, code = " << req.err << "\n";
-		}
+			this->log_file.write("Invalid request, code = " + req.err + "\n");
+		else
+			this->log_file.write((req.request + "\n").c_str());
 		Response	res(req);
+		this->log_file.write((res.res + "\n").c_str());
+		this->log_file.write("--------------------------------\n");
 		send(client_sock, res.res.c_str(), res.res.size(), 0);
-		close(client_sock);
+		close(client_sock); // forgot to purge client ?
 	}
 }
 
@@ -190,5 +192,4 @@ void	Sock::init_server()
 
 Sock::~Sock()
 {
-	
 }

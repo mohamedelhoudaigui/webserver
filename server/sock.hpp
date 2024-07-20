@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 00:21:24 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/07/19 08:54:49 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/07/20 05:16:27 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,10 @@
 #include "../request_response/Request.hpp"
 #include "../request_response/Response.hpp"
 #include "../structes.hpp"
+#include "./Logger.hpp"
 
 #include <iostream>
+#include <fstream>
 #include <vector>
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -36,6 +38,7 @@
 #define MIN_STATUS 100
 #define MAX_STATUS 599
 #define MAX_BODY_SIZE 10000000
+#define LOG_FILE "log.txt"
 
 
 class   Sock
@@ -46,6 +49,7 @@ class   Sock
 		struct pollfd				fds[MAX_CLIENTS];
 		std::vector<server_config>	servers;
 		std::map<int, int>			clients;
+		Logger						log_file;
 
 
 		Sock(std::vector<server_config>& servers);

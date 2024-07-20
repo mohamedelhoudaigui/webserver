@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 11:25:25 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/07/19 09:32:06 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/07/20 04:57:55 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@
 #include <fstream>
 
 #define TEXT_CTYPE "text/html; charset=UTF-8"
-#define C_TYPE "Content-Type :"
-#define C_LEN "Content-Lenght :"
+#define C_TYPE "Content-Type: "
+#define C_LEN "Content-Lenght: "
 
 class	Response
 {

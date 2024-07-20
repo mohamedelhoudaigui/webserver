@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 00:22:32 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/07/19 09:10:33 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/07/20 03:53:58 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int main(int ac, char **av)
 		exit(1);
 	}
 	std::vector<server_config>	servers;
-	std::string	host =			"127.0.0.1";
+	std::string	host =			"10.11.13.2";
 	std::vector<int>			ports;
 
 	ports.push_back(std::atoi(av[1]));
