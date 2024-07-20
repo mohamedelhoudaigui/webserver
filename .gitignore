@@ -1,4 +1,4 @@
-./log.txt
+log.txt
 *.o
-./webserv
+webserv
 .DS_Store
