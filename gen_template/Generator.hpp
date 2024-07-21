@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 01:32:08 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/07/20 08:25:34 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/07/21 10:19:23 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,12 @@
 #include <string>
 #include <iostream>
 
+#define ERR_FILE "./www/error_template.html"
+
 class	Generator
 {
 	public:
-		Generator(std::string& err, int status_code);
-		std::ifstream	html_temp;
+		Generator(std::string& err, int status_code, std::string file);
 		std::string		body;
 		~Generator();
 };

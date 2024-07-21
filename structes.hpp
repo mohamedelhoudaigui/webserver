@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 04:38:30 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/07/19 04:39:06 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/07/20 08:36:11 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ typedef	struct
 	int									fd;
 	std::string							host;
 	int									port;
-	std::vector<std::string>			routes;
+	std::map<std::string, std::string>	routes;
 	std::vector<std::string>			methods;
 }		server_config;
 

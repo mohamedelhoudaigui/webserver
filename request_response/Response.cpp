@@ -6,19 +6,18 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 11:25:29 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/07/20 08:28:24 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/07/21 10:41:21 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Response.hpp"
 
-
-void    Response::gen_res(std::string& status, int status_code)
-{   
-	Generator  gen(status, status_code);
+void    Response::gen_res(Request req)
+{
+	Generator  gen(req.status, req.status_code, this->server.routes[req.req_line[1]]);
 	this->status_line.push_back(HTTP_V);
-	this->status_line.push_back(itos(status_code));
-	this->status_line.push_back(status);
+	this->status_line.push_back(itos(req.status_code));
+	this->status_line.push_back(req.status);
 	this->headers[C_TYPE] = TEXT_CTYPE;
 	this->headers[C_LEN] = itos(gen.body.length());
 	this->body = gen.body;
@@ -40,9 +39,10 @@ void    Response::gen_res(std::string& status, int status_code)
 }
 
 
-Response::Response(Request req)
+
+Response::Response(Request req, server_config server) : server(server), req(req)
 {
-	gen_res(req.status, req.status_code);
+	gen_res(req);
 }
 
 Response::~Response()

@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 01:26:22 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/07/20 08:26:34 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/07/21 10:34:14 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,14 @@ void string_lower(std::string &str)
     for (size_t i = 0; i < str.size(); ++i)
 	{
         str[i] = tolower(static_cast<unsigned char>(str[i]));
+    }
+}
+
+void	string_upper(std::string &str)
+{
+    for (size_t i = 0; i < str.size(); ++i)
+	{
+        str[i] = toupper(static_cast<unsigned char>(str[i]));
     }
 }
 

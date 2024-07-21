@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 11:25:25 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/07/20 04:57:55 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/07/21 10:41:13 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,14 +32,16 @@
 class	Response
 {
 	public:
-		Response(Request req);
+		Response(Request req, server_config server);
 		~Response();
-		void		gen_res(std::string& status, int status_code);
+		void		gen_res(Request req);
 
 		std::vector<std::string>			status_line;
 		std::map<std::string, std::string>	headers;
 		std::string							body;
 		std::string							res;
+		server_config						server;
+		Request								req;
 };
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 05:20:47 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/07/20 08:25:34 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/07/21 10:34:35 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,13 @@
 #include "../utils/utils.hpp"
 #include "../structes.hpp"
 
-#define GET "get"
-#define POST "post"
-#define DELETE "delete"
-#define HTTP_V "http/1.1"
-#define HOST "host"
+#define GET			"get"
+#define POST		"post"
+#define DELETE		"delete"
+#define HTTP_V		"HTTP/1.1"
+#define HOST		"host"
+#define	CONNECTION	"connection"
+#define CONT_LEN	"content-length"
 #define BAD_REQ		400
 #define NOT_FOUND	404
 #define	HTTP_V_NSUP	505
@@ -42,9 +44,10 @@ class	Request
 
 		void	parse_req();
 		void	parse_req_line();
-		void	set_req_prop(std::string err, int status_code);
+		void	set_req_prop(std::string status, int status_code);
 		void	parse_header(std::string& buffer);
 		void	print_req();
+		void	check_headers_value();
 
 		std::string							request;
 		std::vector<std::string>			req_line;

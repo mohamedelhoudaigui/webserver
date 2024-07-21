@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 05:25:13 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/07/20 08:26:16 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/07/21 10:40:48 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,36 @@ Request::Request(char *req, server_config server) : request(req), server(server)
 
 }
 
-void	Request::set_req_prop(std::string err, int status_code)
+void	Request::set_req_prop(std::string status, int status_code)
 {
 	this->valid_req = false;
-	this->status = err;
+	this->status = status;
 	this->status_code = status_code;
+}
+
+void	Request::check_headers_value()
+{
+	if (this->headers[HOST] != this->server.host + ":" + itos(this->server.port)) // checking host header 
+	{
+		set_req_prop("Bad Request", BAD_REQ);
+		return ;
+	}
+
+	if (this->headers[CONNECTION] != "close") // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Connection - the header is not mandatory
+		this->headers[CONNECTION] = "keep-alive";
+
+	if (this->headers.find(CONT_LEN) != headers.end()) // check content-length
+	{
+		for (int i = 0; i < headers[CONT_LEN].size(); i++)
+		{
+			if (headers[CONT_LEN][i] < '0' || headers[CONT_LEN][i] > '9')
+			{
+				set_req_prop("Bad Request", BAD_REQ);
+				return ;
+			}
+		}
+	}
+	// we have 3 essential headers for the server to process the request properly
 }
 
 void	Request::parse_req_line()
@@ -32,7 +57,7 @@ void	Request::parse_req_line()
 		set_req_prop("Bad Request", BAD_REQ);
 		return ;
 	}
-	if (find_item(this->server.routes, req_line[1]) == -1) // url check
+	if (this->server.routes.find(req_line[1]) == this->server.routes.end()) // url check
 	{
 		set_req_prop("Not Found", NOT_FOUND);
 		return ;
@@ -67,7 +92,7 @@ void	Request::parse_header(std::string& buffer)
 	this->headers[header[0]] = value;
 }
 
-void	Request::parse_req()
+void	Request::parse_req() // we normalise headers and request line to lower case because http is case insensitive
 {
 	std::string buffer;
 	std::istringstream ss(this->request);
@@ -77,6 +102,7 @@ void	Request::parse_req()
 		buffer = trim(buffer);
 		string_lower(buffer);
 		req_line = split(buffer, ' ');
+		string_upper(req_line[2]); // upper the http version
 		parse_req_line();
 	}
 	if (!this->valid_req) return ;
@@ -87,15 +113,9 @@ void	Request::parse_req()
 		parse_header(buffer);
 		if (!this->valid_req) return ;
 	}
-	while (std::getline(ss, buffer)) // body (need modification if chunked content type is there) :
-	{
+	while (std::getline(ss, buffer)) // body (need modification if chunked content type is there) - raed until end or depende on content length ??
 		this->body.append(buffer);
-	}
-	if (this->headers[HOST] != this->server.host + ":" + itos(this->server.port)) // checking host header 
-	{
-		set_req_prop("Bad Request", BAD_REQ);
-		return ;
-	}
+	check_headers_value();
 }
 
 void	Request::print_req()

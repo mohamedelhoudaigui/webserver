@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 00:22:32 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/07/20 08:27:46 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/07/21 10:19:46 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,11 @@
 
 void	gen_server(std::string host, std::vector<int> ports, std::vector<server_config>& servers) // gen servers while there is no config file handling
 {
-	std::vector<std::string>	routes;
+	std::map<std::string, std::string>	routes;
 	std::vector<std::string>	methods;
 
-	routes.push_back("/");
+	routes["/"] = "./www/index.html";
+	routes["/index.html"] = "./www/index.html";
 	methods.push_back("get");
 	methods.push_back("post");
 	methods.push_back("delete");
