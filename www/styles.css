@@ -1,0 +1,25 @@
+/* styles.css */
+
+/* Reset some default browser styles */
+body, h1 {
+    margin: 0;
+    padding: 0;
+}
+
+/* Style the body */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Style the h1 element */
+h1 {
+    color: #0066cc;
+    font-size: 3em;
+    text-align: center;
+}

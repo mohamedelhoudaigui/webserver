@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 11:25:25 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/07/21 10:41:13 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/07/21 13:51:49 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@
 #include <sstream>
 #include <fstream>
 
-#define TEXT_CTYPE "text/html; charset=UTF-8"
 #define C_TYPE "Content-Type: "
 #define C_LEN "Content-Lenght: "
 

@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 01:11:53 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/07/21 10:39:50 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/07/21 13:48:20 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	Sock::handle_req(char *buffer, int client_sock, server_config server)
 	Response	res(req, server);
 	this->log_file.write(res.res + "\n");
 	send(client_sock, res.res.c_str(), res.res.size(), 0);
-	purge_client(client_sock);
+	// purge_client(client_sock);
 }
 
 void	Sock::put_client(int client_fd, char *ip)

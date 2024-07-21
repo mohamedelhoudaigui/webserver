@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 11:25:29 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/07/21 10:41:21 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/07/21 13:45:34 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void    Response::gen_res(Request req)
 	this->status_line.push_back(HTTP_V);
 	this->status_line.push_back(itos(req.status_code));
 	this->status_line.push_back(req.status);
-	this->headers[C_TYPE] = TEXT_CTYPE;
+	this->headers[C_TYPE] = req.headers[C_TYPE];
 	this->headers[C_LEN] = itos(gen.body.length());
 	this->body = gen.body;
 	for (int i = 0; i < 3; i++)
