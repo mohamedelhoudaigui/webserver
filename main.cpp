@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 00:22:32 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/07/21 13:51:23 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/07/21 22:25:20 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ void	gen_server(std::string host, std::vector<int> ports, std::vector<server_con
 	routes["/styles.css"] = "./www/styles.css";
 	routes["/img.png"] = "./www/img.png";
 	routes["/index.html"] = "./www/index.html";
+	routes["/script.js"] = "./www/script.js";
+	routes["/audio.mp3"] = "./www/audio.mp3";
 
 	methods.push_back("get");
 	methods.push_back("post");
@@ -46,7 +48,7 @@ int main(int ac, char **av)
 		exit(1);
 	}
 	std::vector<server_config>	servers;
-	std::string	host =			"10.11.13.2";
+	std::string	host =			"10.11.1.3";
 	std::vector<int>			ports;
 
 	ports.push_back(std::atoi(av[1]));
