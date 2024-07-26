@@ -6,11 +6,11 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 05:25:13 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/07/21 10:40:48 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/07/26 11:22:01 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Request.hpp"
+#include "../headers/Request.hpp"
 
 
 Request::Request(char *req, server_config server) : request(req), server(server), valid_req(true), status_code(200), status("Ok")

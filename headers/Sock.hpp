@@ -6,17 +6,17 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 00:21:24 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/07/20 06:41:20 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/07/26 11:27:04 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SOCK_HPP
 #define SOCK_HPP
 
-#include "../request_response/Request.hpp"
-#include "../request_response/Response.hpp"
-#include "../structes.hpp"
-#include "./Logger.hpp"
+#include "Request.hpp"
+#include "Response.hpp"
+#include "Structes.hpp"
+#include "Logger.hpp"
 
 #include <iostream>
 #include <fstream>

@@ -6,11 +6,11 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 01:34:30 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/07/21 10:25:35 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/07/26 11:22:17 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Generator.hpp"
+#include "../headers/Generator.hpp"
 
 Generator::Generator(std::string& err, int status_code, std::string file_path)
 {

@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 11:25:25 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/07/21 13:51:49 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/07/26 11:27:00 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 #define RESPONSE_HPP
 
 #include "Request.hpp"
-#include "../utils/utils.hpp"
-#include "../gen_template/Generator.hpp"
+#include "Utils.hpp"
+#include "Generator.hpp"
 
 #include <iostream>
 #include <vector>

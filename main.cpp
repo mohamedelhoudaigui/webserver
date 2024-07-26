@@ -6,11 +6,12 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 00:22:32 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/07/21 22:25:20 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/07/26 11:53:13 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./server/sock.hpp"
+#include "./headers/Sock.hpp"
+#include "./headers/Gen_dir.hpp"
 
 void	gen_server(std::string host, std::vector<int> ports, std::vector<server_config>& servers) // gen servers while there is no config file handling
 {
@@ -39,29 +40,31 @@ void	gen_server(std::string host, std::vector<int> ports, std::vector<server_con
 	}
 }
 
-
 int main(int ac, char **av)
 {
-	if (ac != 2)
-	{
-		std::cerr << "need port\n";
-		exit(1);
-	}
-	std::vector<server_config>	servers;
-	std::string	host =			"10.11.1.3";
-	std::vector<int>			ports;
 
-	ports.push_back(std::atoi(av[1]));
-	try
-	{
-		gen_server(host, ports, servers);
-		Sock sockets(servers);
-		sockets.init_server();
-	}
-	catch (...)
-	{
-		std::cerr << "An unknown error occurred\n";
-		exit(1);
-	}
+	Gen_dir	gg("www");
+	gg.generate();
+	// if (ac != 2)
+	// {
+	// 	std::cerr << "need port\n";
+	// 	exit(1);
+	// }
+	// std::vector<server_config>	servers;
+	// std::string	host =			"10.13.10.13";
+	// std::vector<int>			ports;
+
+	// ports.push_back(std::atoi(av[1]));
+	// try
+	// {
+	// 	gen_server(host, ports, servers);
+	// 	Sock sockets(servers);
+	// 	sockets.init_server();
+	// }
+	// catch (...)
+	// {
+	// 	std::cerr << "An unknown error occurred\n";
+	// 	exit(1);
+	// }
     return 0;
 }

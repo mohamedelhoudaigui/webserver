@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 05:20:47 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/07/21 10:34:35 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/07/26 11:26:52 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@
 #include <sstream>
 #include <stdbool.h>
 
-#include "../utils/utils.hpp"
-#include "../structes.hpp"
+#include "Utils.hpp"
+#include "Structes.hpp"
 
 #define GET			"get"
 #define POST		"post"

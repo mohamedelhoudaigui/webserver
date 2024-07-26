@@ -6,11 +6,11 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 01:11:53 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/07/21 13:59:30 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/07/26 11:25:47 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "sock.hpp"
+#include "../headers/Sock.hpp"
 
 Sock::Sock(std::vector<server_config>& servers) : servers(servers), log_file(LOG_FILE)
 {

@@ -6,11 +6,11 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 05:13:01 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/07/20 06:37:47 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/07/26 11:21:46 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Logger.hpp"
+#include "../headers/Logger.hpp"
 
 Logger::Logger(std::string filename)
 {
