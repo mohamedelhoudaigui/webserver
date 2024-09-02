@@ -2,3 +2,4 @@ log.txt
 *.o
 webserv
 .DS_Store
+objects
