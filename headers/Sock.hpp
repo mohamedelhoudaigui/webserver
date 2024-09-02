@@ -6,7 +6,7 @@
 /*   By: theworld27 <theworld27@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 00:21:24 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/09/02 08:55:20 by theworld27       ###   ########.fr       */
+/*   Updated: 2024/09/02 14:36:19 by theworld27       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ class   Sock
 		void	init_server();
 		void	handle_req(char *buffer, int client_sock, server_config server);
 		void	put_client(int client_fd, char *ip);
-		
+
 };
 
 

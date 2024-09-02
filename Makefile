@@ -11,7 +11,9 @@ OBJS = $(patsubst %.cpp, $(OBJ_DIR)/%.o, $(SRCS))
 
 CC = c++
 
-CFLAGS = -std=c++98
+RM = rm -f
+
+CFLAGS = -std=c++11
 
 NAME = webserv
 
@@ -26,9 +28,11 @@ $(OBJ_DIR)/%.o: %.cpp $(HEAD)
 	echo "Building $<..."
 	$(CC) $(CFLAGS) -c $< -o $@
 
+
 clean:
 	echo "Removing all object files..."
 	$(RM) $(OBJS)
+	$(RM) -r $(OBJ_DIR)
 
 fclean: clean
 	echo "Removing executable and libs..."
