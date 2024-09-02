@@ -1,10 +1,8 @@
-SRCS = main.cpp ./server/Sock.cpp ./request_response/Request.cpp ./request_response/Response.cpp \
-       ./gen_template/Generator.cpp ./utils/Convert.cpp ./server/Logger.cpp ./dir_map_gen/Gen_dir.cpp
+SRCS = ./main.cpp ./server/Sock.cpp ./request_response/Request.cpp ./request_response/Response.cpp \
+       ./gen_template/Generator.cpp ./utils/Convert.cpp ./server/Logger.cpp
 
 HEAD = ./headers/Sock.hpp ./headers/Request.hpp ./headers/Response.hpp \
        ./headers/Generator.hpp ./headers/Utils.hpp ./headers/Structes.hpp ./headers/Logger.hpp \
-	   ./headers/Gen_dir.hpp
-
 # Directory for object files
 OBJ_DIR = objects
 

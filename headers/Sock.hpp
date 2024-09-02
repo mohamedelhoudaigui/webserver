@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sock.hpp                                           :+:      :+:    :+:   */
+/*   Sock.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: theworld27 <theworld27@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 00:21:24 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/07/26 11:27:04 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/09/02 08:55:20 by theworld27       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@
 #include <fcntl.h>
 #include <poll.h>
 #include <map>
+#include <cstdlib>
 
 #define MAX_CLIENTS 100
 #define MAX_PORT 65535

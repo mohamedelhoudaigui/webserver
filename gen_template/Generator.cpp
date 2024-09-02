@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Generator.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: theworld27 <theworld27@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 01:34:30 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/07/26 11:22:17 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/09/02 08:56:39 by theworld27       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ Generator::Generator(std::string& err, int status_code, std::string file_path)
 	if (status_code != 200)
 		html_temp.open(ERR_FILE);
 	else
-		html_temp.open(file_path);
+		html_temp.open(file_path.c_str());
 	if (!html_temp.is_open())
 	{
 		std::cerr << "error reading html template\n";

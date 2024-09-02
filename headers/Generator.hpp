@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Generator.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: theworld27 <theworld27@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 01:32:08 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/07/26 11:26:34 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/09/02 08:56:55 by theworld27       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 #include <fstream>
 #include <string>
 #include <iostream>
+#include <cstdlib>
 
 #define ERR_FILE "./www/error_template.html"
 

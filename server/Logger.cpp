@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Logger.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: theworld27 <theworld27@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 05:13:01 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/07/26 11:21:46 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/09/02 08:57:39 by theworld27       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 Logger::Logger(std::string filename)
 {
-    log.open(filename, std::ios::out);
+    log.open(filename.c_str(), std::ios::out);
     if (!log.is_open())
 	{
         std::cerr << "Failed to open log file" << std::endl;
