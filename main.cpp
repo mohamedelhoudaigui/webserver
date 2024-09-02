@@ -6,7 +6,7 @@
 /*   By: theworld27 <theworld27@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 00:22:32 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/09/02 11:08:56 by theworld27       ###   ########.fr       */
+/*   Updated: 2024/09/02 17:54:51 by theworld27       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void	gen_server(std::string host, std::vector<int> ports, std::vector<server_con
 	routes["/index.html"] = "./www/index.html";
 	routes["/script.js"] = "./www/script.js";
 	routes["/audio.mp3"] = "./www/audio.mp3";
+	routes["/video.mp4"] = "./www/video.mp4";
 
 	methods.push_back("get");
 	//methods.push_back("post");

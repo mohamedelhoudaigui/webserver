@@ -6,7 +6,7 @@
 /*   By: theworld27 <theworld27@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 11:25:29 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/09/02 10:58:51 by theworld27       ###   ########.fr       */
+/*   Updated: 2024/09/02 17:52:47 by theworld27       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ void	Response::set_MIME_type(Request req)
     mime_types[".json"] = "application/json";
     mime_types[".xml"] = "application/xml";
 	mime_types[".mp3"] = "audio/mpeg";
+	mime_types[".mp4"] = "video/mp4";
 	
 	std::string file = this->server.routes[req.req_line[1]];
 	size_t pos = file.find_last_of(".");
