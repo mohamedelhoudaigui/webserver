@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 11:45:34 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/11 18:44:17 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/11 21:07:31 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 #include <unistd.h>
 #include <vector>
 
+#include "Request.hpp"
+
 
 class Server
 {
@@ -35,8 +37,8 @@ class Server
 		void	ClientActivity(fd_set& Readfds);
 		void	ServerActivity(fd_set& Readfds);
 
-		void	CloseClient(int& ClientFd, int& ClientIndex);
-		void	HandleClient(int& ClientFd, int& ClientIndex, std::string& ReqBuffer, int& Valread);
+		void	CloseClient(int ClientFd, int ClientIndex);
+		void	HandleClient(int ClientFd, int ClientIndex, std::string& ReqBuffer, int Valread);
 
 	private:
 		int					ServerSocket;

@@ -1,6 +1,6 @@
-SRCS = ./main.cpp ./Server/Server.cpp
+SRCS = ./main.cpp ./Server/Server.cpp ./Request/Request.cpp
 
-HEAD = ./Include/Server.hpp
+HEAD = ./Include/Server.hpp ./Include/Request.hpp 
 # Directory for object files
 OBJ_DIR = objects
 

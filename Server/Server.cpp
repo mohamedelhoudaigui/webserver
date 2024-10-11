@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 11:50:41 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/11 18:44:42 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/11 21:07:38 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	Server::BindServer() {
 	this->ServerSocket = socket(AF_INET, SOCK_STREAM, 0);
 	if (this->ServerSocket == -1)
 	{
-		std::cerr << "Failed to start server (socket init error)\n";
+		std::cerr << "Failed to start server (socket init error)" << std::endl;
 		exit(1);
 	}
 
@@ -35,7 +35,7 @@ void	Server::BindServer() {
 
 	if (bind(this->ServerSocket, (struct sockaddr*)&ServerAddrStruct, sizeof(ServerAddrStruct)) == -1)
 	{
-		std::cerr << "Error binding server socket\n";
+		std::cerr << "Error binding server socket" << std::endl;
 		exit(1);
 	}
 }
@@ -44,17 +44,17 @@ void Server::GetServerInfo() {
 	struct sockaddr_in addr;
     socklen_t addr_len = sizeof(addr);
     if (getsockname(this->ServerSocket, (struct sockaddr*)&addr, &addr_len) == -1) {
-        std::cerr << "Error getting socket name\n";
+        std::cerr << "Error getting socket name" << std::endl;
         exit(1);
     }
     char ip[INET_ADDRSTRLEN];
     inet_ntop(AF_INET, &(addr.sin_addr), ip, INET_ADDRSTRLEN);
-    std::cout << "Server is bound to IP: " << ip << " and port: " << ntohs(addr.sin_port) << "\n";
+    std::cout << "Server is bound to IP: " << ip << " and port: " << ntohs(addr.sin_port) << std::endl;
 }
 
 void	Server::ListenServer() {
 	if (listen(this->ServerSocket, 100) == -1) {
-        std::cerr << "Error listening on server socket\n";
+        std::cerr << "Error listening on server socket" << std::endl;
         exit(1);
 	}
 }
@@ -83,7 +83,7 @@ void	Server::SelectSetup()
 
         Activity = select(MaxFd + 1, &Readfds, NULL, NULL, NULL);
         if (Activity < 0)
-            std::cerr << "Select error" << '\n';
+            std::cerr << "Select error" << std::endl;
 
         ServerActivity(Readfds);
 		ClientActivity(Readfds);
@@ -100,7 +100,7 @@ void	Server::ServerActivity(fd_set& Readfds)
 	{
 		NewSocket = accept(ServerSocket, (struct sockaddr *)&Address, (socklen_t*)&Addrlen);
 		if (NewSocket < 0)
-			std::cerr << "Accept failed\n";
+			std::cerr << "Accept failed" << std::endl;
 
 		//std::cout << "New connection, socket fd is " << NewSocket 
 		//          << ", ip is : " << inet_ntoa(Address.sin_addr) 
@@ -112,7 +112,6 @@ void	Server::ServerActivity(fd_set& Readfds)
 			if (Clients[i] == 0) 
 			{
 				Clients[i] = NewSocket;
-				std::cout << "Adding to list of sockets as " << i << '\n';
 				break;
 			}
 		}
@@ -121,16 +120,16 @@ void	Server::ServerActivity(fd_set& Readfds)
 
 // Client handeling :
 
-void	Server::CloseClient(int& ClientFd, int& ClientIndex)
+void	Server::CloseClient(int ClientFd, int ClientIndex)
 {
 	close(ClientFd);
 	this->Clients[ClientIndex] = 0;
 }
 
-void	Server::HandleClient(int& ClientFd, int& ClientIndex, std::string& ReqBuffer, int& Valread) // req init here
+void	Server::HandleClient(int ClientFd, int ClientIndex, std::string& ReqBuffer, int Valread) // req init here
 {
-	
-	std::cout << ReqBuffer << '\n';
+	Request	r(ReqBuffer);
+	r.Parse();
 	//send(sd, buffer, strlen(buffer), 0);
 	CloseClient(ClientFd, ClientIndex);
 	
