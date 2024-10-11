@@ -1,7 +1,6 @@
 log.txt
 *.o
 webserv
-.DS_Store
 objects
 www
 ubuntu_tester
