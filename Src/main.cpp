@@ -6,11 +6,11 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 11:43:46 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/11 18:18:39 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/11 22:26:25 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./Include/Server.hpp"
+#include "../Include/Server.hpp"
 
 
 void	LaunchServer(int Port, int BufferSize, int MaxClients) {
@@ -33,6 +33,6 @@ void	LaunchServer(int Port, int BufferSize, int MaxClients) {
 int main(int ac, char **av) {
 	if (ac == 4)
 	{
-		LaunchServer(atoi(av[1]), atoi(av[2]), atoi(av[3]));
+		LaunchServer(atoi(av[3]), atoi(av[1]), atoi(av[2]));
 	}
 }

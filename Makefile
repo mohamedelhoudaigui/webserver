@@ -1,4 +1,4 @@
-SRCS = ./main.cpp ./Server/Server.cpp ./Request/Request.cpp
+SRCS = ./Src/main.cpp ./Src/Server.cpp ./Src/Request.cpp
 
 HEAD = ./Include/Server.hpp ./Include/Request.hpp 
 # Directory for object files
