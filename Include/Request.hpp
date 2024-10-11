@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 18:38:40 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/11 22:19:34 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/11 23:07:25 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,18 +37,20 @@ class	Request
 {
 	public:
 		Request(std::string& ReqBuffer);
-		void	Parse();
-		void	ParseReqLine(std::string& Line);
-		void	ParseHeaders(std::string& Line);
-		void	ParseBody(std::string& Line);
+		void		Parse();
+		void		ParseReqLine(std::string& Line);
+		void		ParseHeaders(std::string& Line);
+		void		ParseBody(std::string& Line);
+
+		ReqStruct		Result;
 
 	private:
 		unsigned int	Status;
 		std::string		ReqBuffer;
-		ReqStruct		Result;
 		
 };
 
-std::ostream&	operator<<(std::ostream& o, const ReqStruct& r);
+std::ostream&	operator<<(std::ostream& o, ReqStruct& r);
+std::string		TrimAll(std::string str);
 
 #endif

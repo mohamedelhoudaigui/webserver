@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 18:38:25 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/11 22:25:27 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/11 23:07:42 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,22 @@
 
 Request::Request(std::string& ReqBuffer): ReqBuffer(ReqBuffer), Status(200)
 {}
+
+std::string	TrimAll(std::string str)
+{
+    size_t start = 0;
+    while (start < str.size() && (std::isspace(str[start]) || str[start] == '\n' || str[start] == '\r'))
+        ++start;
+
+    if (start == str.size())
+        return ("");
+
+    size_t end = str.size() - 1;
+    while (end > start && (std::isspace(str[end]) || str[end] == '\n' || str[end] == '\r'))
+        --end;
+
+    return (str.substr(start, end - start + 1));
+}
 
 void	Request::Parse()
 {
@@ -30,7 +46,8 @@ void	Request::Parse()
 			ParseReqLine(Line);
 			Counter++;
 		}
-		ParseHeaders(Line);
+		else
+			ParseHeaders(Line);
 	}
 }
 
@@ -48,25 +65,19 @@ void	Request::ParseReqLine(std::string& line)
 		Status = 400;
 	else
 	{
-		Result.ReqLine.Method = Parts[0];
-		Result.ReqLine.Path = Parts[1];
-		Result.ReqLine.HttpVersion = Parts[2];	
+		Result.ReqLine.Method = TrimAll(Parts[0]);
+		Result.ReqLine.Path = TrimAll(Parts[1]);
+		Result.ReqLine.HttpVersion = TrimAll(Parts[2]);	
 	}
 }
 
 void	Request::ParseHeaders(std::string& Line)
 {
-	std::istringstream			S(Line);
-	std::vector<std::string>	Parts;
-	std::string					Part;
-
-	while (getline(S, Part), ':')
-        Parts.push_back(Part);
-
-    if (Parts.size() != 2)
+	size_t pos = Line.find(':');
+    if (pos == std::string::npos)
 		Status = 400;
 	else
-		Result.Headers[Parts[0]] = Parts[1];
+		Result.Headers[TrimAll(Line.substr(0, pos))] = TrimAll(Line.substr(pos + 1));
 }
 
 // overload :
@@ -82,3 +93,4 @@ std::ostream&	operator<<(std::ostream& o, ReqStruct& r)
 	}
 	return o;
 }
+
