@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 11:45:34 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/11 16:48:33 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/11 18:44:17 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,16 +27,18 @@ class Server
 {
 	public:
 		Server(unsigned int Port, unsigned int BufferSize, unsigned int MaxClients);
-		void	BindServer(); // 1
-		void	GetServerInfo(); // 2
-		void	ListenServer(); // 3
-		void	SelectSetup(); // 4
-		void	HandleClient(int ClientFd, int ClientIndex, char* Buffer, int Valread);
+		void	BindServer();
+		void	GetServerInfo();
+		void	ListenServer();
 
-		void	CloseClient(int ClientFd, int ClientIndex);
+		void	SelectSetup();
+		void	ClientActivity(fd_set& Readfds);
+		void	ServerActivity(fd_set& Readfds);
+
+		void	CloseClient(int& ClientFd, int& ClientIndex);
+		void	HandleClient(int& ClientFd, int& ClientIndex, std::string& ReqBuffer, int& Valread);
 
 	private:
-		std::string			Addr;
 		int					ServerSocket;
 		sockaddr_in			ServerAddrStruct;
 		std::vector<int>	Clients;

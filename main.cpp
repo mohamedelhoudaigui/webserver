@@ -6,17 +6,17 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 11:43:46 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/11 16:48:52 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/11 18:18:39 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./Include/Server.hpp"
 
 
-void	LaunchServer() {
+void	LaunchServer(int Port, int BufferSize, int MaxClients) {
 	try 
 	{
-		Server	MainServer(4545, 1024 , 100);
+		Server	MainServer(Port, BufferSize , MaxClients);
 		MainServer.BindServer();
 		MainServer.GetServerInfo();
 		MainServer.ListenServer();
@@ -30,6 +30,9 @@ void	LaunchServer() {
 }
 
 
-int main() {
-	LaunchServer();
+int main(int ac, char **av) {
+	if (ac == 4)
+	{
+		LaunchServer(atoi(av[1]), atoi(av[2]), atoi(av[3]));
+	}
 }

@@ -6,20 +6,20 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 11:50:41 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/11 16:48:03 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/11 18:44:42 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Include/Server.hpp"
 
+// server bind + listen setup :
 
 Server::Server(unsigned int Port, unsigned int BufferSize, unsigned int MaxClients):
 	Port(Port),
 	BufferSize(BufferSize),
 	MaxClients(MaxClients),
 	Clients(MaxClients, 0)
-{
-}
+{}
 
 void	Server::BindServer() {
 	this->ServerSocket = socket(AF_INET, SOCK_STREAM, 0);
@@ -59,21 +59,12 @@ void	Server::ListenServer() {
 	}
 }
 
-void	Server::HandleClient(int ClientFd, int ClientIndex, char* Buffer, int Valread) {
-	Buffer[Valread] = '\0';
-	std::cout << Buffer << '\n';
-	//send(sd, buffer, strlen(buffer), 0);
-	CloseClient(ClientFd, ClientIndex);
-	
-}
+// select() code :
 
 void	Server::SelectSetup()
 {
-	int					NewSocket, Activity, Valread, ClientFd, MaxFd;
-    struct sockaddr_in	Address;
-    char				Buffer[BufferSize];
-    fd_set				Readfds;
-    int Addrlen =		sizeof(Address);
+	int		Activity, MaxFd;
+    fd_set	Readfds;
 
 	while(true)
 	{
@@ -81,60 +72,89 @@ void	Server::SelectSetup()
         FD_SET(ServerSocket, &Readfds);
         MaxFd = ServerSocket;
 
-        for (int i = 0; i < MaxClients; i++)
+        for (int i = 0; i < MaxClients; i++) // add clients to Readfds struct
 		{
-            ClientFd = Clients[i];
+            if(Clients[i] > 0)
+                FD_SET(Clients[i], &Readfds);
 
-            if(ClientFd > 0)
-                FD_SET(ClientFd, &Readfds);
-
-            if(ClientFd > MaxFd)
-                MaxFd = ClientFd;
+            if(Clients[i] > MaxFd)
+                MaxFd = Clients[i];
         }
 
         Activity = select(MaxFd + 1, &Readfds, NULL, NULL, NULL);
-
         if (Activity < 0)
             std::cerr << "Select error" << '\n';
 
-        if (FD_ISSET(ServerSocket, &Readfds)) // activity from server socket
+        ServerActivity(Readfds);
+		ClientActivity(Readfds);
+    }	
+}
+
+void	Server::ServerActivity(fd_set& Readfds)
+{
+	struct sockaddr_in	Address;
+    int Addrlen =		sizeof(Address);
+	int	NewSocket;
+
+	if (FD_ISSET(ServerSocket, &Readfds)) // activity from server socket
+	{
+		NewSocket = accept(ServerSocket, (struct sockaddr *)&Address, (socklen_t*)&Addrlen);
+		if (NewSocket < 0)
+			std::cerr << "Accept failed\n";
+
+		//std::cout << "New connection, socket fd is " << NewSocket 
+		//          << ", ip is : " << inet_ntoa(Address.sin_addr) 
+		//          << ", port : " << ntohs(Address.sin_port) << '\n';
+
+
+		for (int i = 0; i < MaxClients; i++)
 		{
-            if ((NewSocket = accept(ServerSocket, (struct sockaddr *)&Address, (socklen_t*)&Addrlen)) < 0)
-                std::cerr << "Accept failed" << '\n';
-
-            std::cout << "New connection, socket fd is " << NewSocket 
-                      << ", ip is : " << inet_ntoa(Address.sin_addr) 
-                      << ", port : " << ntohs(Address.sin_port) << '\n';
-
-
-            for (int i = 0; i < MaxClients; i++)
+			if (Clients[i] == 0) 
 			{
-                if (Clients[i] == 0) 
-				{
-                    Clients[i] = NewSocket;
-                    std::cout << "Adding to list of sockets as " << i << '\n';
-                    break;
-                }
-            }
-        }
+				Clients[i] = NewSocket;
+				std::cout << "Adding to list of sockets as " << i << '\n';
+				break;
+			}
+		}
+	}
+}
 
-        for (int i = 0; i < MaxClients; i++) // Else it's some IO operation on a client socket
+// Client handeling :
+
+void	Server::CloseClient(int& ClientFd, int& ClientIndex)
+{
+	close(ClientFd);
+	this->Clients[ClientIndex] = 0;
+}
+
+void	Server::HandleClient(int& ClientFd, int& ClientIndex, std::string& ReqBuffer, int& Valread) // req init here
+{
+	
+	std::cout << ReqBuffer << '\n';
+	//send(sd, buffer, strlen(buffer), 0);
+	CloseClient(ClientFd, ClientIndex);
+	
+}
+
+void	Server::ClientActivity(fd_set& Readfds)
+{
+	int		ClientFd;
+	char	Buffer[BufferSize];
+	int		Valread;
+
+	for (int i = 0; i < MaxClients; i++) // Else it's some IO operation on a client socket
 		{
             ClientFd = Clients[i];
             if (FD_ISSET(ClientFd, &Readfds))
 			{
                 if ((Valread = read(ClientFd, Buffer, BufferSize)) == 0)
                 	CloseClient(ClientFd, i);
-				else      
-					HandleClient(ClientFd, i, Buffer, Valread);
+				else
+				{
+					Buffer[Valread] = '\0';
+					std::string	ReqBuffer(Buffer);
+					HandleClient(ClientFd, i, ReqBuffer, Valread);
+				}
             }
         }
-    }	
-}
-
-
-void	Server::CloseClient(int ClientFd, int ClientIndex)
-{
-	close(ClientFd);
-	this->Clients[ClientIndex] = 0;
 }
