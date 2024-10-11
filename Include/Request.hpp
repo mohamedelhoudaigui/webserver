@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 18:38:40 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/11 23:07:25 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/12 00:49:29 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ typedef struct ReqStruct
 {
 	RequestLine							ReqLine;
 	std::map<std::string, std::string>	Headers;
+	std::string							Body;
 }		ReqStruct;
 
 

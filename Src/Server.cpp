@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 11:50:41 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/11 22:58:04 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/12 00:51:01 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,16 @@ void	Server::BindServer() {
 		std::cerr << "Failed to start server (socket init error)" << std::endl;
 		exit(1);
 	}
+
+	int flags = fcntl(this->ServerSocket, F_GETFL, 0);
+    if (flags == -1) {
+        std::cerr << "Error getting socket flags" << std::endl;
+        exit(1);
+    }
+    if (fcntl(this->ServerSocket, F_SETFL, flags | O_NONBLOCK) == -1) {
+        std::cerr << "Error setting socket to non-blocking mode" << std::endl;
+        exit(1);
+    }
 
 	this->ServerAddrStruct.sin_family = AF_INET;
 	this->ServerAddrStruct.sin_port = htons(this->Port);
