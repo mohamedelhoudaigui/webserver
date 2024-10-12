@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 18:38:25 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/12 00:54:58 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/12 00:56:54 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ void	Request::Parse()
 		else
 			ParseBody(Line);
 	}
+	std::cout << "Status = " << this->Status << '\n';
 }
 
 

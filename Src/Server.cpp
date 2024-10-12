@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 11:50:41 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/12 00:51:01 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/12 00:57:40 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,6 +141,7 @@ void	Server::HandleClient(int ClientFd, int ClientIndex, std::string& ReqBuffer,
 	Request	r(ReqBuffer);
 	r.Parse();
 	std::cout << r.Result;
+	
 	//send(sd, buffer, strlen(buffer), 0);
 	CloseClient(ClientFd, ClientIndex);
 	
