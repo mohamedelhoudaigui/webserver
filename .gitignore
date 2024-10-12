@@ -1,9 +1,0 @@
-log.txt
-*.o
-webserv
-objects
-www
-ubuntu_tester
-TODO.md
-.vscode
-.gitignore
