@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Request.hpp                                        :+:      :+:    :+:   */
+/*   Response.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/11 18:38:40 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/12 02:21:34 by mel-houd         ###   ########.fr       */
+/*   Created: 2024/10/12 02:06:10 by mel-houd          #+#    #+#             */
+/*   Updated: 2024/10/12 02:25:46 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef REQUEST_HPP
-#define REQUEST_HPP
+#ifndef RESPONSE_HPP
+#define RESPONSE_HPP
 
 #include <iostream>
 #include <string>
@@ -19,40 +19,38 @@
 #include <sstream>
 #include <vector>
 
-typedef struct RequestLine
-{
-	std::string	Method;
-	std::string	Path;
-	std::string	HttpVersion;
-}		RequestLine;
+#include "Request.hpp"
 
-typedef struct ReqStruct
+typedef	struct StatusLine
 {
-	RequestLine							ReqLine;
+	std::string	HttpVersion;
+	std::string	StatusCode;
+	std::string	StatusText;
+}	StatusLine;
+
+typedef struct ResStruct
+{
+	StatusLine							Stline;
 	std::map<std::string, std::string>	Headers;
 	std::vector<std::string>			Body;
-	unsigned int						Status;
-}		ReqStruct;
+	std::string							BufferRes;
+	char								*RawResponse;
+}				ResStruct;
 
 
-class	Request
+class	Response
 {
 	public:
-		Request(std::string& ReqBuffer);
-		void		Parse();
-		void		ParseReqLine(std::string& Line);
-		void		ParseHeaders(std::string& Line, bool& h);
-		void		ParseBody(std::string& Line);
-		ReqStruct	GetResult();
-
-
+		Response(Request req);
+		void		BuildSLine();
+		void		AppendHeaders();
+		void		AppendBody();
+		ResStruct	GetRes();
+		
 	private:
-		std::string		ReqBuffer;
-		ReqStruct		Result;
-
+		ResStruct	res;
 };
 
-std::ostream&	operator<<(std::ostream& o, Request& r);
-std::string		TrimAll(std::string str);
+
 
 #endif
