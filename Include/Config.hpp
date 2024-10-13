@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 02:49:00 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/13 05:32:41 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/13 06:17:12 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,16 +25,30 @@
 
 #include "Helper.hpp"
 
-enum Tokens
+enum TokenType
 {
-	KEY,
-	VALUE,
-	COMMENT,
-	ENDLINE,
-	OPEN,
-	CLOSE,
+	KEY = 0,
+	VALUE = 1,
+	OPEN = 2,
+	CLOSE = 3,
 };
 
+typedef struct Token
+{
+	std::string	Token;
+	TokenType	Type;
+
+}	Token;
+
+typedef struct TokenLine
+{
+	std::vector<Token>	Tokens;
+}	TokenLine;
+
+typedef struct ConfigLines
+{
+	std::vector<TokenLine>	TokenLines;
+}			ConfigLines;
 
 typedef struct RouteConf
 {
@@ -65,14 +79,19 @@ class Config
 {
 	public:
 		Config(std::string FileName);
-		void	Init();
-		void	Parse();
+		void		Init();
+		void		Parse();
+		void		Tokenise(std::string LineStr);
+		ConfigLines	GetLines();
 
 	private:
 		std::map<std::string, int>	Keys;
 		ConfigFile					Result;
 		std::fstream				File;
+		ConfigLines					ConfLines;
 };
+
+std::ostream&	operator<<(std::ostream& o, ConfigLines& c);
 
 
 #endif
