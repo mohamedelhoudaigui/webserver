@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 18:38:25 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/13 05:34:40 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/13 09:43:45 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,11 @@ void	Request::ParseHeaders(std::string& Line, bool& h)
     else if (pos == std::string::npos)
 		Result.Status = 400;
 	else
-		Result.Headers[TrimAll(Line.substr(0, pos))] = TrimAll(Line.substr(pos + 1));
+	{
+		std::string	Key = Line.substr(0, pos);
+		std::string	Value = Line.substr(pos + 1);
+		Result.Headers[TrimAll(Key)] = TrimAll(Value);
+	}
 }
 
 void	Request::ParseBody(std::string& Line)

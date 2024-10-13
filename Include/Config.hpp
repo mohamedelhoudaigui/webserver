@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 02:49:00 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/13 06:32:09 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/13 09:46:44 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,56 +24,8 @@
 #include <unistd.h>
 
 #include "Helper.hpp"
+#include "Types.hpp"
 
-enum TokenType
-{
-	KEY = 0,
-	VALUE = 1,
-	OPEN = 2,
-	CLOSE = 3,
-};
-
-typedef struct Token
-{
-	std::string	Token;
-	TokenType	Type;
-
-}	Token;
-
-typedef struct TokenLine
-{
-	std::vector<Token>	Tokens;
-}	TokenLine;
-
-typedef struct ConfigLines
-{
-	std::vector<TokenLine>	TokenLines;
-}			ConfigLines;
-
-typedef struct RouteConf
-{
-	std::string					Location;
-	std::vector<std::string>	Methods;
-
-}	RouteConf;
-
-typedef struct ServerConf
-{
-	std::string		Label;
-	unsigned int	Port;
-	std::string		Root;
-	unsigned int	MaxClients;
-	std::vector<RouteConf>	Routes;
-	
-}	ServerConf;
-
-typedef struct ConfigFile
-{
-	unsigned long							MaxClientBody;
-	unsigned int							MaxClients;
-	std::string								ErrorPage;
-	std::vector<ServerConf>					servers;
-}	ConfigFile;
 
 class Config
 {
@@ -81,9 +33,12 @@ class Config
 		Config(std::string FileName);
 		void		Init();
 		void		Parse();
-		void		Tokenise(std::string LineStr);
-		void		AssignTokens(TokenLine& LineTokens);
 		ConfigLines	GetLines();
+		ConfigFile	GetResult();
+		void		Tokenise(const std::string& LineStr);
+		void		AssignTokens(TokenLine& LineTokens);
+		void		AssignGlobalParams(Token& Key, std::vector<Token>& Tokens);
+		void		AssignServer(Token& Key, std::vector<Token>& Tokens);
 
 	private:
 		std::map<std::string, int>	Keys;

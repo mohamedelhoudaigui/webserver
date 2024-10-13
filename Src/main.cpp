@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 11:43:46 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/13 06:14:07 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/13 08:46:49 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,11 @@ int main(int ac, char **av) {
 		Config	g(av[1]);
 		g.Init();
 		g.Parse();
-		ConfigLines	Lines = g.GetLines();
-		std::cout << Lines;
+		std::cout << g.GetResult().ErrorPage << std::endl;
+		std::cout << g.GetResult().MaxClientBody << std::endl;
+		std::cout << g.GetResult().MaxClients << std::endl;
+		//ConfigLines	Lines = g.GetLines();
+		//std::cout << Lines;
 	} catch (const std::exception& e){
 		std::cout << e.what() << std::endl;
 		exit(2);

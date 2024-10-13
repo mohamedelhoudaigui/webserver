@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 04:29:25 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/13 06:46:45 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/13 09:46:53 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,14 +45,20 @@ void	Config::Parse()
 	{
 		Buffer = TrimAll(Buffer);
 		if (Buffer != "" && Buffer[0] != '#')
+		{
 			Tokenise(TrimAll(Buffer));
+		}
 	}
 	File.close();
+	for (int i = 0; i < ConfLines.TokenLines.size(); ++i)
+	{
+		AssignTokens(ConfLines.TokenLines[i]);
+	}
 }
 
 
 
-void	Config::Tokenise(std::string LineStr)
+void	Config::Tokenise(const std::string& LineStr)
 {
 	TokenLine			Line;
 	std::string			Buffer;
@@ -61,73 +67,78 @@ void	Config::Tokenise(std::string LineStr)
 	
 	while (std::getline(s, Buffer, ' '))
 	{
-		Token	token;
+		Buffer = TrimAll(Buffer);
+		if (Buffer != "")
+		{
+			Token	token;
 
-		if (Buffer == "}")
-		{
-			token.Token = Buffer;
-			token.Type = CLOSE;
-		}
-		else if (Buffer == "{")
-		{
-			token.Token = Buffer;
-			token.Type = OPEN;
-		}
-
-		else if (Key && Buffer != "}" && Buffer != "{") // key
-		{
-			if (Keys[Buffer] != 1)
+			if (Buffer == "}")
 			{
-				throw std::runtime_error("Invalid key in config file :" + Buffer);
+				token.Token = Buffer;
+				token.Type = CLOSE;
 			}
-			token.Token = Buffer;
-			token.Type = KEY;
-			Key = false;
-		}
+			else if (Buffer == "{")
+			{
+				token.Token = Buffer;
+				token.Type = OPEN;
+			}
 
-		else // value
-		{
-			token.Token = Buffer;
-			token.Type = VALUE;
-		}
+			else if (Key && Buffer != "}" && Buffer != "{") // key
+			{
+				if (Keys[Buffer] != 1)
+				{
+					throw std::runtime_error("Invalid key in config file :" + Buffer);
+				}
+				token.Token = Buffer;
+				token.Type = KEY;
+				Key = false;
+			}
 
-		Line.Tokens.push_back(token);
+			else
+			{
+				token.Token = Buffer;
+				token.Type = VALUE;
+			}
+
+			Line.Tokens.push_back(token);
+		}
 	}
 
 	ConfLines.TokenLines.push_back(Line);
 }
 
+void	Config::AssignGlobalParams(Token& Key, std::vector<Token>& Tokens)
+{
+	if (Key.Token == "ClientMaxBodySize")
+		Result.MaxClientBody = PairValueNum(Tokens, "ClientMaxBodySize");
+	if (Key.Token == "MaxClients")
+		Result.MaxClients = PairValueNum(Tokens, "MaxClients");
+	if (Key.Token == "ErrorPage")
+	{
+		std::string Path = PairValueStr(Tokens, "ErrorPage");
+		std::ifstream f(Path);
+		if (f.good() == false)
+			throw std::runtime_error(Tokens[1].Token + " ErrorFile doesnt exist");
+		f.close();
+		Result.ErrorPage = Path;
+	}
+}
 
-
+void	Config::AssignServer(Token& Key, std::vector<Token>& Tokens)
+{
+	// implement
+}
 
 void	Config::AssignTokens(TokenLine& LineTokens)
 {
 	std::vector<Token>	Tokens = LineTokens.Tokens;
 	size_t				Ntokens = Tokens.size();
 
-	Token key = Tokens[0]; 
-	if (key.Type == 0)
-	{
-		if (key.Token == "ClientMaxBodySize")
-		{
-			if (Ntokens != 2)
-				throw std::runtime_error("ClientMaxBodySize: more than 1 value");
-			unsigned long	value = std::atoi(Tokens[1].Token.c_str());
-			if (value == 0 && Tokens[1].Token != "0")
-				throw std::runtime_error("ClientMaxBodySize: invalid value");
-			Result.MaxClientBody = value;
-		}
-		if (key.Token == "MaxClients")
-		{
-			
-		}
-	}
-	else
-		throw std::runtime_error("invalid key in line :" + key.Token);
+	Token Key = Tokens[0];
+
+	AssignGlobalParams(Key, Tokens);
+	AssignServer(Key, Tokens);
 }
-
-
-
 
 ConfigLines	Config::GetLines()
 {
@@ -147,4 +158,9 @@ std::ostream&	operator<<(std::ostream& o, ConfigLines& c)
 		}
 	}
 	return o;
+}
+
+ConfigFile	Config::GetResult()
+{
+	return (this->Result);
 }
