@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 02:49:00 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/13 06:17:12 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/13 06:32:09 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ class Config
 		void		Init();
 		void		Parse();
 		void		Tokenise(std::string LineStr);
+		void		AssignTokens(TokenLine& LineTokens);
 		ConfigLines	GetLines();
 
 	private:

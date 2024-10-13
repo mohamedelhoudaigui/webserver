@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 04:29:25 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/13 06:21:35 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/13 06:46:45 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ Config::Config(std::string FileName): File(FileName)
 
 void	Config::Init()
 {
-	Keys["Global"] = 1;
 	Keys["ClientMaxBodySize"] = 1;
 	Keys["ErrorPage"] = 1;
 	Keys["ServerName"] = 1;
@@ -63,6 +62,7 @@ void	Config::Tokenise(std::string LineStr)
 	while (std::getline(s, Buffer, ' '))
 	{
 		Token	token;
+
 		if (Buffer == "}")
 		{
 			token.Token = Buffer;
@@ -73,7 +73,8 @@ void	Config::Tokenise(std::string LineStr)
 			token.Token = Buffer;
 			token.Type = OPEN;
 		}
-		else if (Key && Buffer != "}" && Buffer != "{")
+
+		else if (Key && Buffer != "}" && Buffer != "{") // key
 		{
 			if (Keys[Buffer] != 1)
 			{
@@ -83,15 +84,50 @@ void	Config::Tokenise(std::string LineStr)
 			token.Type = KEY;
 			Key = false;
 		}
-		else
+
+		else // value
 		{
 			token.Token = Buffer;
 			token.Type = VALUE;
 		}
+
 		Line.Tokens.push_back(token);
 	}
+
 	ConfLines.TokenLines.push_back(Line);
 }
+
+
+
+
+void	Config::AssignTokens(TokenLine& LineTokens)
+{
+	std::vector<Token>	Tokens = LineTokens.Tokens;
+	size_t				Ntokens = Tokens.size();
+
+	Token key = Tokens[0]; 
+	if (key.Type == 0)
+	{
+		if (key.Token == "ClientMaxBodySize")
+		{
+			if (Ntokens != 2)
+				throw std::runtime_error("ClientMaxBodySize: more than 1 value");
+			unsigned long	value = std::atoi(Tokens[1].Token.c_str());
+			if (value == 0 && Tokens[1].Token != "0")
+				throw std::runtime_error("ClientMaxBodySize: invalid value");
+			Result.MaxClientBody = value;
+		}
+		if (key.Token == "MaxClients")
+		{
+			
+		}
+	}
+	else
+		throw std::runtime_error("invalid key in line :" + key.Token);
+}
+
+
+
 
 ConfigLines	Config::GetLines()
 {
