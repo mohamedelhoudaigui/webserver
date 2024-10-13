@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 05:31:43 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/13 09:43:58 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/13 12:08:56 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 
 #include <string>
 #include <limits.h>
+#include <stdexcept>
+#include <cstdlib>
 #include "../Include/Types.hpp"
 
 

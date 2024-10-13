@@ -6,15 +6,17 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 04:29:25 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/13 09:46:53 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/13 13:14:38 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Include/Config.hpp"
 
 
-Config::Config(std::string FileName): File(FileName)
+Config::Config(std::string FileName)
 {
+	const char*	zbi = FileName.c_str();
+	File.open(zbi);
 	if (!File.is_open())
 		throw std::runtime_error("Error opening config file");
 }
@@ -50,9 +52,10 @@ void	Config::Parse()
 		}
 	}
 	File.close();
+	std::string	Scope = "Global";
 	for (int i = 0; i < ConfLines.TokenLines.size(); ++i)
 	{
-		AssignTokens(ConfLines.TokenLines[i]);
+		AssignTokens(ConfLines.TokenLines[i], Scope);
 	}
 }
 
@@ -110,40 +113,81 @@ void	Config::Tokenise(const std::string& LineStr)
 void	Config::AssignGlobalParams(Token& Key, std::vector<Token>& Tokens)
 {
 	if (Key.Token == "ClientMaxBodySize")
-		Result.MaxClientBody = PairValueNum(Tokens, "ClientMaxBodySize");
+		this->Result.MaxClientBody = PairValueNum(Tokens, "ClientMaxBodySize");
 	if (Key.Token == "MaxClients")
-		Result.MaxClients = PairValueNum(Tokens, "MaxClients");
+		this->Result.MaxClients = PairValueNum(Tokens, "MaxClients");
 	if (Key.Token == "ErrorPage")
 	{
 		std::string Path = PairValueStr(Tokens, "ErrorPage");
-		std::ifstream f(Path);
+		std::ifstream f(Path.c_str());
 		if (f.good() == false)
 			throw std::runtime_error(Tokens[1].Token + " ErrorFile doesnt exist");
 		f.close();
-		Result.ErrorPage = Path;
+		this->Result.ErrorPage = Path;
 	}
 }
 
-void	Config::AssignServer(Token& Key, std::vector<Token>& Tokens)
+void	Config::AssignServer(Token& Key, std::vector<Token>& Tokens, std::string& Scope)
 {
-	// implement
+	if (Key.Token == "Server")
+	{
+		if (Tokens.size() != 2 || Tokens[1].Token != "{")
+			throw std::runtime_error("Server parsing error");
+		ServerConf	Server;
+		this->Result.servers.push_back(Server);
+	}
+	if (Key.Token == "Listen")
+	{
+		if (Result.servers.size() == 0)
+			throw std::runtime_error("Error in listen attribute");
+		this->Result.servers.back().Port = PairValueNum(Tokens, "Listen");
+	}
+
+	if (Key.Token ==  "ServerName")
+	{
+		if (Result.servers.size() == 0)
+			throw std::runtime_error("Error in listen attribute");
+		this->Result.servers.back().ServerName = PairValueStr(Tokens, "ServerName");
+	}
+
+	if (Key.Token == "Root")
+	{
+		if (Result.servers.size() == 0)
+			throw std::runtime_error("Error in listen attribute");
+		this->Result.servers.back().Root = PairValueStr(Tokens, "ServerName");
+	}
+
+	if (Key.Token == "}")
+	{
+		Scope == "Global";
+	}
 }
 
-void	Config::AssignTokens(TokenLine& LineTokens)
+void	Config::AssignTokens(TokenLine& LineTokens, std::string& Scope)
 {
 	std::vector<Token>	Tokens = LineTokens.Tokens;
 	size_t				Ntokens = Tokens.size();
 
 	Token Key = Tokens[0];
 
-	AssignGlobalParams(Key, Tokens);
-	AssignServer(Key, Tokens);
+	if (Key.Token == "Server")
+	{
+		Scope = "Server";
+	}
+	else if (Key.Token == "Location")
+	{
+		Scope = "Location";
+	}
+	if (Scope == "Global")
+	{
+		AssignGlobalParams(Key, Tokens);
+	}
+	else if (Scope == "Server")
+	{
+		AssignServer(Key, Tokens, Scope);
+	}
 }
 
-ConfigLines	Config::GetLines()
-{
-	return (this->ConfLines);
-}
 
 //-- overload :
 
@@ -158,6 +202,53 @@ std::ostream&	operator<<(std::ostream& o, ConfigLines& c)
 		}
 	}
 	return o;
+}
+
+std::ostream&	operator<<(std::ostream& o, RouteConf& r)
+{
+	o << "		Loaction : " << r.Location << std::endl;
+	o << "		Methods : ";
+	for (int i = 0; i < r.Methods.size(); ++i)
+	{
+		o << r.Methods[i] << " ";
+	}
+	o << std::endl;
+	return o;
+}
+
+std::ostream&	operator <<(std::ostream& o, ServerConf& s)
+{
+	o << "	Port :" << s.Port << std::endl;
+	o << "	Root folder : " << s.Root << std::endl;
+	o << "	Server name : " << s.ServerName << std::endl;
+	for (int i = 0; i < s.Routes.size(); ++i)
+	{
+		o << "========================" << std::endl;
+		o << s.Routes[i];
+		o << "========================" << std::endl;
+	}
+	return o;
+}
+
+std::ostream&	operator<<(std::ostream& o, Config& c)
+{
+	ConfigFile	res = c.GetResult();
+	o << "Error page : " << res.ErrorPage << std::endl;
+	o << "Max clients : " << res.MaxClients << std::endl;
+	o << "Max client body size : " << res.MaxClientBody << std::endl;
+	std::cout << "Servers :" << std::endl;
+	for (int i = 0; i < res.servers.size(); ++i)
+	{
+		o << "-----------------------" << std::endl;
+		o << res.servers[i];
+		o << "-----------------------" << std::endl;
+	}
+	return o;
+}
+
+ConfigLines	Config::GetLines()
+{
+	return (this->ConfLines);
 }
 
 ConfigFile	Config::GetResult()

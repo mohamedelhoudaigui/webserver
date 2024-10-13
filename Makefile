@@ -1,8 +1,11 @@
-SRCS = ./Src/main.cpp ./Src/Server.cpp ./Src/Request.cpp ./Src/Response.cpp ./Src/Config.cpp ./Src/Helper.cpp
+SRCS =  ./Src/main.cpp \
+		./Src/Server.cpp \
+		./Src/Request.cpp \
+		./Src/Config.cpp \
+		./Src/Helper.cpp
 
 HEAD = ./Include/Server.hpp \
 		./Include/Request.hpp \
-		./Include/Response.hpp \
 		./Include/Config.hpp \
 		./Include/Helper.hpp \
 		./Include/Types.hpp \

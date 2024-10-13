@@ -6,11 +6,13 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 05:30:53 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/13 09:45:04 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/13 12:07:28 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Include/Helper.hpp"
+
+
 
 std::string TrimAll(const std::string& Line)
 {
@@ -43,7 +45,7 @@ unsigned int	PairValueNum(std::vector<Token>& Tokens, std::string ConfName)
     }
 
 	long long	Ret = std::atoll(Tokens[1].Token.c_str());
-	if (Ret > UINT32_MAX)
+	if (Ret > UINT_MAX)
 		throw std::runtime_error(ConfName + ": invalid value" + Value);
 
 	return Ret;

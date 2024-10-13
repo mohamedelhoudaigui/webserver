@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 02:49:00 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/13 09:46:44 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/13 12:57:21 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 
 #include <string>
-#include <iostream>
+#include <iostream> 
 #include <vector>
 #include <map>
 #include <sstream>
@@ -36,9 +36,9 @@ class Config
 		ConfigLines	GetLines();
 		ConfigFile	GetResult();
 		void		Tokenise(const std::string& LineStr);
-		void		AssignTokens(TokenLine& LineTokens);
+		void		AssignTokens(TokenLine& LineTokens, std::string& Scope);
 		void		AssignGlobalParams(Token& Key, std::vector<Token>& Tokens);
-		void		AssignServer(Token& Key, std::vector<Token>& Tokens);
+		void		AssignServer(Token& Key, std::vector<Token>& Tokens, std::string& Scope);
 
 	private:
 		std::map<std::string, int>	Keys;
@@ -48,6 +48,9 @@ class Config
 };
 
 std::ostream&	operator<<(std::ostream& o, ConfigLines& c);
+std::ostream&	operator<<(std::ostream& o, Config& c);
+std::ostream&	operator <<(std::ostream& o, ServerConf& s);
+std::ostream&	operator<<(std::ostream& o, RouteConf& r);
 
 
 #endif

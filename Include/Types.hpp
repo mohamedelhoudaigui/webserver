@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 08:34:31 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/13 09:32:20 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/13 12:35:23 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,9 @@ typedef struct RouteConf
 
 typedef struct ServerConf
 {
-	std::string		Label;
 	unsigned int	Port;
 	std::string		Root;
-	unsigned int	MaxClients;
+	std::string		ServerName;
 	std::vector<RouteConf>	Routes;
 	
 }	ServerConf;
