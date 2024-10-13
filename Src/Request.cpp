@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 18:38:25 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/12 02:24:02 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/13 05:34:40 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,22 +15,6 @@
 Request::Request(std::string& ReqBuffer): ReqBuffer(ReqBuffer)
 {
 	Result.Status = 200;
-}
-
-std::string	TrimAll(std::string str)
-{
-    size_t start = 0;
-    while (start < str.size() && (std::isspace(str[start]) || str[start] == '\n' || str[start] == '\r'))
-        ++start;
-
-    if (start == str.size())
-        return ("");
-
-    size_t end = str.size() - 1;
-    while (end > start && (std::isspace(str[end]) || str[end] == '\n' || str[end] == '\r'))
-        --end;
-
-    return (str.substr(start, end - start + 1));
 }
 
 void	Request::Parse()

@@ -6,18 +6,34 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 02:49:00 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/13 02:59:20 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/13 05:32:41 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CONFIG_HPP
-#define CONFIH_HPP
+#define CONFIG_HPP
 
 
 #include <string>
 #include <iostream>
 #include <vector>
 #include <map>
+#include <sstream>
+#include <fstream>
+#include <stdexcept>
+#include <unistd.h>
+
+#include "Helper.hpp"
+
+enum Tokens
+{
+	KEY,
+	VALUE,
+	COMMENT,
+	ENDLINE,
+	OPEN,
+	CLOSE,
+};
 
 
 typedef struct RouteConf
@@ -39,16 +55,24 @@ typedef struct ServerConf
 
 typedef struct ConfigFile
 {
+	unsigned long							MaxClientBody;
+	unsigned int							MaxClients;
+	std::string								ErrorPage;
 	std::vector<ServerConf>					servers;
-	std::string								MaxClientBody;
-	std::map<unsigned int, std::string>		ErrorPages;
 }	ConfigFile;
 
 class Config
 {
 	public:
+		Config(std::string FileName);
+		void	Init();
+		void	Parse();
 
-	private:		
+	private:
+		std::map<std::string, int>	Keys;
+		ConfigFile					Result;
+		std::fstream				File;
 };
+
 
 #endif

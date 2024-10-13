@@ -6,12 +6,12 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 11:43:46 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/12 01:33:41 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/13 05:09:36 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Include/Server.hpp"
-
+#include "../Include/Config.hpp"
 
 void	LaunchServer(int Port) {
 	try 
@@ -31,8 +31,18 @@ void	LaunchServer(int Port) {
 
 
 int main(int ac, char **av) {
-	if (ac == 2)
-	{
-		LaunchServer(atoi(av[1]));
+	//if (ac == 2)
+	//{
+	//	LaunchServer(atoi(av[1]));
+	//}
+	if (ac != 2)
+		return 1;
+	try{
+		Config	g(av[1]);
+		g.Init();
+		g.Parse();
+	} catch (const std::exception& e){
+		std::cout << e.what() << std::endl;
+		exit(2);
 	}
 }

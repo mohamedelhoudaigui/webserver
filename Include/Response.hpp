@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/12 02:06:10 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/12 06:08:43 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/13 05:03:48 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ typedef struct ResStruct
 	std::map<std::string, std::string>	Headers;
 	std::string							Body;
 	std::string							BufferRes;
-	char								*RawResponse;
+	const char							*RawResponse;
 
 }				ResStruct;
 

@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 18:38:40 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/12 02:21:34 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/13 05:32:56 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 #include <map>
 #include <sstream>
 #include <vector>
+
+#include "Helper.hpp"
 
 typedef struct RequestLine
 {
@@ -53,6 +55,5 @@ class	Request
 };
 
 std::ostream&	operator<<(std::ostream& o, Request& r);
-std::string		TrimAll(std::string str);
 
 #endif
