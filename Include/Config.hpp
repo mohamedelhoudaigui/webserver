@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 02:49:00 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/13 12:57:21 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/13 14:04:19 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,17 @@ class Config
 	public:
 		Config(std::string FileName);
 		void		Init();
+
 		void		Parse();
-		ConfigLines	GetLines();
-		ConfigFile	GetResult();
 		void		Tokenise(const std::string& LineStr);
+
 		void		AssignTokens(TokenLine& LineTokens, std::string& Scope);
 		void		AssignGlobalParams(Token& Key, std::vector<Token>& Tokens);
 		void		AssignServer(Token& Key, std::vector<Token>& Tokens, std::string& Scope);
+		void		AssignLocation(Token& Key, std::vector<Token>& Tokens, std::string& Scope);
+
+		ConfigLines	GetLines();
+		ConfigFile	GetResult();
 
 	private:
 		std::map<std::string, int>	Keys;

@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 04:29:25 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/13 13:14:38 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/13 14:32:12 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,11 @@ void	Config::Init()
 	Keys["AutoIndex"] = 1;
 }
 
-void	Config::Parse()
+void	Config::Parse() // main parser
 {
 	std::string	Buffer;
 
-	while (std::getline(File, Buffer))
+	while (std::getline(File, Buffer))  // tokenise and fills this->ConfLines struct
 	{
 		Buffer = TrimAll(Buffer);
 		if (Buffer != "" && Buffer[0] != '#')
@@ -61,7 +61,7 @@ void	Config::Parse()
 
 
 
-void	Config::Tokenise(const std::string& LineStr)
+void	Config::Tokenise(const std::string& LineStr) // tokenizer
 {
 	TokenLine			Line;
 	std::string			Buffer;
@@ -75,18 +75,18 @@ void	Config::Tokenise(const std::string& LineStr)
 		{
 			Token	token;
 
-			if (Buffer == "}")
+			if (Buffer == "}") // close Token
 			{
 				token.Token = Buffer;
 				token.Type = CLOSE;
 			}
-			else if (Buffer == "{")
+			else if (Buffer == "{") // open Token
 			{
 				token.Token = Buffer;
 				token.Type = OPEN;
 			}
 
-			else if (Key && Buffer != "}" && Buffer != "{") // key
+			else if (Key && Buffer != "}" && Buffer != "{") // key Token
 			{
 				if (Keys[Buffer] != 1)
 				{
@@ -97,7 +97,7 @@ void	Config::Tokenise(const std::string& LineStr)
 				Key = false;
 			}
 
-			else
+			else // value Token
 			{
 				token.Token = Buffer;
 				token.Type = VALUE;
@@ -110,6 +110,7 @@ void	Config::Tokenise(const std::string& LineStr)
 	ConfLines.TokenLines.push_back(Line);
 }
 
+// assign global params from config file
 void	Config::AssignGlobalParams(Token& Key, std::vector<Token>& Tokens)
 {
 	if (Key.Token == "ClientMaxBodySize")
@@ -117,50 +118,90 @@ void	Config::AssignGlobalParams(Token& Key, std::vector<Token>& Tokens)
 	if (Key.Token == "MaxClients")
 		this->Result.MaxClients = PairValueNum(Tokens, "MaxClients");
 	if (Key.Token == "ErrorPage")
-	{
-		std::string Path = PairValueStr(Tokens, "ErrorPage");
-		std::ifstream f(Path.c_str());
-		if (f.good() == false)
-			throw std::runtime_error(Tokens[1].Token + " ErrorFile doesnt exist");
-		f.close();
-		this->Result.ErrorPage = Path;
-	}
+		this->Result.ErrorPage = PairValueStr(Tokens, "ErrorPage");
 }
 
+// assign server scope from config file
 void	Config::AssignServer(Token& Key, std::vector<Token>& Tokens, std::string& Scope)
 {
 	if (Key.Token == "Server")
 	{
 		if (Tokens.size() != 2 || Tokens[1].Token != "{")
-			throw std::runtime_error("Server parsing error");
+			throw std::runtime_error("Server scope parsing error");
 		ServerConf	Server;
 		this->Result.servers.push_back(Server);
-	}
-	if (Key.Token == "Listen")
-	{
-		if (Result.servers.size() == 0)
-			throw std::runtime_error("Error in listen attribute");
-		this->Result.servers.back().Port = PairValueNum(Tokens, "Listen");
-	}
-
-	if (Key.Token ==  "ServerName")
-	{
-		if (Result.servers.size() == 0)
-			throw std::runtime_error("Error in listen attribute");
-		this->Result.servers.back().ServerName = PairValueStr(Tokens, "ServerName");
-	}
-
-	if (Key.Token == "Root")
-	{
-		if (Result.servers.size() == 0)
-			throw std::runtime_error("Error in listen attribute");
-		this->Result.servers.back().Root = PairValueStr(Tokens, "ServerName");
+		return ;
 	}
 
 	if (Key.Token == "}")
 	{
 		Scope == "Global";
+		return ;
 	}
+
+	if (Result.servers.size() == 0)
+		throw std::runtime_error("Attribute of Server but there is none");
+
+	if (Key.Token == "Listen")
+	{
+		this->Result.servers.back().Port = PairValueNum(Tokens, "Listen");
+	}
+
+
+	if (Key.Token ==  "ServerName")
+	{
+		this->Result.servers.back().ServerName = PairValueStr(Tokens, "ServerName");
+	}
+
+	if (Key.Token == "Root")
+	{
+		this->Result.servers.back().Root = PairValueStr(Tokens, "Root");
+	}
+
+}
+
+// assign server scope from config file
+void	Config::AssignLocation(Token& Key, std::vector<Token>& Tokens, std::string& Scope)
+{
+	if (Key.Token == "Location")
+	{
+		if (Tokens.size() != 3 || Tokens[2].Token != "{")
+			throw std::runtime_error("Location scope parsing error");
+		RouteConf	Location;
+		Location.Location = Tokens[1].Token;
+		this->Result.servers.back().Routes.push_back(Location);
+		return ;
+	}
+
+	if (Key.Token == "}")
+	{
+		Scope == "Server";
+		return ;
+	}
+
+	if (Result.servers.back().Routes.size() == 0)
+			throw std::runtime_error("Attribute of Location but there is none");
+
+	if (Key.Token == "Index")
+	{
+		this->Result.servers.back().Routes.back().Index = PairValueStr(Tokens, "Index");
+	}
+
+	if (Key.Token == "Redir")
+	{
+		this->Result.servers.back().Routes.back().Redir = PairValueStr(Tokens, "Redir");
+	}
+
+	if (Key.Token == "Methods")
+	{
+		this->Result.servers.back().Routes.back().Methods =  MultiValueStr(Tokens, "Methods");
+	}
+
+	if (Key.Token == "AutoIndex")
+	{
+		this->Result.servers.back().Routes.back().AutoIndex =  PairValueBool(Tokens, "AutoIndex");
+	}
+
 }
 
 void	Config::AssignTokens(TokenLine& LineTokens, std::string& Scope)
@@ -174,18 +215,27 @@ void	Config::AssignTokens(TokenLine& LineTokens, std::string& Scope)
 	{
 		Scope = "Server";
 	}
+
 	else if (Key.Token == "Location")
 	{
 		Scope = "Location";
 	}
+
 	if (Scope == "Global")
 	{
 		AssignGlobalParams(Key, Tokens);
 	}
+
 	else if (Scope == "Server")
 	{
 		AssignServer(Key, Tokens, Scope);
 	}
+
+	else if (Scope == "Location")
+	{
+		AssignLocation(Key, Tokens, Scope);
+	}
+
 }
 
 
@@ -206,6 +256,9 @@ std::ostream&	operator<<(std::ostream& o, ConfigLines& c)
 
 std::ostream&	operator<<(std::ostream& o, RouteConf& r)
 {
+	o << "		Index : " << r.Index << std::endl;
+	o << "		Redir : " << r.Redir << std::endl;
+	o << "		AutoIndex : " << r.AutoIndex << std::endl;
 	o << "		Loaction : " << r.Location << std::endl;
 	o << "		Methods : ";
 	for (int i = 0; i < r.Methods.size(); ++i)
@@ -223,7 +276,7 @@ std::ostream&	operator <<(std::ostream& o, ServerConf& s)
 	o << "	Server name : " << s.ServerName << std::endl;
 	for (int i = 0; i < s.Routes.size(); ++i)
 	{
-		o << "========================" << std::endl;
+		o << "\n=========Route==========" << std::endl;
 		o << s.Routes[i];
 		o << "========================" << std::endl;
 	}
@@ -239,12 +292,14 @@ std::ostream&	operator<<(std::ostream& o, Config& c)
 	std::cout << "Servers :" << std::endl;
 	for (int i = 0; i < res.servers.size(); ++i)
 	{
-		o << "-----------------------" << std::endl;
+		o << "\n---------Server---------" << std::endl;
 		o << res.servers[i];
 		o << "-----------------------" << std::endl;
 	}
 	return o;
 }
+
+//-- getters :
 
 ConfigLines	Config::GetLines()
 {

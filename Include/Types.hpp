@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 08:34:31 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/13 12:35:23 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/13 14:08:09 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,9 @@ typedef struct ConfigLines
 typedef struct RouteConf
 {
 	std::string					Location;
+	bool						AutoIndex;
+	std::string					Redir;
+	std::string					Index;
 	std::vector<std::string>	Methods;
 
 }	RouteConf;
