@@ -1,0 +1,7 @@
+ClientMaxBodySize   16000
+MaxClients          100
+ErrorPage           ./www/Error.html
+
+
+Server {
+}

@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 02:49:00 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/13 14:04:19 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/14 10:48:37 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,18 @@ class Config
 		void		Tokenise(const std::string& LineStr);
 
 		void		AssignTokens(TokenLine& LineTokens, std::string& Scope);
-		void		AssignGlobalParams(Token& Key, std::vector<Token>& Tokens);
+		void		AssignGlobalParams(Token& Key, std::vector<Token>& Tokens, std::string& Scope);
 		void		AssignServer(Token& Key, std::vector<Token>& Tokens, std::string& Scope);
 		void		AssignLocation(Token& Key, std::vector<Token>& Tokens, std::string& Scope);
+
+		void		AssignScope(Token& Key, std::vector<Token>& Tokens, std::string& Scope);
+		void		CheckNested(std::string& Key, std::string& Scope);
+		void		ManageScope(std::string& Key, std::string& Scope);
+
+		void		CheckResult();
+		void		CheckGlobalParams();
+		void		CheckServers();
+		void		CheckLocations(std::vector<RouteConf>& Locations, ServerConf& Server);
 
 		ConfigLines	GetLines();
 		ConfigFile	GetResult();

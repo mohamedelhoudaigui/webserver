@@ -4,9 +4,12 @@ ErrorPage           ./www/Error.html
 
 
 Server {
+	Server {
+		
+	}
     Listen 80
     ServerName www.example.com
-    Root /Default
+    Root /var/www/
 
 
     Location / {

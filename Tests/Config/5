@@ -3,13 +3,13 @@ MaxClients          100
 ErrorPage           ./www/Error.html
 
 
-Server {
+Server
     Listen 80
     ServerName www.example.com
-    Root /Default
+    Root /var/www/
 
 
-    Location / {
+    Location /
         Index index.html
         AutoIndex on
         Methods GET POST

@@ -6,7 +6,7 @@ ErrorPage           ./www/Error.html
 Server {
     Listen 80
     ServerName www.example.com
-    Root /Default
+    Root /var/www/
 
 
     Location / {
@@ -14,6 +14,6 @@ Server {
         AutoIndex on
         Methods GET POST
         Redir /new-page
-    }
+    
 
-}
+

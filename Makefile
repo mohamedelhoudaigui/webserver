@@ -18,7 +18,7 @@ CC = c++
 
 RM = rm -f
 
-CFLAGS = -std=c++98
+CFLAGS = #-std=c++98
 
 NAME = webserv
 

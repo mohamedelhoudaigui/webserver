@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 04:29:25 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/13 14:32:12 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/14 10:48:20 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ Config::Config(std::string FileName)
 	File.open(zbi);
 	if (!File.is_open())
 		throw std::runtime_error("Error opening config file");
+	Result.MaxClientBody = 16000;
+	Result.MaxClients = 600;
 }
 
 void	Config::Init()
@@ -57,9 +59,14 @@ void	Config::Parse() // main parser
 	{
 		AssignTokens(ConfLines.TokenLines[i], Scope);
 	}
+	CheckResult();
 }
 
-
+void	Config::CheckResult()
+{
+	CheckGlobalParams();
+	CheckServers();
+}
 
 void	Config::Tokenise(const std::string& LineStr) // tokenizer
 {
@@ -111,13 +118,18 @@ void	Config::Tokenise(const std::string& LineStr) // tokenizer
 }
 
 // assign global params from config file
-void	Config::AssignGlobalParams(Token& Key, std::vector<Token>& Tokens)
+void	Config::AssignGlobalParams(Token& Key, std::vector<Token>& Tokens, std::string& Scope)
 {
-	if (Key.Token == "ClientMaxBodySize")
+	if (Key.Token == "Server")
+	{
+		Scope = "Server";
+		return ;
+	}
+	else if (Key.Token == "ClientMaxBodySize")
 		this->Result.MaxClientBody = PairValueNum(Tokens, "ClientMaxBodySize");
-	if (Key.Token == "MaxClients")
+	else if (Key.Token == "MaxClients")
 		this->Result.MaxClients = PairValueNum(Tokens, "MaxClients");
-	if (Key.Token == "ErrorPage")
+	else if (Key.Token == "ErrorPage")
 		this->Result.ErrorPage = PairValueStr(Tokens, "ErrorPage");
 }
 
@@ -129,35 +141,39 @@ void	Config::AssignServer(Token& Key, std::vector<Token>& Tokens, std::string& S
 		if (Tokens.size() != 2 || Tokens[1].Token != "{")
 			throw std::runtime_error("Server scope parsing error");
 		ServerConf	Server;
+		Server.Port = 0;
 		this->Result.servers.push_back(Server);
-		return ;
-	}
-
-	if (Key.Token == "}")
-	{
-		Scope == "Global";
 		return ;
 	}
 
 	if (Result.servers.size() == 0)
 		throw std::runtime_error("Attribute of Server but there is none");
 
-	if (Key.Token == "Listen")
+
+	if (Key.Token == "Location")
+	{
+		Scope = "Location";
+		return ;
+	} 
+
+	else if (Key.Token == "Listen")
 	{
 		this->Result.servers.back().Port = PairValueNum(Tokens, "Listen");
 	}
 
 
-	if (Key.Token ==  "ServerName")
+	else if (Key.Token ==  "ServerName")
 	{
 		this->Result.servers.back().ServerName = PairValueStr(Tokens, "ServerName");
 	}
 
-	if (Key.Token == "Root")
+	else if (Key.Token == "Root")
 	{
 		this->Result.servers.back().Root = PairValueStr(Tokens, "Root");
 	}
-
+	
+	else
+		throw std::runtime_error(Key.Token + ": Invalid keyword in server scope");
 }
 
 // assign server scope from config file
@@ -169,13 +185,8 @@ void	Config::AssignLocation(Token& Key, std::vector<Token>& Tokens, std::string&
 			throw std::runtime_error("Location scope parsing error");
 		RouteConf	Location;
 		Location.Location = Tokens[1].Token;
+		Location.AutoIndex = false;
 		this->Result.servers.back().Routes.push_back(Location);
-		return ;
-	}
-
-	if (Key.Token == "}")
-	{
-		Scope == "Server";
 		return ;
 	}
 
@@ -187,21 +198,22 @@ void	Config::AssignLocation(Token& Key, std::vector<Token>& Tokens, std::string&
 		this->Result.servers.back().Routes.back().Index = PairValueStr(Tokens, "Index");
 	}
 
-	if (Key.Token == "Redir")
+	else if (Key.Token == "Redir")
 	{
 		this->Result.servers.back().Routes.back().Redir = PairValueStr(Tokens, "Redir");
 	}
 
-	if (Key.Token == "Methods")
+	else if (Key.Token == "Methods")
 	{
 		this->Result.servers.back().Routes.back().Methods =  MultiValueStr(Tokens, "Methods");
 	}
 
-	if (Key.Token == "AutoIndex")
+	else if (Key.Token == "AutoIndex")
 	{
 		this->Result.servers.back().Routes.back().AutoIndex =  PairValueBool(Tokens, "AutoIndex");
 	}
-
+	else
+		throw std::runtime_error(Key.Token + "Invalid keyword in location scope");
 }
 
 void	Config::AssignTokens(TokenLine& LineTokens, std::string& Scope)
@@ -211,32 +223,95 @@ void	Config::AssignTokens(TokenLine& LineTokens, std::string& Scope)
 
 	Token Key = Tokens[0];
 
-	if (Key.Token == "Server")
-	{
-		Scope = "Server";
-	}
-
-	else if (Key.Token == "Location")
-	{
-		Scope = "Location";
-	}
-
-	if (Scope == "Global")
-	{
-		AssignGlobalParams(Key, Tokens);
-	}
-
-	else if (Scope == "Server")
-	{
-		AssignServer(Key, Tokens, Scope);
-	}
-
-	else if (Scope == "Location")
-	{
-		AssignLocation(Key, Tokens, Scope);
-	}
+	ManageScope(Key.Token, Scope);
+	CheckNested(Key.Token, Scope);
+	if (Key.Token != "}")
+		AssignScope(Key, Tokens, Scope);
 
 }
+
+void	Config::CheckNested(std::string& Key, std::string& Scope)
+{
+	if (Key == Scope)
+	{
+		throw std::runtime_error("Error nesting is forbidden");
+	}
+}
+
+void	Config::ManageScope(std::string& Key, std::string& Scope)
+{
+	if (Key == "}")
+	{ 
+		if (Scope == "Global")
+			std::runtime_error("Invalid closure tag");
+		else if (Scope == "Server")
+			Scope = "Global";
+		else if (Scope == "Location")
+			Scope = "Server";
+	}
+}
+
+void	Config::AssignScope(Token& Key, std::vector<Token>& Tokens, std::string& Scope)
+{
+	if (Scope == "Global")
+		AssignGlobalParams(Key, Tokens, Scope);
+	if (Scope == "Server")
+		AssignServer(Key, Tokens, Scope);
+	if (Scope == "Location")
+		AssignLocation(Key, Tokens, Scope);
+}
+
+//assign default values if none are provided except default error page
+void	Config::CheckGlobalParams()
+{
+	// check error page existense
+	std::fstream	f;
+	f.open(Result.ErrorPage.c_str());
+	if (!f.good())
+		throw std::runtime_error(Result.ErrorPage + ": Default error page doesn't exist");
+	f.close();
+}
+
+//check server data
+void	Config::CheckServers()
+{
+	std::vector<ServerConf>	Servers = Result.servers;
+	for (std::vector<ServerConf>::iterator it = Servers.begin(); it != Servers.end(); ++it)
+	{
+		if (it->Port == 0 || it->Root.empty() || it->ServerName.empty())
+			std::runtime_error("Server params error: invalid parameters");
+		CheckLocations(it->Routes, *it);
+	}
+}
+
+void	Config::CheckLocations(std::vector<RouteConf>& Locations, ServerConf& Server)
+{
+	for (std::vector<RouteConf>::iterator it = Locations.begin(); it != Locations.end(); ++it)
+	{
+		if (it->Index.empty())
+		{
+			if (it->AutoIndex == true)
+				it->Index = "index.html";
+			else
+				throw std::runtime_error("Location params error: no index specified");
+		}
+		else
+		{
+			std::string	FullPath = "./www/" + Server.Root + "/" + it->Index;
+			std::fstream	f;
+			f.open(FullPath);
+			if (!f.good())
+				throw std::runtime_error("Location params error: index file not found: " + FullPath);
+		}
+		for (std::vector<std::string>::iterator mt = it->Methods.begin(); mt != it->Methods.end(); ++mt)
+		{
+			if (*mt != "GET" && *mt != "POST" && *mt != "DELETE")
+				throw std::runtime_error("Location params error: invalid HTPP method: " + *mt);
+		}
+		// how to check redirection ??
+	}
+}
+
 
 
 //-- overload :
@@ -248,7 +323,9 @@ std::ostream&	operator<<(std::ostream& o, ConfigLines& c)
 		std::cout << "Line " << i << " :" << std::endl;
 		for (int j = 0; j < c.TokenLines[i].Tokens.size(); ++j)
 		{
-			std::cout << "	" << c.TokenLines[i].Tokens[j].Type << " " << c.TokenLines[i].Tokens[j].Token << std::endl;
+			std::cout << "	" <<
+			c.TokenLines[i].Tokens[j].Type << " " <<
+			c.TokenLines[i].Tokens[j].Token << std::endl;
 		}
 	}
 	return o;

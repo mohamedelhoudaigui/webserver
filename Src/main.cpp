@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 11:43:46 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/13 13:08:05 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/14 10:45:04 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,21 @@ int main(int ac, char **av) {
 	//}
 	if (ac != 2)
 		return 1;
-	try{
+	try
+	{
 		Config	g(av[1]);
 		g.Init();
 		g.Parse();
-		std::cout << g;
-	} catch (const std::exception& e){
+		//// testing :
+		//for (int i = 1; i < 7; ++i)
+		//{
+		//	Config	c("./Tests/Config/" + std::to_string(i));
+		//	c.Init();
+		//	c.Parse();
+		//}
+	}
+	catch (const std::exception& e)
+	{
 		std::cout << e.what() << std::endl;
 		exit(2);
 	}
