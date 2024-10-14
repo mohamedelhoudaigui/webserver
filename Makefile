@@ -1,8 +1,16 @@
-SRCS = ./Src/main.cpp ./Src/Server.cpp ./Src/Request.cpp ./Src/Response.cpp ./Src/Config.cpp ./Src/Helper.cpp
+SRCS =  ./Src/main.cpp \
+		./Src/Helper.cpp \
+		./Src/Server/Server.cpp \
+		./Src/Server/Request.cpp \
+		./Src/Config/Config.cpp \
+		./Src/Config/Overloads.cpp \
+		./Src/Config/Assigner.cpp \
+		./Src//Config/Checker.cpp \
+		./Src/Config/Tokens.cpp \
+		./Tests/Config/RunConfigTest.cpp \
 
 HEAD = ./Include/Server.hpp \
 		./Include/Request.hpp \
-		./Include/Response.hpp \
 		./Include/Config.hpp \
 		./Include/Helper.hpp \
 		./Include/Types.hpp \
@@ -15,7 +23,7 @@ CC = c++
 
 RM = rm -f
 
-CFLAGS = -std=c++98
+CFLAGS = #-std=c++98
 
 NAME = webserv
 

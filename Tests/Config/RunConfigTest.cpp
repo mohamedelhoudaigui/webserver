@@ -1,36 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   RunConfigTest.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/10 11:43:46 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/14 11:36:07 by mel-houd         ###   ########.fr       */
+/*   Created: 2024/10/14 11:30:04 by mel-houd          #+#    #+#             */
+/*   Updated: 2024/10/14 15:04:27 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../Include/Server.hpp"
-#include "../Include/Config.hpp"
+#include "../../Include/Config.hpp"
 
-void	LaunchServer(int Port) {
-	try 
-	{
-		Server	MainServer(Port, 16384, 500); // BufferSize - MaxClients
-		MainServer.BindServer();
-		MainServer.GetServerInfo();
-		MainServer.ListenServer();
-		MainServer.SelectSetup();
+void	RunTests()
+{
+	try{
+		Config c("./Tests/Config/valid");
+		c.Parse();
 	}
 	catch (const std::exception& e)
 	{
-		std::cerr << e.what() << std::endl;
-		exit(1);
+		std::cout << "Testing Exception:" << std::endl;
+		std::cout << e.what() << std::endl;
 	}
-}
-
-
-int main(int ac, char **av) {
-	// testing :
-	RunTests();
+	std::cout << "All tests passed" << std::endl;
 }

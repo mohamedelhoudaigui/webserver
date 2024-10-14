@@ -6,11 +6,11 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 18:38:25 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/13 09:43:45 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/14 18:39:43 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../Include/Request.hpp"
+#include "../../Include/Request.hpp"
 
 Request::Request(std::string& ReqBuffer): ReqBuffer(ReqBuffer)
 {
