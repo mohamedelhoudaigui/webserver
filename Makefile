@@ -1,9 +1,13 @@
 SRCS =  ./Src/main.cpp \
-		./Src/Server.cpp \
-		./Src/Request.cpp \
-		./Src/Config.cpp \
 		./Src/Helper.cpp \
-		./Tests/Config/RunConfigTest.cpp
+		./Src/Server/Server.cpp \
+		./Src/Server/Request.cpp \
+		./Src/Config/Config.cpp \
+		./Src/Config/Overloads.cpp \
+		./Src/Config/Assigner.cpp \
+		./Src//Config/Checker.cpp \
+		./Src/Config/Tokens.cpp \
+		./Tests/Config/RunConfigTest.cpp \
 
 HEAD = ./Include/Server.hpp \
 		./Include/Request.hpp \

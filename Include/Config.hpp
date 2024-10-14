@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 02:49:00 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/14 11:33:12 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/14 18:50:14 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,28 +30,31 @@
 class Config
 {
 	public:
+		//Config.cpp
 		Config(std::string FileName);
 		void		Init();
-
 		void		Parse();
-		void		Tokenise(const std::string& LineStr);
+		ConfigLines	GetLines();
+		ConfigFile	GetResult();
+	
+		//Tokens.cpp
+		void		Tokeniser();
+		void		TokeniseLine(const std::string& LineStr);
+		void		AssignTokens();
 
-		void		AssignTokens(TokenLine& LineTokens, std::string& Scope);
-		void		AssignGlobalParams(Token& Key, std::vector<Token>& Tokens, std::string& Scope);
-		void		AssignServer(Token& Key, std::vector<Token>& Tokens, std::string& Scope);
-		void		AssignLocation(Token& Key, std::vector<Token>& Tokens, std::string& Scope);
+		//Assigner.cpp
+		void		AssignGlobalParams(Token& Key, std::vector<Token>& Tokens);
+		void		AssignServer(Token& Key, std::vector<Token>& Tokens);
+		void		AssignLocation(Token& Key, std::vector<Token>& Tokens);
 
-		void		AssignScope(Token& Key, std::vector<Token>& Tokens, std::string& Scope);
-		void		CheckNested(std::string& Key, std::string& Scope);
-		void		ManageScope(std::string& Key, std::string& Scope);
-
+		//Checker.cpp
 		void		CheckResult();
 		void		CheckGlobalParams();
 		void		CheckServers();
 		void		CheckLocations(std::vector<RouteConf>& Locations, ServerConf& Server);
 
-		ConfigLines	GetLines();
-		ConfigFile	GetResult();
+		//Syntax.cpp
+		void		CheckSyntaxError();
 
 	private:
 		std::map<std::string, int>	Keys;
