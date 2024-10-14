@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 02:49:00 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/14 10:48:37 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/14 11:33:12 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@ class Config
 		std::fstream				File;
 		ConfigLines					ConfLines;
 };
+
+void	RunTests();
 
 std::ostream&	operator<<(std::ostream& o, ConfigLines& c);
 std::ostream&	operator<<(std::ostream& o, Config& c);

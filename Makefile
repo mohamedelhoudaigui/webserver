@@ -2,7 +2,8 @@ SRCS =  ./Src/main.cpp \
 		./Src/Server.cpp \
 		./Src/Request.cpp \
 		./Src/Config.cpp \
-		./Src/Helper.cpp
+		./Src/Helper.cpp \
+		./Tests/Config/RunConfigTest.cpp
 
 HEAD = ./Include/Server.hpp \
 		./Include/Request.hpp \

@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 04:29:25 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/14 10:48:20 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/14 11:47:36 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,7 @@
 
 Config::Config(std::string FileName)
 {
-	const char*	zbi = FileName.c_str();
-	File.open(zbi);
+	File.open(FileName.c_str());
 	if (!File.is_open())
 		throw std::runtime_error("Error opening config file");
 	Result.MaxClientBody = 16000;
@@ -279,7 +278,7 @@ void	Config::CheckServers()
 	for (std::vector<ServerConf>::iterator it = Servers.begin(); it != Servers.end(); ++it)
 	{
 		if (it->Port == 0 || it->Root.empty() || it->ServerName.empty())
-			std::runtime_error("Server params error: invalid parameters");
+			throw std::runtime_error("Server params error: invalid parameters");
 		CheckLocations(it->Routes, *it);
 	}
 }
