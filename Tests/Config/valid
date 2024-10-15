@@ -43,5 +43,6 @@ Server {
         AutoIndex on
         Methods GET POST
         Redir /new-page
+
     }
 }

@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 18:33:16 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/15 19:41:01 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/15 20:51:58 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void	Config::CheckLocations(std::vector<RouteConf>& Locations, ServerConf& Serve
 		}
 		for (std::vector<std::string>::iterator mt = it->Methods.begin(); mt != it->Methods.end(); ++mt)
 		{
-			if (*mt != "GET" && *mt != "POST" && *mt != "DELETE")
+			if (*mt != "GET" && *mt != "POST" && *mt != "DELETE" && *mt != "PUT")
 				throw std::runtime_error("Location params error: invalid HTPP method: " + *mt);
 		}
 		// how to check redirection ??

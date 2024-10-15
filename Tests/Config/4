@@ -1,3 +1,5 @@
+ErrorPage      ./www/Error.html
+
 Server {
     Listen 80
     ServerName www.example.com
