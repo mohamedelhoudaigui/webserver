@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 08:34:31 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/14 23:08:16 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/15 17:45:22 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@
 
 enum Scope
 {
-	GLOBAL,
-	SERVER,
-	LOCATION,
+	GLOBAL = 0,
+	SERVER = 1,
+	LOCATION = 2,
 };
 
 enum TokenType

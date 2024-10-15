@@ -14,4 +14,31 @@ Server {
         Methods GET POST
         Redir /new-page
     }
+
+    Location / {
+        Index index.html
+        AutoIndex on
+        Methods GET POST
+        Redir /new-page
+    }
+}
+
+Server {
+    Listen 80
+    ServerName www.example.com
+    Root /Default
+
+    Location / {
+        Index index.html
+        AutoIndex on
+        Methods GET POST
+        Redir /new-page
+    }
+
+    Location / {
+        Index index.html
+        AutoIndex on
+        Methods GET POST
+        Redir /new-page
+    }
 }

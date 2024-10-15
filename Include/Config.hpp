@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 02:49:00 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/15 01:20:39 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/15 17:40:27 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,9 @@ class Config
 		void		CheckLocations(std::vector<RouteConf>& Locations, ServerConf& Server);
 
 		//Syntax.cpp
-		void		AssignLine(Token& key, std::vector<Token>& Tokens);
-		void		CheckSyntaxError();
+		void		CheckScope(Token& Key, std::vector<Token>& Tokens, Scope& s);
 		void		CheckScopeKeyWord(std::string& Key, std::vector<std::string>& Keys);
+		void		CheckSyntaxError();
 
 	private:
 		std::vector<std::string>	GlobalKeys;
