@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 11:50:41 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/14 18:39:35 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/15 23:22:21 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,11 +113,6 @@ void	Server::ServerActivity(fd_set& Readfds)
 		if (NewSocket < 0)
 			std::cerr << "Accept failed" << std::endl;
 
-		//std::cout << "New connection, socket fd is " << NewSocket 
-		//          << ", ip is : " << inet_ntoa(Address.sin_addr) 
-		//          << ", port : " << ntohs(Address.sin_port) << '\n';
-
-
 		for (int i = 0; i < MaxClients; i++)
 		{
 			if (Clients[i] == 0) 
@@ -137,13 +132,10 @@ void	Server::CloseClient(int ClientFd, int ClientIndex)
 	this->Clients[ClientIndex] = 0;
 }
 
-void	Server::HandleClient(int ClientFd, int ClientIndex, std::string& ReqBuffer, int Valread) // req init here
+void	Server::HandleClient(int ClientFd, int ClientIndex, std::string& ReqBuffer)
 {
-	Request	r(ReqBuffer);
-	r.Parse();
-	std::cout << r;
-	
-	//send(sd, buffer, strlen(buffer), 0);
+	std::cout << ReqBuffer << std::endl;
+	send(ClientFd, ReqBuffer.c_str(), strlen(ReqBuffer.c_str()), 0);
 	CloseClient(ClientFd, ClientIndex);
 	
 }
@@ -165,7 +157,7 @@ void	Server::ClientActivity(fd_set& Readfds)
 				{
 					Buffer[Valread] = '\0';
 					std::string	ReqBuffer(Buffer);
-					HandleClient(ClientFd, i, ReqBuffer, Valread);
+					HandleClient(ClientFd, i, ReqBuffer);
 				}
             }
         }

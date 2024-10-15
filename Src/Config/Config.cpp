@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 04:29:25 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/15 19:44:21 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/15 23:13:34 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ void	Config::Init() // check Key token with key words
 	ServerKeys.push_back("Host");
 
 	LocationKeys.push_back("Methods");
+	LocationKeys.push_back("UpDir");
 	LocationKeys.push_back("Index");
 	LocationKeys.push_back("Redir");
 	LocationKeys.push_back("AutoIndex");

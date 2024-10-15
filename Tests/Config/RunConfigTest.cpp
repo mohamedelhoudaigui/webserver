@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 11:30:04 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/15 22:25:10 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/15 23:06:46 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	RunTests() // improve tests !
 {
 	try{
-		Config c("./Tests/Config/7");
+		Config c("./Tests/Config/Files/valid");
 		c.Init();
 		c.Parse();
 	}

@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 11:45:34 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/12 00:27:47 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/15 23:22:13 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ class Server
 		void	ServerActivity(fd_set& Readfds);
 
 		void	CloseClient(int ClientFd, int ClientIndex);
-		void	HandleClient(int ClientFd, int ClientIndex, std::string& ReqBuffer, int Valread);
+		void	HandleClient(int ClientFd, int ClientIndex, std::string& ReqBuffer);
 
 	private:
 		int					ServerSocket;

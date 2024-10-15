@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 18:32:18 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/15 19:47:33 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/15 23:13:43 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,12 +59,14 @@ void	Config::AssignLocation(Token& Key, std::vector<Token>& Tokens)
 		this->Result.servers.back().Routes.back().Index = PairValueStr(Tokens, "Index");
 	else if (Key.Token == "Redir")
 		this->Result.servers.back().Routes.back().Redir = PairValueStr(Tokens, "Redir");
-	else if (Key.Token == "Methods")
-		this->Result.servers.back().Routes.back().Methods =  MultiValueStr(Tokens, "Methods");
+	else if (Key.Token == "UploadDir")
+		this->Result.servers.back().Routes.back().UpDir =  PairValueStr(Tokens, "UpDir");
 	else if (Key.Token == "AutoIndex")
 		this->Result.servers.back().Routes.back().AutoIndex =  PairValueBool(Tokens, "AutoIndex");
 	else if (Key.Token == "DirList")
 		this->Result.servers.back().Routes.back().DirList =  PairValueBool(Tokens, "DirList");
+	else if (Key.Token == "Methods")
+		this->Result.servers.back().Routes.back().Methods =  MultiValueStr(Tokens, "Methods");
 }
 
 void	Config::AssignTokens()
