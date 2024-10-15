@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 08:34:31 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/15 17:45:22 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/15 19:47:48 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,12 +54,14 @@ typedef struct RouteConf
 	bool						AutoIndex;
 	std::string					Redir;
 	std::string					Index;
+	bool						DirList;
 	std::vector<std::string>	Methods;
 
 }	RouteConf;
 
 typedef struct ServerConf
 {
+	std::string		Host;
 	unsigned int	Port;
 	std::string		Root;
 	std::string		ServerName;

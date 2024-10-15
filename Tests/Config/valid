@@ -7,6 +7,7 @@ Server {
     Listen 80
     ServerName www.example.com
     Root /Default
+    Host localhost
 
     Location / {
         Index index.html
@@ -27,12 +28,14 @@ Server {
     Listen 80
     ServerName www.example.com
     Root /Default
+    Host test
 
     Location / {
         Index index.html
         AutoIndex on
         Methods GET POST
         Redir /new-page
+        DirList on
     }
 
     Location / {

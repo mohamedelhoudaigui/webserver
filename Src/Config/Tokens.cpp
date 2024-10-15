@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 18:30:30 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/15 18:50:57 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/15 19:45:55 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,16 +74,3 @@ void	Config::TokeniseLine(const std::string& LineStr) // tokenizer
 }
 
 
-void	Config::AssignTokens()
-{
-	for (std::vector<TokenLine>::iterator it = ConfLines.TokenLines.begin();  it != ConfLines.TokenLines.end(); ++it)
-	{
-		std::vector<Token>	Tokens = it->Tokens;
-		size_t				Ntokens = Tokens.size();
-
-		Token Key = Tokens[0];
-		AssignGlobalParams(Key, Tokens);
-		AssignServer(Key, Tokens);
-		AssignLocation(Key, Tokens);
-	}
-}

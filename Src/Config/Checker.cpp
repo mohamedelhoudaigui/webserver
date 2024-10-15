@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 18:33:16 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/14 18:41:16 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/15 19:41:01 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,11 @@ void	Config::CheckServers()
 	std::vector<ServerConf>	Servers = Result.servers;
 	for (std::vector<ServerConf>::iterator it = Servers.begin(); it != Servers.end(); ++it)
 	{
-		if (it->Port == 0 || it->Root.empty() || it->ServerName.empty())
+		if (it->Port == 0
+			|| it->Root.empty()
+			|| it->ServerName.empty()
+			|| it->Host.empty()
+		)
 		{
 			throw std::runtime_error("Server params error: invalid parameters");
 		}

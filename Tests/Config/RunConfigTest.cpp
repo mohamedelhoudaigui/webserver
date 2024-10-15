@@ -6,13 +6,13 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 11:30:04 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/15 18:52:49 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/15 19:49:07 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../Include/Config.hpp"
 
-void	RunTests()
+void	RunTests() // improve tests !
 {
 	try{
 		Config c("./Tests/Config/valid");
@@ -23,6 +23,7 @@ void	RunTests()
 	{
 		std::cout << "Testing Exception:" << std::endl;
 		std::cout << e.what() << std::endl;
+		exit(1);
 	}
 	std::cout << "All tests passed" << std::endl;
 }
