@@ -12,6 +12,7 @@
 
 #include "../Include/Server.hpp"
 #include "../Include/Config.hpp"
+#include "../Include/Response.hpp"
 
 void	LaunchServer(int Port) {
 	try 
@@ -32,5 +33,12 @@ void	LaunchServer(int Port) {
 
 int main(int ac, char **av) {
 	// testing :
-	RunTests();
+	// RunTests();
+	std::map<std::string, std::string>	headers;
+		headers.insert(std::make_pair("content-length", "15344"));
+		headers.insert(std::make_pair("content-type", "font/woff"));
+		headers.insert(std::make_pair("server", "nginx"));
+		headers.insert(std::make_pair("date", "tue, October 15, 2024 12:44AM GMT"));
+	HttpResponse rep(headers, "HTTP/1.1", "OK", " ", 200);
+	std::cout << rep;
 }
