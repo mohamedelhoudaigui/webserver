@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 02:49:00 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/14 18:50:14 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/15 01:20:39 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 #include <sstream>
 #include <fstream>
 #include <stdexcept>
+#include <algorithm>
 #include <unistd.h>
 
 #include "Helper.hpp"
@@ -54,10 +55,14 @@ class Config
 		void		CheckLocations(std::vector<RouteConf>& Locations, ServerConf& Server);
 
 		//Syntax.cpp
+		void		AssignLine(Token& key, std::vector<Token>& Tokens);
 		void		CheckSyntaxError();
+		void		CheckScopeKeyWord(std::string& Key, std::vector<std::string>& Keys);
 
 	private:
-		std::map<std::string, int>	Keys;
+		std::vector<std::string>	GlobalKeys;
+		std::vector<std::string>	ServerKeys;
+		std::vector<std::string>	LocationKeys;
 		ConfigFile					Result;
 		std::fstream				File;
 		ConfigLines					ConfLines;

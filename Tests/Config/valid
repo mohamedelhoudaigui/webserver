@@ -8,13 +8,10 @@ Server {
     ServerName www.example.com
     Root /Default
 
-
     Location / {
         Index index.html
         AutoIndex on
         Methods GET POST
         Redir /new-page
-    }    
-
-
+    }
 }

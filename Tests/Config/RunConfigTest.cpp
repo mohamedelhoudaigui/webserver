@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 11:30:04 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/14 15:04:27 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/14 22:08:23 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ void	RunTests()
 {
 	try{
 		Config c("./Tests/Config/valid");
+		c.Init();
 		c.Parse();
 	}
 	catch (const std::exception& e)

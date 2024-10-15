@@ -7,6 +7,7 @@ SRCS =  ./Src/main.cpp \
 		./Src/Config/Assigner.cpp \
 		./Src//Config/Checker.cpp \
 		./Src/Config/Tokens.cpp \
+		./Src/Config/Syntax.cpp \
 		./Tests/Config/RunConfigTest.cpp \
 
 HEAD = ./Include/Server.hpp \

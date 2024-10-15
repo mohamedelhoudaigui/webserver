@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 18:30:30 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/14 18:49:53 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/14 23:03:56 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,6 @@ void	Config::TokeniseLine(const std::string& LineStr) // tokenizer
 
 			else if (Key && Buffer != "}" && Buffer != "{") // key Token
 			{
-				if (Keys[Buffer] != 1)
-				{
-					throw std::runtime_error("Invalid key in config file :" + Buffer);
-				}
 				token.Token = Buffer;
 				token.Type = KEY;
 				Key = false;
