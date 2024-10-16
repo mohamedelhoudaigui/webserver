@@ -4,6 +4,7 @@ SRCS =  ./Src/main.cpp \
 		./Src/Config/Config.cpp \
 		./Src/Config/Assigner.cpp \
 		./Src//Config/Checker.cpp \
+		./Src//Config/Getters.cpp \
 		./Src/Config/Tokens.cpp \
 		./Src/Config/Syntax.cpp \
 		./Tests/Config/RunConfigTest.cpp \

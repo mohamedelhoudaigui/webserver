@@ -1,11 +1,13 @@
 DefaultErrorPage     ./www/Error.html
 
-
+#need unique ServerNames
+#check error codes
 Server {
     Listen 80
     ServerName www.example.com
     MaxClients          100
-    ErrorPage     z 70 ./www/Default/ServerError.html
+    ErrorPage     400 401 402 ./www/Default/ServerError.html
+    Host         gg
 
     Location / {
         Root /www/Default
@@ -24,28 +26,10 @@ Server {
         Redir /new-page
     }
 }
-
 Server {
-    Listen 80 90 99
-    ServerName www.default.com 
-    Host test
-
-    Location / {
-        Index index.html
-        AutoIndex on
-        Methods GET POST
-        Redir /new-page
-        DirList on
-        Root /www
-    }
-
-    Location / {
-        Root /wwww
-        Index index.html
-        AutoIndex on
-        Methods GET POST
-        Redir /new-page
-        UpDir /Uploads
-        ClientMaxBodySize 10
-    }
+    Listen 80
+    ServerName www.examle.com
+    MaxClients          100
+    ErrorPage     400 401 402 ./www/Default/ServerError.html
+    Host         gg
 }

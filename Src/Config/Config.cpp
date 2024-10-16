@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 04:29:25 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/16 03:45:43 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/16 18:56:23 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,17 +49,5 @@ void	Config::Parse() // main parser
 	Tokeniser();
 	CheckSyntaxError();
 	AssignTokens();
-	//CheckResult();
-}
-
-//-- getters :
-
-ConfigLines	Config::GetLines()
-{
-	return (this->ConfLines);
-}
-
-ConfigFile	Config::GetResult()
-{
-	return (this->Result);
+	CheckResult();
 }

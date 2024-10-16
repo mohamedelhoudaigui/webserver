@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 02:49:00 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/15 17:40:27 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/16 18:57:57 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,6 @@ class Config
 		Config(std::string FileName);
 		void		Init();
 		void		Parse();
-		ConfigLines	GetLines();
-		ConfigFile	GetResult();
-	
 		//Tokens.cpp
 		void		Tokeniser();
 		void		TokeniseLine(const std::string& LineStr);
@@ -51,13 +48,24 @@ class Config
 		//Checker.cpp
 		void		CheckResult();
 		void		CheckGlobalParams();
+		void		CheckServerNames();
+		void		CheckPorts(std::vector<unsigned int>& Ports);
 		void		CheckServers();
+		void		CheckIndex(RouteConf& Location);
+		void		CheckMethods(RouteConf& Location);
 		void		CheckLocations(std::vector<RouteConf>& Locations, ServerConf& Server);
 
 		//Syntax.cpp
 		void		CheckScope(Token& Key, std::vector<Token>& Tokens, Scope& s);
 		void		CheckScopeKeyWord(std::string& Key, std::vector<std::string>& Keys);
 		void		CheckSyntaxError();
+
+		//Getters.cpp
+		ConfigLines		GetLines();
+		ConfigFile		GetResult();
+		std::string&	GetDefaultErrorPage();
+	
+		
 
 	private:
 		std::vector<std::string>	GlobalKeys;
