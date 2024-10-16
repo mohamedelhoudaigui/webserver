@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 18:32:18 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/15 23:13:43 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/16 03:48:32 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,8 @@
 // assign global params from config file
 void	Config::AssignGlobalParams(Token& Key, std::vector<Token>& Tokens)
 {
-	if (Key.Token == "ClientMaxBodySize")
-		this->Result.MaxClientBody = PairValueNum(Tokens, "ClientMaxBodySize");
-	else if (Key.Token == "MaxClients")
-		this->Result.MaxClients = PairValueNum(Tokens, "MaxClients");
-	else if (Key.Token == "ErrorPage")
-		this->Result.ErrorPage = PairValueStr(Tokens, "ErrorPage");
+	if (Key.Token == "DefaultErrorPage")
+		this->Result.DefaultErrorPage = PairValueStr(Tokens, "DefaultErrorPage");
 }
 
 // assign server scope from config file
@@ -29,18 +25,17 @@ void	Config::AssignServer(Token& Key, std::vector<Token>& Tokens)
 	if (Key.Token == "Server")
 	{
 		ServerConf	Server;
-		Server.Port = 0;
 		this->Result.servers.push_back(Server);
 		return ;
 	}
 	else if (Key.Token == "Listen")
-		this->Result.servers.back().Port = PairValueNum(Tokens, "Listen");
+		this->Result.servers.back().Port = MultiValueNum(Tokens, "Listen");
 	else if (Key.Token ==  "ServerName")
 		this->Result.servers.back().ServerName = PairValueStr(Tokens, "ServerName");
-	else if (Key.Token == "Root")
-		this->Result.servers.back().Root = PairValueStr(Tokens, "Root");
 	else if (Key.Token == "Host")
 		this->Result.servers.back().Host = PairValueStr(Tokens, "Host");
+	else if (Key.Token == "ErrorPage")
+		ParseErrorPage(Tokens, this->Result.servers.back().ErrorPage);
 }
 
 // assign server scope from config file
@@ -67,6 +62,8 @@ void	Config::AssignLocation(Token& Key, std::vector<Token>& Tokens)
 		this->Result.servers.back().Routes.back().DirList =  PairValueBool(Tokens, "DirList");
 	else if (Key.Token == "Methods")
 		this->Result.servers.back().Routes.back().Methods =  MultiValueStr(Tokens, "Methods");
+	else if (Key.Token == "Root")
+		this->Result.servers.back().Routes.back().Root =  PairValueStr(Tokens, "Root");
 }
 
 void	Config::AssignTokens()

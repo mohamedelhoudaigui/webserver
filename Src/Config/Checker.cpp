@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 18:33:16 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/15 20:51:58 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/16 03:58:36 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@ void	Config::CheckGlobalParams()
 {
 	// check error page existense
 	std::fstream	f;
-	f.open(Result.ErrorPage.c_str());
+	f.open(Result.DefaultErrorPage.c_str());
 	if (!f.good())
-		throw std::runtime_error(Result.ErrorPage + ": Default error page doesn't exist");
+		throw std::runtime_error(Result.DefaultErrorPage + ": Default error page doesn't exist");
 	f.close();
 }
 
@@ -36,8 +36,7 @@ void	Config::CheckServers()
 	std::vector<ServerConf>	Servers = Result.servers;
 	for (std::vector<ServerConf>::iterator it = Servers.begin(); it != Servers.end(); ++it)
 	{
-		if (it->Port == 0
-			|| it->Root.empty()
+		if (it->Port.size() == 0
 			|| it->ServerName.empty()
 			|| it->Host.empty()
 		)
@@ -61,7 +60,7 @@ void	Config::CheckLocations(std::vector<RouteConf>& Locations, ServerConf& Serve
 		}
 		else
 		{
-			std::string	FullPath = "./www/" + Server.Root + "/" + it->Index;
+			std::string	FullPath = "." + it->Root + "/" + it->Index;
 			std::fstream	f;
 			f.open(FullPath);
 			if (!f.good())

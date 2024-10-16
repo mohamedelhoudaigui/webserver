@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 08:34:31 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/15 23:17:43 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/16 03:45:30 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 #include <string>
 #include <vector>
+#include <map>
 
 enum Scope
 {
@@ -56,25 +57,30 @@ typedef struct RouteConf
 	std::string					Redir;
 	std::string					Index;
 	std::string					UpDir;
+	std::string					Root;
+	unsigned int				MaxClientBody;
 	std::vector<std::string>	Methods;
 
 }	RouteConf;
 
+
+
 typedef struct ServerConf
 {
-	std::string		Host;
-	unsigned int	Port;
-	std::string		Root;
-	std::string		ServerName;
-	std::vector<RouteConf>	Routes;
+	unsigned int					MaxClients;
+	std::string							Host;
+	std::vector<unsigned int>			Port;
+	std::string							ServerName;
+	std::map<unsigned int, std::string>	ErrorPage;
+	std::vector<RouteConf>				Routes;
 	
 }	ServerConf;
 
+
+
 typedef struct ConfigFile
 {
-	unsigned int							MaxClientBody;
-	unsigned int							MaxClients;
-	std::string								ErrorPage;
+	std::string								DefaultErrorPage;
 	std::vector<ServerConf>					servers;
 }	ConfigFile;
 

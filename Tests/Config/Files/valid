@@ -1,22 +1,23 @@
-ClientMaxBodySize   16000
-MaxClients          100
-ErrorPage           ./www/Error.html
+DefaultErrorPage     ./www/Error.html
 
 
 Server {
     Listen 80
     ServerName www.example.com
-    Root /Default
-    Host localhost
+    MaxClients          100
+    ErrorPage     z 70 ./www/Default/ServerError.html
 
     Location / {
+        Root /www/Default
         Index index.html
         AutoIndex on
         Methods GET POST
         Redir /new-page
+        ClientMaxBodySize   16000
     }
 
     Location / {
+        Root /www/Default
         Index index.html
         AutoIndex on
         Methods GET POST
@@ -25,9 +26,8 @@ Server {
 }
 
 Server {
-    Listen 80
-    ServerName www.example.com
-    Root /Default
+    Listen 80 90 99
+    ServerName www.default.com 
     Host test
 
     Location / {
@@ -36,13 +36,16 @@ Server {
         Methods GET POST
         Redir /new-page
         DirList on
+        Root /www
     }
 
     Location / {
+        Root /wwww
         Index index.html
         AutoIndex on
         Methods GET POST
         Redir /new-page
         UpDir /Uploads
+        ClientMaxBodySize 10
     }
 }

@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 05:31:43 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/13 14:27:37 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/16 03:48:50 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,5 +25,7 @@ std::string					PairValueStr(std::vector<Token>& Tokens, std::string ConfName);
 unsigned int				PairValueNum(std::vector<Token>& Tokens, std::string ConfName);
 std::vector<std::string>	MultiValueStr(std::vector<Token>& Tokens, std::string ConfName);
 bool						PairValueBool(std::vector<Token>& Tokens, std::string ConfName);
+std::vector<unsigned int>	MultiValueNum(std::vector<Token>& Tokens, std::string ConfName);
+void						ParseErrorPage(std::vector<Token>& Tokens, std::map<unsigned int, std::string>& ErrorPage);
 
 #endif

@@ -2,7 +2,6 @@ SRCS =  ./Src/main.cpp \
 		./Src/Helper.cpp \
 		./Src/Server/Server.cpp \
 		./Src/Config/Config.cpp \
-		./Src/Config/Overloads.cpp \
 		./Src/Config/Assigner.cpp \
 		./Src//Config/Checker.cpp \
 		./Src/Config/Tokens.cpp \

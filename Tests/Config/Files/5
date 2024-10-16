@@ -1,19 +1,25 @@
-ClientMaxBodySize   16000
-MaxClients          100
-ErrorPage           ./www/Error.html
 
 
-Server
-    Listen 80
-    ServerName www.example.com
-    Root /var/www/
+http {
+    error_log /logs/error.log;
+    access_log /logs/access.log;
 
+    root /;
+    server {
+        root /hhh;
+        error_page 500  /errors/index.hmtl;
+        listen 90;
+        server_name localhost;
+        location {
+            root /www;
+            index index.html;
+            autoindex on|off;
 
-    Location /
-        Index index.html
-        AutoIndex on
-        Methods GET POST
-        Redir /new-page
+            return 404 "https:/...";
+
+            cgi_pass /wwww/index.php;
+
+            methods GET, PUT, POST, DELETE;
+        }
     }
-
 }

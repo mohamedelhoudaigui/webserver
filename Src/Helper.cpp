@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 05:30:53 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/13 14:29:45 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/16 03:58:06 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,13 +65,38 @@ std::string	PairValueStr(std::vector<Token>& Tokens, std::string ConfName)
 std::vector<std::string>	MultiValueStr(std::vector<Token>& Tokens, std::string ConfName)
 {
 	std::vector<std::string>	Values;
-	if (Tokens.size() == 1)
+	if (Tokens.size() <= 1)
 		throw std::runtime_error(ConfName + ": expecting value(s)");
 	for (int i = 1; i < Tokens.size(); ++i)
 	{
 		Values.push_back(TrimAll(Tokens[i].Token));
 	}
 	return (Values);
+}
+
+std::vector<unsigned int>	MultiValueNum(std::vector<Token>& Tokens, std::string ConfName)
+{
+	std::vector<unsigned int>	Values;
+
+	if (Tokens.size() <= 1)
+		throw std::runtime_error(ConfName + ": expecting value(s)");
+
+	for (int i = 1; i < Tokens.size(); ++i)
+	{
+		std::string	Value = Tokens[i].Token;
+		for (std::string::iterator it = Value.begin(); it != Value.end(); ++it)
+		{
+			if (!std::isdigit(*it))
+				throw std::runtime_error(ConfName + ": invalid value " + Value);
+		}
+		
+		long long	Ret = std::atoll(Tokens[1].Token.c_str());
+		if (Ret > UINT_MAX)
+			throw std::runtime_error(ConfName + ": invalid value " + Value);
+
+		Values.push_back((unsigned int)Ret);
+	}
+	return Values;
 }
 
 bool	PairValueBool(std::vector<Token>& Tokens, std::string ConfName)
@@ -85,4 +110,19 @@ bool	PairValueBool(std::vector<Token>& Tokens, std::string ConfName)
 	if (value == "on")
 		return true;
 	return false;
+}
+
+
+void	ParseErrorPage(std::vector<Token>& Tokens, std::map<unsigned int, std::string>& ErrorPage)
+{
+	if (Tokens.size() <= 2)
+		throw std::runtime_error("ErrorPage: expecting value(s)");
+	std::string	File = Tokens.back().Token;
+	for (int i = 1; i < Tokens.size() - 1; ++i)
+	{
+		long long ErrorCode = atoll(Tokens[i].Token.c_str());
+		if (ErrorCode > UINT_MAX || ErrorCode >= 600)
+			throw std::runtime_error("ErrorCode: invalid value " + Tokens[i].Token);
+		ErrorPage[(unsigned int)ErrorCode] = File;
+	}
 }
