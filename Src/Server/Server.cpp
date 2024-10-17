@@ -25,12 +25,14 @@ void	Server::BindServer() {
 	this->ServerSocket = socket(AF_INET, SOCK_STREAM, 0);
 	if (this->ServerSocket == -1)
 	{
+		//throw exception
 		std::cerr << "Failed to start server (socket init error)" << std::endl;
 		exit(1);
 	}
 
 	int flags = fcntl(this->ServerSocket, F_GETFL, 0);
     if (flags == -1) {
+		//throw exception
         std::cerr << "Error getting socket flags" << std::endl;
         exit(1);
     }
@@ -45,6 +47,7 @@ void	Server::BindServer() {
 
 	if (bind(this->ServerSocket, (struct sockaddr*)&ServerAddrStruct, sizeof(ServerAddrStruct)) == -1)
 	{
+		//should throw exceptions
 		std::cerr << "Error binding server socket" << std::endl;
 		exit(1);
 	}
