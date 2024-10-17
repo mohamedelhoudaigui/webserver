@@ -29,4 +29,9 @@ class HttpResponse {
         void    setBody(std::string& version);
         void    setStatusCode(int status);
         void    setHeaders(std::map<std::string, std::string> headers);
+        std::map<std::string, std::string> getHeaders() const;
+        std::string getVersion() const;
+        std::string getReason() const;
+        std::string getBody() const;
+        int      getStatusCode() const;
 };
