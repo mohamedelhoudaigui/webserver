@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 18:33:16 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/16 19:04:57 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/24 04:07:56 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,17 @@ void	Config::CheckResult()
 //assign default values if none are provided except default error page
 void	Config::CheckGlobalParams()
 {
-	// check error page existense
-	std::fstream	f;
-	f.open(Result.DefaultErrorPage.c_str());
-	if (!f.good())
-		throw std::runtime_error(Result.DefaultErrorPage + ": Default error page doesn't exist");
-	f.close();
+	// check files existense
+	CheckFile(Result.Default.DefaultErrorPage);
+	CheckFile(Result.Default.DefaultIndex);
+	CheckFolder(Result.Default.DefaultRoot);
+	CheckFolder(Result.Default.DefaultUploadDir);
+	if (Result.Default.DefaultMaxClients == 0 ||
+		Result.Default.DefaultMaxClientBody == 0)
+	{
+		throw std::runtime_error("missing or invalid default configuration (DefaultMaxClients or DefaultMaxClientBody)");
+	}
+	
 }
 
 //Check uniques ServerNames
@@ -38,9 +43,7 @@ void	Config::CheckServerNames()
 	std::vector<std::string>			ServerNames;
 
 	for (it = Result.servers.begin(); it != Result.servers.end(); ++it)
-	{
 		ServerNames.push_back(it->ServerName);
-	}
 
 	sort(ServerNames.begin(), ServerNames.end());
 	std::string							tmp;
@@ -78,6 +81,7 @@ void	Config::CheckLocations(std::vector<RouteConf>& Locations, ServerConf& Serve
 	{
 		CheckIndex(*it);
 		CheckMethods(*it);
+		CheckFolder(it->Root);
 	}
 }
 
@@ -103,12 +107,8 @@ void	Config::CheckIndex(RouteConf& Location)
 	}
 	else
 	{
-		std::string	FullPath = "." + Location.Root + "/" + Location.Index;
-		std::fstream	f;
-		f.open(FullPath);
-		if (!f.good())
-			throw std::runtime_error("Location params error: index file not found: " + FullPath);
-		f.close();
+		std::string	FullPath = Location.Root + "/" + Location.Index;
+		CheckFile(FullPath);
 	}
 }
 

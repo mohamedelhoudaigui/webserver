@@ -1,36 +1,25 @@
-DefaultErrorPage     ./www/Error.html
-
-#need unique ServerNames
-
-Server {
-    Listen 80
-    ServerName www.example.com
-    MaxClients          100
-    ErrorPage     400 401 402 ./www/Default/ServerError.html
-    Host         gg
-
-    Location / {
-        Root /www/Default
-        Index index.html
-        AutoIndex on
-        Methods GET POST
-        Redir /new-page
-        ClientMaxBodySize   16000
-    }
-
-    Location / {
-        Root /www/Default
-        Index index.html
-        AutoIndex on
-        Methods GET POST
-        Redir /new-page
-    }
-}
+DefaultErrorPage                    ./www/Error.html
+DefaultRoot                         ./www/Default
+DefaultUploadDir                    ./www/upload
+DefaultIndex                        ./www/Default/index.html
+DefaultMaxClients                   0
+DefaultMaxClientBody                0
 
 Server {
+
+
     Listen 80
-    ServerName www.examle.com
+    ServerName          www.example.com
     MaxClients          100
-    ErrorPage     400 401 402 ./www/Default/ServerError.html
-    Host         gg
+    ErrorPage           400 401 402 ./www/Error.html
+    Host                gg
+
+    Location / {
+        Root            ./www/Default
+        Index           index.html
+        AutoIndex       on
+        Methods         GET POST
+        Redir           /new-page
+        MaxClientBody   16000
+    }
 }

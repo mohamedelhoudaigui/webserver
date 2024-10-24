@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 05:31:43 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/16 03:48:50 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/24 03:45:27 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,11 @@
 #include <limits.h>
 #include <stdexcept>
 #include <cstdlib>
+#include <fstream>
+#include <sys/stat.h>
+#include <iostream>
+#include <unistd.h>
+
 #include "../Include/Types.hpp"
 
 
@@ -27,5 +32,7 @@ std::vector<std::string>	MultiValueStr(std::vector<Token>& Tokens, std::string C
 bool						PairValueBool(std::vector<Token>& Tokens, std::string ConfName);
 std::vector<unsigned int>	MultiValueNum(std::vector<Token>& Tokens, std::string ConfName);
 void						ParseErrorPage(std::vector<Token>& Tokens, std::map<unsigned int, std::string>& ErrorPage);
+void						CheckFile(std::string& file);
+void						CheckFolder(std::string& folder);
 
 #endif

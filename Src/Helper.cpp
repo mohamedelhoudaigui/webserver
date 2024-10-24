@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 05:30:53 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/23 23:22:01 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/24 04:04:39 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ unsigned int	PairValueNum(std::vector<Token>& Tokens, std::string ConfName)
 	if (Ret > UINT_MAX)
 		throw std::runtime_error(ConfName + ": invalid value" + Value);
 
-	return Ret;
+	return static_cast<unsigned int>(Ret);
 }
 
 // checks and gets the value(std::string) from a TokenLine
@@ -56,11 +56,9 @@ std::string	PairValueStr(std::vector<Token>& Tokens, std::string ConfName)
 {
 	if (Tokens.size() != 2)
 		throw std::runtime_error(ConfName + ": need one value");
-    
 	std::string	value = Tokens[1].Token;
 	return value;
 }
-
 
 std::vector<std::string>	MultiValueStr(std::vector<Token>& Tokens, std::string ConfName)
 {
@@ -125,4 +123,20 @@ void	ParseErrorPage(std::vector<Token>& Tokens, std::map<unsigned int, std::stri
 			throw std::runtime_error("ErrorCode: invalid value " + Tokens[i].Token);
 		ErrorPage[ErrorCode] = File;
 	}
+}
+
+void	CheckFile(std::string& file)
+{
+	std::fstream	f;
+	f.open(file.c_str());
+	if (!f.good())
+		throw std::runtime_error(file + ": file doesn't exist");
+	f.close();
+}
+
+ void	CheckFolder(std::string& folder)
+ {
+    struct stat sb;
+	if (!(stat(folder.c_str(), &sb) == 0 && S_ISDIR(sb.st_mode)))
+		throw std::runtime_error(folder + ": folder doesnt exist");
 }

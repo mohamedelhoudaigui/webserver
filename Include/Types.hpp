@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 08:34:31 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/24 01:57:21 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/24 03:50:56 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,7 @@
 
 enum Error
 {
-	Ok = 200,
-	NotFound = 400,	
+	NotFound = 400,
 };
 
 enum Scope
@@ -58,19 +57,37 @@ typedef struct ConfigLines
 	std::vector<TokenLine>	TokenLines;
 }			ConfigLines;
 
+typedef struct DefaultConf
+{
+	unsigned int				DefaultMaxClients;
+	unsigned int				DefaultMaxClientBody;
+	std::string					DefaultErrorPage;
+	std::string					DefaultRoot;
+	std::string					DefaultUploadDir;
+	std::string					DefaultIndex;
 
+	unsigned int				GetDefaultMaxClients();
+	unsigned int				GetDefaultMaxBody();
+	std::string&				GetDefaultErrorPage();
+	std::string&				GetDefaultRoot();
+	std::string&				GetDefaultUploadDir();
+	std::string&				GetDefaultIndex();
+
+}			DefaultConf;
 
 typedef struct RouteConf
 {
-	bool						DirList;
-	bool						AutoIndex;
-	std::string					Location;
-	std::string					Redir;
-	std::string					Index;
-	std::string					UpDir;
-	std::string					Root;
-	unsigned int				MaxClientBody;
-	std::vector<std::string>	Methods;
+	DefaultConf*					Default;
+
+	bool							DirList;
+	bool							AutoIndex;
+	std::string						Location;
+	std::string						Redir;
+	std::string						Index;
+	std::string						UploadDir;
+	std::string						Root;
+	unsigned int					MaxClientBody;
+	std::vector<std::string>		Methods;
 
 	std::string&					GetLocationPath();
 	std::string&					GetIndex();
@@ -90,6 +107,8 @@ typedef struct RouteConf
 
 typedef struct ServerConf
 {
+	DefaultConf*						Default;
+
 	unsigned int						MaxClients;
 	std::string							Host;
 	std::string							ServerName;
@@ -111,10 +130,8 @@ typedef struct ServerConf
 
 typedef struct ConfigFile
 {
-	std::string				DefaultErrorPage;
 	std::vector<ServerConf>	servers;
-
-	std::string&			GetDefaultErrorPage();
+	DefaultConf				Default;
 	bool					CheckServer(std::string& Host, unsigned int Port);
 	ServerConf&				GetServer(std::string& Host, unsigned int Port); // throws
 

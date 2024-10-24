@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 04:29:25 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/24 01:02:00 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/24 03:50:25 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,11 @@ void	Config::Init() // check Key token with key words
 {
 	GlobalKeys.push_back("DefaultErrorPage");
 	GlobalKeys.push_back("Server");
+	GlobalKeys.push_back("DefaultIndex");
+	GlobalKeys.push_back("DefaultUploadDir");
+	GlobalKeys.push_back("DefaultRoot");
+	GlobalKeys.push_back("DefaultMaxClientBody");
+	GlobalKeys.push_back("DefaultMaxClients");
 
 	ServerKeys.push_back("Listen");
 	ServerKeys.push_back("ServerName");
@@ -32,16 +37,15 @@ void	Config::Init() // check Key token with key words
 	ServerKeys.push_back("Host");
 	ServerKeys.push_back("MaxClients");
 
-	LocationKeys.push_back("ClientMaxBodySize");
-	LocationKeys.push_back("Root");
-	LocationKeys.push_back("Methods");
-	LocationKeys.push_back("UpDir");
+	LocationKeys.push_back("UploadDir");
 	LocationKeys.push_back("Index");
 	LocationKeys.push_back("Redir");
 	LocationKeys.push_back("AutoIndex");
 	LocationKeys.push_back("DirList");
+	LocationKeys.push_back("Root");
+	LocationKeys.push_back("Methods");
+	LocationKeys.push_back("MaxClientBody");
 }
-
 
 
 void	Config::Parse() // main parser

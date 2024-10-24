@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 18:51:31 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/24 01:56:04 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/24 03:24:05 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,7 @@
 #include "../../Include/Exps.hpp"
 
 
-//GlobalGetters :
-
-std::string&	ConfigFile::GetDefaultErrorPage()
-{
-	return (this->DefaultErrorPage);	
-}
+//global Getters :
 
 bool			ConfigFile::CheckServer(std::string& Host, unsigned int Port)
 {
@@ -58,6 +53,11 @@ ServerConf&	ConfigFile::GetServer(std::string& Host, unsigned int Port)
 	}
 	throw GetterExc(NotFound);
 }
+
+// default getters:
+
+
+
 
 
 //ServerGetters :
@@ -144,7 +144,7 @@ bool	RouteConf::CheckRedirection()
 
 bool	RouteConf::CheckUploadDir()
 {
-	if (UpDir.empty())
+	if (UploadDir.empty())
 		return (false);
 	return (true);
 }
@@ -165,9 +165,9 @@ std::string&	RouteConf::GetRoot()
 
 std::string&	RouteConf::GetUploadDir()
 {
-	if (this->UpDir.empty())
+	if (this->UploadDir.empty())
 		throw GetterExc(NotFound);
-	return (this->UpDir);
+	return (this->UploadDir);
 }
 
 std::string&	RouteConf::GetIndex()

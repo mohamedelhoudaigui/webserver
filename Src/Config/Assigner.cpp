@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 18:32:18 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/16 03:48:32 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/24 04:00:50 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,16 @@
 void	Config::AssignGlobalParams(Token& Key, std::vector<Token>& Tokens)
 {
 	if (Key.Token == "DefaultErrorPage")
-		this->Result.DefaultErrorPage = PairValueStr(Tokens, "DefaultErrorPage");
+		this->Result.Default.DefaultErrorPage = PairValueStr(Tokens, "DefaultErrorPage");
+	else if (Key.Token == "DefaultIndex")
+		this->Result.Default.DefaultIndex = PairValueStr(Tokens, "DefaultIndex");
+	else if (Key.Token == "DefaultUploadDir")
+		this->Result.Default.DefaultUploadDir = PairValueStr(Tokens, "DefaultUploadDir");
+	else if (Key.Token == "DefaultRoot")
+		this->Result.Default.DefaultRoot = PairValueStr(Tokens, "DefaultRoot");
+	else if (Key.Token == "DefaultMaxClientBody")
+		this->Result.Default.DefaultMaxClientBody = PairValueNum(Tokens, "DefaultMaxClientBody");
+	
 }
 
 // assign server scope from config file
@@ -25,6 +34,7 @@ void	Config::AssignServer(Token& Key, std::vector<Token>& Tokens)
 	if (Key.Token == "Server")
 	{
 		ServerConf	Server;
+		Server.Default = &Result.Default;
 		this->Result.servers.push_back(Server);
 		return ;
 	}
@@ -36,6 +46,8 @@ void	Config::AssignServer(Token& Key, std::vector<Token>& Tokens)
 		this->Result.servers.back().Host = PairValueStr(Tokens, "Host");
 	else if (Key.Token == "ErrorPage")
 		ParseErrorPage(Tokens, this->Result.servers.back().ErrorPage);
+	else if (Key.Token == "MaxClients")
+		this->Result.servers.back().MaxClients = PairValueNum(Tokens, "MaxClients");
 }
 
 // assign server scope from config file
@@ -47,15 +59,17 @@ void	Config::AssignLocation(Token& Key, std::vector<Token>& Tokens)
 		Location.Location = Tokens[1].Token;
 		Location.AutoIndex = false;
 		Location.DirList = false;
+		Location.Default = &Result.Default;
 		this->Result.servers.back().Routes.push_back(Location);
 		return ;
 	}
+	
 	if (Key.Token == "Index")
 		this->Result.servers.back().Routes.back().Index = PairValueStr(Tokens, "Index");
 	else if (Key.Token == "Redir")
 		this->Result.servers.back().Routes.back().Redir = PairValueStr(Tokens, "Redir");
 	else if (Key.Token == "UploadDir")
-		this->Result.servers.back().Routes.back().UpDir =  PairValueStr(Tokens, "UpDir");
+		this->Result.servers.back().Routes.back().UploadDir =  PairValueStr(Tokens, "UploadDir");
 	else if (Key.Token == "AutoIndex")
 		this->Result.servers.back().Routes.back().AutoIndex =  PairValueBool(Tokens, "AutoIndex");
 	else if (Key.Token == "DirList")
@@ -63,7 +77,12 @@ void	Config::AssignLocation(Token& Key, std::vector<Token>& Tokens)
 	else if (Key.Token == "Methods")
 		this->Result.servers.back().Routes.back().Methods =  MultiValueStr(Tokens, "Methods");
 	else if (Key.Token == "Root")
+	{
 		this->Result.servers.back().Routes.back().Root =  PairValueStr(Tokens, "Root");
+	}
+	else if (Key.Token == "MaxClientBody")
+		this->Result.servers.back().Routes.back().MaxClientBody =  PairValueNum(Tokens, "MaxClientBody");
+	
 }
 
 void	Config::AssignTokens()

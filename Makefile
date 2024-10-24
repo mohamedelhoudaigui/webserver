@@ -24,7 +24,7 @@ CC = c++
 
 RM = rm -f
 
-CFLAGS = #-std=c++98
+CFLAGS = -std=c++98 -g -fsanitize=address
 
 NAME = webserv
 

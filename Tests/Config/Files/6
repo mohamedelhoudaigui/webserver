@@ -1,4 +1,4 @@
-ClientMaxBodySize   16000
+ClientMaxBody   16000
 MaxClients          100
 ErrorPage           ./www/Error.html
 
