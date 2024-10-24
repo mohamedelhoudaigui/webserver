@@ -1,7 +1,7 @@
 DefaultErrorPage     ./www/Error.html
 
 #need unique ServerNames
-#check error codes
+
 Server {
     Listen 80
     ServerName www.example.com
@@ -26,6 +26,7 @@ Server {
         Redir /new-page
     }
 }
+
 Server {
     Listen 80
     ServerName www.examle.com

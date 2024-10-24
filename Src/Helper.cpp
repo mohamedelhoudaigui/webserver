@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 05:30:53 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/16 03:58:06 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/23 23:22:01 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,9 +120,9 @@ void	ParseErrorPage(std::vector<Token>& Tokens, std::map<unsigned int, std::stri
 	std::string	File = Tokens.back().Token;
 	for (int i = 1; i < Tokens.size() - 1; ++i)
 	{
-		long long ErrorCode = atoll(Tokens[i].Token.c_str());
-		if (ErrorCode > UINT_MAX || ErrorCode >= 600)
+		unsigned int ErrorCode = static_cast<unsigned int>(atoll(Tokens[i].Token.c_str()));
+		if (ErrorCode >= 600)
 			throw std::runtime_error("ErrorCode: invalid value " + Tokens[i].Token);
-		ErrorPage[(unsigned int)ErrorCode] = File;
+		ErrorPage[ErrorCode] = File;
 	}
 }

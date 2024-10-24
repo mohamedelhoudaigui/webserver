@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 02:49:00 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/16 18:57:57 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/24 01:06:03 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,9 +63,6 @@ class Config
 		//Getters.cpp
 		ConfigLines		GetLines();
 		ConfigFile		GetResult();
-		std::string&	GetDefaultErrorPage();
-	
-		
 
 	private:
 		std::vector<std::string>	GlobalKeys;
@@ -78,10 +75,6 @@ class Config
 
 void	RunTests();
 
-std::ostream&	operator<<(std::ostream& o, ConfigLines& c);
-std::ostream&	operator<<(std::ostream& o, Config& c);
-std::ostream&	operator <<(std::ostream& o, ServerConf& s);
-std::ostream&	operator<<(std::ostream& o, RouteConf& r);
 
 
 #endif
