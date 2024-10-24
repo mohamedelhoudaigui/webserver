@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 18:33:16 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/24 04:07:56 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/24 07:03:10 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	Config::CheckResult()
 	CheckServerNames();
 }
 
-//assign default values if none are provided except default error page
+//assign default values if none are provided
 void	Config::CheckGlobalParams()
 {
 	// check files existense
@@ -46,13 +46,11 @@ void	Config::CheckServerNames()
 		ServerNames.push_back(it->ServerName);
 
 	sort(ServerNames.begin(), ServerNames.end());
-	std::string							tmp;
 
-	for (int i = 0; i < ServerNames.size(); ++i)
+	for (int i = 1; i < ServerNames.size(); ++i)
 	{
-		if (i != 0 && tmp == ServerNames[i])
+		if (ServerNames[i - 1] == ServerNames[i])
 			throw std::runtime_error("Duplicated ServerName attribute");
-		tmp = ServerNames[i];
 	}
 }
 
@@ -63,13 +61,9 @@ void	Config::CheckServers()
 	std::vector<ServerConf>	Servers = Result.servers;
 	for (std::vector<ServerConf>::iterator it = Servers.begin(); it != Servers.end(); ++it)
 	{
-		if (it->Port.size() == 0
-			|| it->ServerName.empty()
-			|| it->Host.empty()
-		)
-		{
+		if (it->Host.empty())
 			throw std::runtime_error("Server params error: invalid parameters");
-		}
+
 		CheckPorts(it->Port);
 		CheckLocations(it->Routes, *it);
 	}
@@ -79,9 +73,7 @@ void	Config::CheckLocations(std::vector<RouteConf>& Locations, ServerConf& Serve
 {
 	for (std::vector<RouteConf>::iterator it = Locations.begin(); it != Locations.end(); ++it)
 	{
-		CheckIndex(*it);
 		CheckMethods(*it);
-		CheckFolder(it->Root);
 	}
 }
 
@@ -89,6 +81,8 @@ void	Config::CheckPorts(std::vector<unsigned int>& Ports)
 {
 	std::vector<unsigned int>::iterator it;
 
+	if (Ports.size() == 0)
+		throw std::runtime_error("No port assigned to server");
 	for (it = Ports.begin(); it != Ports.end(); ++it)
 	{
 		if (*it > 65535)

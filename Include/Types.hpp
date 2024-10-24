@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 08:34:31 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/24 03:50:56 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/24 06:47:38 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ typedef struct RouteConf
 	bool							CheckUploadDir();
 	bool							CheckMethod(std::string& Method);
 	std::string&					GetRedirection(); // throws
-	std::string&					GetUploadDir(); // throws
+	std::string&					GetUploadDir();
 
 }	RouteConf;
 

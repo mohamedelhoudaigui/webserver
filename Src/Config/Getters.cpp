@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 18:51:31 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/24 03:24:05 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/10/24 06:45:12 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,14 +56,48 @@ ServerConf&	ConfigFile::GetServer(std::string& Host, unsigned int Port)
 
 // default getters:
 
+std::string&	DefaultConf::GetDefaultErrorPage()
+{
+	return (this->DefaultErrorPage);
+}
 
 
+std::string&	DefaultConf::GetDefaultRoot()
+{
+	return (this->DefaultRoot);
+}
+
+
+std::string&	DefaultConf::GetDefaultIndex()
+{
+	return (this->DefaultIndex);
+}
+
+
+std::string&	DefaultConf::GetDefaultUploadDir()
+{
+	return (this->DefaultUploadDir);
+}
+
+
+unsigned int	DefaultConf::GetDefaultMaxBody()
+{
+	return (this->DefaultMaxClientBody);
+}
+
+
+unsigned int	DefaultConf::GetDefaultMaxClients()
+{
+	return (this->DefaultMaxClients);
+}
 
 
 //ServerGetters :
 
 unsigned int	ServerConf::GetMaxClients()
 {
+	if (this->MaxClients == 0)
+		return (this->Default->GetDefaultMaxClients());
 	return (this->MaxClients);
 }
 
@@ -91,7 +125,7 @@ std::string&		ServerConf::GetErrorPage(unsigned int ErrorCode)
 	std::map<unsigned int, std::string>::iterator it;
 	it = this->ErrorPage.find(ErrorCode);
 	if (it == this->ErrorPage.end())
-		throw GetterExc(NotFound);
+		return (this->Default->GetDefaultErrorPage());
 	return (it->second);
 }
 
@@ -122,6 +156,8 @@ RouteConf&	ServerConf::GetLocation(std::string& LocationPath)
 
 unsigned int	RouteConf::GetMaxBody()
 {
+	if (this->MaxClientBody == 0)
+		return (this->Default->GetDefaultMaxBody());
 	return (this->MaxClientBody);
 }
 
@@ -160,18 +196,22 @@ bool	RouteConf::CheckMethod(std::string& Method)
 
 std::string&	RouteConf::GetRoot()
 {
+	if (this->Root.empty())
+		return (this->Default->GetDefaultRoot());
 	return (this->Root);
 }
 
 std::string&	RouteConf::GetUploadDir()
 {
 	if (this->UploadDir.empty())
-		throw GetterExc(NotFound);
+		return (this->Default->GetDefaultUploadDir());
 	return (this->UploadDir);
 }
 
 std::string&	RouteConf::GetIndex()
 {
+	if (this->Index.empty())
+		return (this->Default->GetDefaultIndex());
 	return (this->Index);
 }
 

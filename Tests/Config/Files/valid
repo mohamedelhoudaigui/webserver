@@ -2,13 +2,14 @@ DefaultErrorPage                    ./www/Error.html
 DefaultRoot                         ./www/Default
 DefaultUploadDir                    ./www/upload
 DefaultIndex                        ./www/Default/index.html
-DefaultMaxClients                   0
-DefaultMaxClientBody                0
+DefaultMaxClients                   900
+DefaultMaxClientBody                16000
+
 
 Server {
 
 
-    Listen 80
+    Listen              80
     ServerName          www.example.com
     MaxClients          100
     ErrorPage           400 401 402 ./www/Error.html
