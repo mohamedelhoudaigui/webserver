@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 05:30:53 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/24 04:04:39 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/11/11 20:46:38 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,29 +72,20 @@ std::vector<std::string>	MultiValueStr(std::vector<Token>& Tokens, std::string C
 	return (Values);
 }
 
-std::vector<unsigned int>	MultiValueNum(std::vector<Token>& Tokens, std::string ConfName)
+void	MultiValueNum(std::vector<Token>& Tokens, std::string ConfName, std::vector<unsigned int>& Buffer)
 {
-	std::vector<unsigned int>	Values;
-
 	if (Tokens.size() <= 1)
 		throw std::runtime_error(ConfName + ": expecting value(s)");
 
 	for (int i = 1; i < Tokens.size(); ++i)
 	{
+		CheckDigit(Tokens[i].Token, ConfName); //uncaught
 		std::string	Value = Tokens[i].Token;
-		for (std::string::iterator it = Value.begin(); it != Value.end(); ++it)
-		{
-			if (!std::isdigit(*it))
-				throw std::runtime_error(ConfName + ": invalid value " + Value);
-		}
-		
-		long long	Ret = std::atoll(Tokens[1].Token.c_str());
+		long long	Ret = std::atoll(Tokens[i].Token.c_str());
 		if (Ret > UINT_MAX)
 			throw std::runtime_error(ConfName + ": invalid value " + Value);
-
-		Values.push_back((unsigned int)Ret);
+		Buffer.push_back(static_cast<unsigned int>(Ret));
 	}
-	return Values;
 }
 
 bool	PairValueBool(std::vector<Token>& Tokens, std::string ConfName)
@@ -139,4 +130,14 @@ void	CheckFile(std::string& file)
     struct stat sb;
 	if (!(stat(folder.c_str(), &sb) == 0 && S_ISDIR(sb.st_mode)))
 		throw std::runtime_error(folder + ": folder doesnt exist");
+}
+
+
+void	CheckDigit(std::string& Token, std::string& ConfName)
+{
+	for (int i = 0; i < Token.size(); ++i)
+	{
+		if (Token[i] < '0' || Token[i] > '9')
+			throw std::runtime_error(ConfName + ": " + Token + " is not a valid port number");
+	}
 }

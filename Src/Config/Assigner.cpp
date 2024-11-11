@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 18:32:18 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/24 05:19:27 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/11/11 20:50:51 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,9 @@ void	Config::AssignServer(Token& Key, std::vector<Token>& Tokens)
 		return ;
 	}
 	else if (Key.Token == "Listen")
-		this->Result.servers.back().Port = MultiValueNum(Tokens, "Listen");
+	{
+		MultiValueNum(Tokens, "Listen", this->Result.servers.back().Port);
+	}
 	else if (Key.Token ==  "ServerName")
 		this->Result.servers.back().ServerName = PairValueStr(Tokens, "ServerName");
 	else if (Key.Token == "Host")

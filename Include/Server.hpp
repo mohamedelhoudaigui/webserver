@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 11:45:34 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/15 23:22:13 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/11/11 18:15:03 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,19 @@
 #include <vector>
 #include <fcntl.h>
 
+#include "Config.hpp"
 #include "Request.hpp"
 
+
+class SocketLayer
+{
+	public:
+		SocketLayer(Config& c);
+		//void	OpenSockets();
+
+	private:
+		std::vector<unsigned int>	SocketPorts;
+};
 
 class Server
 {

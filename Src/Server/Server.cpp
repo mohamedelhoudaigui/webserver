@@ -6,20 +6,47 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 11:50:41 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/23 23:08:23 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/11/11 20:55:34 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../Include/Server.hpp"
 
-// server bind + listen setup :
+// Socket openning:
+
+
+SocketLayer::SocketLayer(Config& c)
+{
+	ConfigFile res = c.GetResult();
+	std::vector<ServerConf>::iterator Server;
+
+	for (Server = res.servers.begin(); Server != res.servers.end(); ++Server)
+	{
+		std::vector<unsigned int>::iterator Port;
+		for (Port = Server->Port.begin(); Port != Server->Port.end(); ++Port)
+		{
+			this->SocketPorts.push_back(*Port);
+		}
+	}
+}
+
+
+
+
+
+
+
+
+// need editing :
+
 
 Server::Server(unsigned int Port, unsigned int BufferSize, unsigned int MaxClients):
 	Port(Port),
 	BufferSize(BufferSize),
 	MaxClients(MaxClients),
 	Clients(MaxClients, 0)
-{}
+{
+}
 
 void	Server::BindServer() {
 	this->ServerSocket = socket(AF_INET, SOCK_STREAM, 0);

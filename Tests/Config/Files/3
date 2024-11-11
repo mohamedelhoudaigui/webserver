@@ -1,12 +1,14 @@
-ClientMaxBody   16000
-MaxClients          100
-ErrorPage           ./www/Error.html
+DefaultErrorPage                    ./www/Error.html
+DefaultRoot                         ./www/Default
+DefaultUploadDir                    ./www/upload
+DefaultIndex                        ./www/Default/index.html
+DefaultMaxClients                   900
+DefaultMaxClientBody                16000
 
 
 Server {
     Listen 80
     ServerName www.example.com
-    Root /Default
 
 
     Location / {
@@ -14,7 +16,6 @@ Server {
         AutoIndex on
         Methods GET POST
         Redir /new-page
-    
-
-
+        Root /Default
     }
+
