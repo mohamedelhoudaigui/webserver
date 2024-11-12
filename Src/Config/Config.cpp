@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 04:29:25 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/11/11 20:53:59 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/11/11 22:34:39 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,7 @@ Config::Config(std::string FileName)
 	File.open(FileName.c_str());
 	if (!File.is_open())
 		throw std::runtime_error("Error opening config file");
-}
 
-void	Config::Init() // check Key token with key words
-{
 	GlobalKeys.push_back("DefaultErrorPage");
 	GlobalKeys.push_back("Server");
 	GlobalKeys.push_back("DefaultIndex");
@@ -46,7 +43,6 @@ void	Config::Init() // check Key token with key words
 	LocationKeys.push_back("Methods");
 	LocationKeys.push_back("MaxClientBody");
 }
-
 
 void	Config::Parse() // main parser
 {

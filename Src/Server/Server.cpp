@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 11:50:41 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/11/11 20:55:34 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/11/12 00:09:49 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,167 +24,117 @@ SocketLayer::SocketLayer(Config& c)
 	{
 		std::vector<unsigned int>::iterator Port;
 		for (Port = Server->Port.begin(); Port != Server->Port.end(); ++Port)
+			this->SocketPorts[*Port] += 1;
+	}
+}
+
+
+unsigned int	SocketLayer::OpenSocket(unsigned int Port)
+{
+	sockaddr_in	AddrServer;
+	int fd = socket(AF_INET, SOCK_STREAM, 0);
+	int flags = fcntl(fd, F_GETFL, 0);
+
+    fcntl(fd, F_SETFL, flags | O_NONBLOCK);
+	AddrServer.sin_family = AF_INET;
+	AddrServer.sin_port = htons(Port);
+	AddrServer.sin_addr.s_addr = INADDR_ANY;
+	bind(fd, (struct sockaddr*)&AddrServer, sizeof(AddrServer));
+	return (fd);
+}
+
+void	SocketLayer::OpenServerSockets()
+{
+	std::map<unsigned int, int>::iterator port;
+	
+	for (port = this->SocketPorts.begin(); port != this->SocketPorts.end(); ++port)
+	{
+		int	fd = OpenSocket(port->first);
+		if (fd > 0)
 		{
-			this->SocketPorts.push_back(*Port);
-		}
-	}
-}
-
-
-
-
-
-
-
-
-// need editing :
-
-
-Server::Server(unsigned int Port, unsigned int BufferSize, unsigned int MaxClients):
-	Port(Port),
-	BufferSize(BufferSize),
-	MaxClients(MaxClients),
-	Clients(MaxClients, 0)
-{
-}
-
-void	Server::BindServer() {
-	this->ServerSocket = socket(AF_INET, SOCK_STREAM, 0);
-	if (this->ServerSocket == -1)
-	{
-		std::cerr << "Failed to start server (socket init error)" << std::endl;
-		exit(1);
-	}
-
-	int flags = fcntl(this->ServerSocket, F_GETFL, 0);
-    if (flags == -1) {
-        std::cerr << "Error getting socket flags" << std::endl;
-        exit(1);
-    }
-    if (fcntl(this->ServerSocket, F_SETFL, flags | O_NONBLOCK) == -1) {
-        std::cerr << "Error setting socket to non-blocking mode" << std::endl;
-        exit(1);
-    }
-
-	this->ServerAddrStruct.sin_family = AF_INET;
-	this->ServerAddrStruct.sin_port = htons(this->Port);
-	this->ServerAddrStruct.sin_addr.s_addr = INADDR_ANY;
-
-	if (bind(this->ServerSocket, (struct sockaddr*)&ServerAddrStruct, sizeof(ServerAddrStruct)) == -1)
-	{
-		std::cerr << "Error binding server socket" << std::endl;
-		exit(1);
-	}
-}
-
-void Server::GetServerInfo()
-{
-	struct sockaddr_in addr;
-    socklen_t addr_len = sizeof(addr);
-    if (getsockname(this->ServerSocket, (struct sockaddr*)&addr, &addr_len) == -1) {
-        std::cerr << "Error getting socket name" << std::endl;
-        exit(1);
-    }
-    char ip[INET_ADDRSTRLEN];
-    inet_ntop(AF_INET, &(addr.sin_addr), ip, INET_ADDRSTRLEN);
-    std::cout << "Server is bound to IP: " << ip << " and port: " << ntohs(addr.sin_port) << std::endl;
-}
-
-void	Server::ListenServer() {
-	if (listen(this->ServerSocket, 100) == -1) {
-        std::cerr << "Error listening on server socket" << std::endl;
-        exit(1);
-	}
-}
-
-// select() code :
-
-void	Server::SelectSetup()
-{
-	int		Activity, MaxFd;
-    fd_set	Readfds;
-
-	while(true)
-	{
-        FD_ZERO(&Readfds);
-        FD_SET(ServerSocket, &Readfds);
-        MaxFd = ServerSocket;
-
-        for (int i = 0; i < MaxClients; i++) // add clients to Readfds struct
-		{
-            if(Clients[i] > 0)
-                FD_SET(Clients[i], &Readfds);
-
-            if(Clients[i] > MaxFd)
-                MaxFd = Clients[i];
-        }
-
-        Activity = select(MaxFd + 1, &Readfds, NULL, NULL, NULL);
-        if (Activity < 0)
-            std::cerr << "Select error" << std::endl;
-
-        ServerActivity(Readfds);
-		ClientActivity(Readfds);
-    }	
-}
-
-void	Server::ServerActivity(fd_set& Readfds)
-{
-	struct sockaddr_in	Address;
-    int Addrlen =		sizeof(Address);
-	int	NewSocket;
-
-	if (FD_ISSET(ServerSocket, &Readfds)) // activity from server socket
-	{
-		NewSocket = accept(ServerSocket, (struct sockaddr *)&Address, (socklen_t*)&Addrlen);
-		if (NewSocket < 0)
-			std::cerr << "Accept failed" << std::endl;
-
-		for (int i = 0; i < MaxClients; i++)
-		{
-			if (Clients[i] == 0) 
+			this->ServerSockets.push_back(fd);
+			if (listen(fd, 100) >= 0)
 			{
-				Clients[i] = NewSocket;
-				break;
+				std::cout << "Server listens on port : " << port->first << " fd : " << fd << std::endl;
 			}
 		}
 	}
 }
 
-// Client handeling :
-
-void	Server::CloseClient(int ClientFd, int ClientIndex)
+void	SocketLayer::SelectSetup()
 {
-	close(ClientFd);
-	this->Clients[ClientIndex] = 0;
+	int		Activity;
+	int		MaxFd;
+	fd_set	Fds;
+
+	FD_ZERO(&Fds); // refresh Fd set
+	while (true)
+	{
+
+		for (int i = 0; i < ServerSockets.size(); ++i) // add all server sockets first
+		{
+			FD_SET(ServerSockets[i], &Fds);
+		}
+		MaxFd = ServerSockets.back();
+
+		for (int i = 0; i < ClientSockets.size(); ++i)
+		{
+			FD_SET(ClientSockets[i], &Fds);
+			if (ClientSockets[i] > MaxFd)
+				MaxFd = ClientSockets[i];
+		}
+		
+		Activity = select(MaxFd + 1, &Fds, NULL, NULL, NULL);
+        if (Activity < 0)
+            std::cerr << "Select error" << std::endl;
+
+        ServerActivity(Fds);
+		ClientActivity(Fds);
+	}
 }
 
-void	Server::HandleClient(int ClientFd, int ClientIndex, std::string& ReqBuffer)
+
+void	SocketLayer::ServerActivity(fd_set& Fds)
 {
-	std::cout << ReqBuffer << std::endl;
-	//send(ClientFd, ReqBuffer.c_str(), strlen(ReqBuffer.c_str()), 0);
-	CloseClient(ClientFd, ClientIndex);
-	
+	struct sockaddr_in	Address;
+	int					NewSocket;
+    int Addrlen = sizeof(Address);
+
+	for (int i = 0; i < ServerSockets.size(); ++i)
+	{
+		if (FD_ISSET(ServerSockets[i], &Fds)) // activity from server socket
+		{
+			NewSocket = accept(ServerSockets[i], (struct sockaddr *)&Address, (socklen_t*)&Addrlen);
+			ClientSockets.push_back(NewSocket);
+		}
+	}
 }
 
-void	Server::ClientActivity(fd_set& Readfds)
+static void	CloseClient(unsigned int fd, std::vector<unsigned int>& ClientSockets)
+{
+	std::vector<unsigned int>::iterator it = find(ClientSockets.begin(), ClientSockets.end(), fd);
+	ClientSockets.erase(it);
+}
+
+void	SocketLayer::ClientActivity(fd_set& Fds)
 {
 	int		ClientFd;
-	char	Buffer[BufferSize];
-	int		Valread;
+	char	Buffer[10];
+	int		Bytes;
 
-	for (int i = 0; i < MaxClients; i++) // Else it's some IO operation on a client socket
+	for (int i = 0; i < ClientSockets.size(); i++) // Else it's some IO operation on a client socket
 		{
-            ClientFd = Clients[i];
-            if (FD_ISSET(ClientFd, &Readfds))
+            ClientFd = ClientSockets[i];
+            if (FD_ISSET(ClientFd, &Fds))
 			{
-                if ((Valread = read(ClientFd, Buffer, BufferSize)) == 0)
-                	CloseClient(ClientFd, i);
+                if ((Bytes = read(ClientFd, Buffer, 10)) == 0)
+                	CloseClient(ClientFd, ClientSockets);
 				else
 				{
-					Buffer[Valread] = '\0';
+					Buffer[Bytes] = '\0';
 					std::string	ReqBuffer(Buffer);
-					HandleClient(ClientFd, i, ReqBuffer);
+					std::cout << ReqBuffer << std::endl;
+                	CloseClient(ClientFd, ClientSockets);
 				}
             }
         }

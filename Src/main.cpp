@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 11:43:46 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/11/11 20:54:49 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/11/12 00:05:06 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,13 @@ int main(int ac, char **av) {
 
 	try {
 		Config c("./Tests/Config/Files/valid");
-		c.Init();
 		c.Parse();
-		SocketLayer l(c);
-	} catch (const std::exception& e) {
+
+		SocketLayer layer(c);
+		layer.OpenServerSockets();
+		layer.SelectSetup();
+	}
+	catch (const std::exception& e) {
 		std::cout << e.what() << std::endl;	
 	}
 }
