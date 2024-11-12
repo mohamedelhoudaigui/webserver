@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 11:50:41 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/11/12 00:09:49 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/11/12 04:48:20 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,7 @@ void	SocketLayer::ClientActivity(fd_set& Fds)
 				{
 					Buffer[Bytes] = '\0';
 					std::string	ReqBuffer(Buffer);
-					std::cout << ReqBuffer << std::endl;
+					std::cout << ReqBuffer << std::endl; // take request from here
                 	CloseClient(ClientFd, ClientSockets);
 				}
             }
