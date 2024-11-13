@@ -6,14 +6,20 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 11:50:41 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/11/12 04:48:20 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/11/13 05:55:59 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../Include/Server.hpp"
 
-// Socket openning:
+// to support multiple servers to listen to the same port 
+// we cant know what server the client want to connect to 
+// since we working with INADDR_ANY so parsing the request
+// should retrieve the server by the header host (or servernamew) if no server
+// is defined the request should be dropped or support a default server
 
+// the default size for listen queue is 1024 because we do not
+// support the max clients directive
 
 SocketLayer::SocketLayer(Config& c)
 {
@@ -26,6 +32,11 @@ SocketLayer::SocketLayer(Config& c)
 		for (Port = Server->Port.begin(); Port != Server->Port.end(); ++Port)
 			this->SocketPorts[*Port] += 1;
 	}
+	
+	this->LogFile.open("/Users/mel-houd/Desktop/webserver/Logs/ServerLog", std::ios::out | std::ios::trunc);
+	if (!LogFile.is_open())
+		std::cout << "log file not open !" << std::endl;
+	this->Conf = c.GetResult();
 }
 
 
@@ -33,13 +44,34 @@ unsigned int	SocketLayer::OpenSocket(unsigned int Port)
 {
 	sockaddr_in	AddrServer;
 	int fd = socket(AF_INET, SOCK_STREAM, 0);
+	if (fd < 0)
+		this->LogFile << "failed to open socket into port " << Port << std::endl;
 	int flags = fcntl(fd, F_GETFL, 0);
+	if (flags < 0)
+	{
+		close(fd);
+		this->LogFile << "failed to get socket flags on port " << Port << std::endl;
+		return (-1);
+	}
 
-    fcntl(fd, F_SETFL, flags | O_NONBLOCK);
+    if (fcntl(fd, F_SETFL, flags | O_NONBLOCK) < 0)
+	{
+		close(fd);
+		this->LogFile << "failed to set socket flags to non-blocking on port " << Port << std::endl;
+		return (-1);
+	}
+
 	AddrServer.sin_family = AF_INET;
 	AddrServer.sin_port = htons(Port);
 	AddrServer.sin_addr.s_addr = INADDR_ANY;
-	bind(fd, (struct sockaddr*)&AddrServer, sizeof(AddrServer));
+
+	if (bind(fd, (struct sockaddr*)&AddrServer, sizeof(AddrServer)) < 0)
+	{
+		close(fd);
+		this->LogFile << "failed to bind socket on port " << Port << std::endl;
+		return (-1);
+	}
+
 	return (fd);
 }
 
@@ -53,9 +85,13 @@ void	SocketLayer::OpenServerSockets()
 		if (fd > 0)
 		{
 			this->ServerSockets.push_back(fd);
-			if (listen(fd, 100) >= 0)
+			if (listen(fd, 1024) == 0)
 			{
-				std::cout << "Server listens on port : " << port->first << " fd : " << fd << std::endl;
+				this->LogFile << "Server listens on port : " << port->first << " fd : " << fd << std::endl;
+			}
+			else
+			{
+				this->LogFile << "failed to listen on port " << port->first << std::endl;
 			}
 		}
 	}
@@ -67,15 +103,16 @@ void	SocketLayer::SelectSetup()
 	int		MaxFd;
 	fd_set	Fds;
 
-	FD_ZERO(&Fds); // refresh Fd set
 	while (true)
 	{
-
+		FD_ZERO(&Fds);
 		for (int i = 0; i < ServerSockets.size(); ++i) // add all server sockets first
 		{
 			FD_SET(ServerSockets[i], &Fds);
 		}
-		MaxFd = ServerSockets.back();
+
+		if (ServerSockets.size() > 0)
+			MaxFd = ServerSockets.back();
 
 		for (int i = 0; i < ClientSockets.size(); ++i)
 		{
@@ -86,7 +123,7 @@ void	SocketLayer::SelectSetup()
 		
 		Activity = select(MaxFd + 1, &Fds, NULL, NULL, NULL);
         if (Activity < 0)
-            std::cerr << "Select error" << std::endl;
+            this->LogFile << "Select error !" << std::endl;
 
         ServerActivity(Fds);
 		ClientActivity(Fds);
@@ -105,37 +142,56 @@ void	SocketLayer::ServerActivity(fd_set& Fds)
 		if (FD_ISSET(ServerSockets[i], &Fds)) // activity from server socket
 		{
 			NewSocket = accept(ServerSockets[i], (struct sockaddr *)&Address, (socklen_t*)&Addrlen);
-			ClientSockets.push_back(NewSocket);
+			if (NewSocket < 0)
+				this->LogFile << "Failed to accept client on server number " << ServerSockets[i] - 2 << std::endl;
+			else
+				ClientSockets.push_back(NewSocket);
 		}
 	}
 }
 
-static void	CloseClient(unsigned int fd, std::vector<unsigned int>& ClientSockets)
+void	SocketLayer::CloseClient(unsigned int ClientFd, std::vector<unsigned int>& ClientSockets, fd_set& Fds)
 {
-	std::vector<unsigned int>::iterator it = find(ClientSockets.begin(), ClientSockets.end(), fd);
+	FD_CLR(ClientFd, &Fds);
+	std::vector<unsigned int>::iterator it = find(ClientSockets.begin(), ClientSockets.end(), ClientFd);
 	ClientSockets.erase(it);
+	close(ClientFd);
 }
 
 void	SocketLayer::ClientActivity(fd_set& Fds)
 {
+	int		DefaultBufferSize = Conf.Default.GetDefaultMaxBody();
 	int		ClientFd;
-	char	Buffer[10];
+	char	Buffer[DefaultBufferSize];
 	int		Bytes;
 
-	for (int i = 0; i < ClientSockets.size(); i++) // Else it's some IO operation on a client socket
+	for (int i = 0; i < ClientSockets.size(); i++)
 		{
             ClientFd = ClientSockets[i];
             if (FD_ISSET(ClientFd, &Fds))
 			{
-                if ((Bytes = read(ClientFd, Buffer, 10)) == 0)
-                	CloseClient(ClientFd, ClientSockets);
+				Bytes = read(ClientFd, Buffer, DefaultBufferSize);
+                if (Bytes <= 0)
+				{
+                	CloseClient(ClientFd, ClientSockets, Fds);
+				}
 				else
 				{
 					Buffer[Bytes] = '\0';
 					std::string	ReqBuffer(Buffer);
-					std::cout << ReqBuffer << std::endl; // take request from here
-                	CloseClient(ClientFd, ClientSockets);
+					std::cout << ReqBuffer << std::endl;
+					send(ClientFd, "ACK !", 5, 0);
+                	CloseClient(ClientFd, ClientSockets, Fds);
 				}
             }
         }
+}
+
+SocketLayer::~SocketLayer()
+{
+	for (int i = 0; i < ServerSockets.size(); ++i)
+		close(ServerSockets[i]);
+	for (int i = 0; i < ClientSockets.size(); ++i)
+		close(ClientSockets[i]);
+	this->LogFile.close();
 }

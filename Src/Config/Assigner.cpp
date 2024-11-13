@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 18:32:18 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/11/11 21:03:14 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/11/13 05:49:48 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,6 @@ void	Config::AssignServer(Token& Key, std::vector<Token>& Tokens)
 		this->Result.servers.back().Host = PairValueStr(Tokens, "Host");
 	else if (Key.Token == "ErrorPage")
 		ParseErrorPage(Tokens, this->Result.servers.back().ErrorPage);
-	else if (Key.Token == "MaxClients")
-		this->Result.servers.back().MaxClients = PairValueNum(Tokens, "MaxClients");
 }
 
 // assign server scope from config file
@@ -79,11 +77,7 @@ void	Config::AssignLocation(Token& Key, std::vector<Token>& Tokens)
 	else if (Key.Token == "Methods")
 		this->Result.servers.back().Routes.back().Methods =  MultiValueStr(Tokens, "Methods");
 	else if (Key.Token == "Root")
-	{
 		this->Result.servers.back().Routes.back().Root =  PairValueStr(Tokens, "Root");
-	}
-	else if (Key.Token == "MaxClientBody")
-		this->Result.servers.back().Routes.back().MaxClientBody =  PairValueNum(Tokens, "MaxClientBody");
 	
 }
 

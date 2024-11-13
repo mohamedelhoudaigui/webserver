@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 04:29:25 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/11/11 22:34:39 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/11/13 05:51:40 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,14 +25,12 @@ Config::Config(std::string FileName)
 	GlobalKeys.push_back("DefaultUploadDir");
 	GlobalKeys.push_back("DefaultRoot");
 	GlobalKeys.push_back("DefaultMaxClientBody");
-	GlobalKeys.push_back("DefaultMaxClients");
 
 	ServerKeys.push_back("Listen");
 	ServerKeys.push_back("ServerName");
 	ServerKeys.push_back("ErrorPage");
 	ServerKeys.push_back("Location");
 	ServerKeys.push_back("Host");
-	ServerKeys.push_back("MaxClients");
 
 	LocationKeys.push_back("UploadDir");
 	LocationKeys.push_back("Index");
@@ -41,7 +39,6 @@ Config::Config(std::string FileName)
 	LocationKeys.push_back("DirList");
 	LocationKeys.push_back("Root");
 	LocationKeys.push_back("Methods");
-	LocationKeys.push_back("MaxClientBody");
 }
 
 void	Config::Parse() // main parser

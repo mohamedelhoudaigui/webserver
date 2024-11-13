@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 18:33:16 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/24 07:03:10 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/11/13 05:51:34 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,10 @@ void	Config::CheckGlobalParams()
 	CheckFile(Result.Default.DefaultIndex);
 	CheckFolder(Result.Default.DefaultRoot);
 	CheckFolder(Result.Default.DefaultUploadDir);
-	if (Result.Default.DefaultMaxClients == 0 ||
-		Result.Default.DefaultMaxClientBody == 0)
+	if (Result.Default.DefaultMaxClientBody == 0)
 	{
 		throw std::runtime_error("missing or invalid default configuration (DefaultMaxClients or DefaultMaxClientBody)");
 	}
-	
 }
 
 //Check uniques ServerNames

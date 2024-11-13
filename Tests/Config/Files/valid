@@ -2,14 +2,12 @@ DefaultErrorPage                    ./www/Error.html
 DefaultRoot                         ./www/Default
 DefaultUploadDir                    ./www/upload
 DefaultIndex                        ./www/Default/index.html
-DefaultMaxClients                   900
 DefaultMaxClientBody                16000
 
 
 Server {
-    Listen              12 43
-    ServerName          www.example.com
-    MaxClients          100
+    Listen              2
+    ServerName          default
     ErrorPage           400 401 402 ./www/Error.html
     Host                gg
 
@@ -19,6 +17,17 @@ Server {
         AutoIndex       on
         Methods         GET POST
         Redir           /new-page
-        MaxClientBody   16000
+    }
+}
+
+Server {
+    Listen 3
+    ServerName HttpServer
+    Host  0.0.0.0
+    Location / {
+        Root ./www/Default
+        Index index.html
+        AutoIndex       on
+        Methods         GET POST PUT
     }
 }
