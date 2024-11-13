@@ -6,11 +6,13 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 11:50:41 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/11/13 05:55:59 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/11/13 12:49:57 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../Include/Server.hpp"
+
+
 
 // to support multiple servers to listen to the same port 
 // we cant know what server the client want to connect to 
@@ -97,94 +99,12 @@ void	SocketLayer::OpenServerSockets()
 	}
 }
 
-void	SocketLayer::SelectSetup()
+
+void	SocketLayer::CloseClient(unsigned int ClientFd)
 {
-	int		Activity;
-	int		MaxFd;
-	fd_set	Fds;
-
-	while (true)
-	{
-		FD_ZERO(&Fds);
-		for (int i = 0; i < ServerSockets.size(); ++i) // add all server sockets first
-		{
-			FD_SET(ServerSockets[i], &Fds);
-		}
-
-		if (ServerSockets.size() > 0)
-			MaxFd = ServerSockets.back();
-
-		for (int i = 0; i < ClientSockets.size(); ++i)
-		{
-			FD_SET(ClientSockets[i], &Fds);
-			if (ClientSockets[i] > MaxFd)
-				MaxFd = ClientSockets[i];
-		}
-		
-		Activity = select(MaxFd + 1, &Fds, NULL, NULL, NULL);
-        if (Activity < 0)
-            this->LogFile << "Select error !" << std::endl;
-
-        ServerActivity(Fds);
-		ClientActivity(Fds);
-	}
-}
-
-
-void	SocketLayer::ServerActivity(fd_set& Fds)
-{
-	struct sockaddr_in	Address;
-	int					NewSocket;
-    int Addrlen = sizeof(Address);
-
-	for (int i = 0; i < ServerSockets.size(); ++i)
-	{
-		if (FD_ISSET(ServerSockets[i], &Fds)) // activity from server socket
-		{
-			NewSocket = accept(ServerSockets[i], (struct sockaddr *)&Address, (socklen_t*)&Addrlen);
-			if (NewSocket < 0)
-				this->LogFile << "Failed to accept client on server number " << ServerSockets[i] - 2 << std::endl;
-			else
-				ClientSockets.push_back(NewSocket);
-		}
-	}
-}
-
-void	SocketLayer::CloseClient(unsigned int ClientFd, std::vector<unsigned int>& ClientSockets, fd_set& Fds)
-{
-	FD_CLR(ClientFd, &Fds);
+	close(ClientFd);
 	std::vector<unsigned int>::iterator it = find(ClientSockets.begin(), ClientSockets.end(), ClientFd);
 	ClientSockets.erase(it);
-	close(ClientFd);
-}
-
-void	SocketLayer::ClientActivity(fd_set& Fds)
-{
-	int		DefaultBufferSize = Conf.Default.GetDefaultMaxBody();
-	int		ClientFd;
-	char	Buffer[DefaultBufferSize];
-	int		Bytes;
-
-	for (int i = 0; i < ClientSockets.size(); i++)
-		{
-            ClientFd = ClientSockets[i];
-            if (FD_ISSET(ClientFd, &Fds))
-			{
-				Bytes = read(ClientFd, Buffer, DefaultBufferSize);
-                if (Bytes <= 0)
-				{
-                	CloseClient(ClientFd, ClientSockets, Fds);
-				}
-				else
-				{
-					Buffer[Bytes] = '\0';
-					std::string	ReqBuffer(Buffer);
-					std::cout << ReqBuffer << std::endl;
-					send(ClientFd, "ACK !", 5, 0);
-                	CloseClient(ClientFd, ClientSockets, Fds);
-				}
-            }
-        }
 }
 
 SocketLayer::~SocketLayer()

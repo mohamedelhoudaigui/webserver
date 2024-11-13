@@ -1,6 +1,8 @@
 SRCS =  ./Src/main.cpp \
 		./Src/Helper.cpp \
 		./Src/Server/Server.cpp \
+		./Src/Server/SelectObj.cpp \
+		./Src/Server/Client.cpp \
 		./Src/Config/Config.cpp \
 		./Src/Config/Assigner.cpp \
 		./Src//Config/Checker.cpp \
@@ -11,7 +13,9 @@ SRCS =  ./Src/main.cpp \
 		./Tests/Config/RunConfigTest.cpp \
 
 HEAD = ./Include/Server.hpp \
+		./Include/SelectObj.hpp \
 		./Include/Config.hpp \
+		./Include/Client.hpp \
 		./Include/Exps.hpp \
 		./Include/Helper.hpp \
 		./Include/Types.hpp \

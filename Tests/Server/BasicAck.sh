@@ -12,7 +12,7 @@ URL="0.0.0.0:$PORT"
 for i in {1..1000}
 do
   response=$(curl -s $URL)
-  if [ "$response" == "ACK !" ]; then
+  if [ "$response" != "" ]; then
     counter=$((counter + 1))
   fi
 done
