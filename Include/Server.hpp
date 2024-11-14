@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 11:45:34 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/11/14 03:52:26 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/11/14 04:33:11 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ class SocketLayer
 		int				OpenSocket(unsigned int Port);
 		void			OpenServerSockets();
 		int				BindSocket(int fd, int Port);
-		void			CloseClient(unsigned int ClientFd);
 		int				SocketListen(int fd, int BufferSize, int Port);
 		void			RunKqueue();
 		~SocketLayer();
@@ -46,10 +45,8 @@ class SocketLayer
 	private:
 		std::map<unsigned int, int>			SocketPorts;
 		std::vector<unsigned int>			ServerSockets;
-		std::vector<unsigned int>			ClientSockets;
 		std::fstream						LogFile;
-		ConfigFile							Conf;
-		std::map<int, Client>				Clients;		
+		ConfigFile							Conf;	
 		
 };
 

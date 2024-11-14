@@ -6,17 +6,15 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 11:16:08 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/11/13 11:51:47 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/11/14 05:19:09 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../Include/Client.hpp"
 
 
-Client::Client()
-{
-}
-
+Client::Client(std::fstream& LogFile): LogFile(LogFile)
+{}
 
 void    Client::SetFd(int fd)
 {
@@ -25,29 +23,35 @@ void    Client::SetFd(int fd)
 
 int    Client::Recv(int BufferSize)
 {
-    char    Buffer[BufferSize];
-    int Bytes = read(fd, Buffer, BufferSize);
-    if (Bytes <= 0)
+   char	Buffer[BufferSize];
+		
+    int		count = read(fd, Buffer, BufferSize);
+    if (count < 0)
     {
-       return (-1);
+        this->LogFile << "Error in reading" << std::endl;
+        return (-1);
     }
-    else
+    else if (count == 0)
     {
-        Buffer[Bytes] = '\0';
-        std::string	ReqBuffer(Buffer);
-        std::cout << ReqBuffer << std::endl;
-    }   
-    return (0);
+        std::cout << "Client disconnected" << std::endl;
+        return (0);
+    }
+
+    Buffer[count] = '\0';
+    std::cout << Buffer << std::endl;
+    this->Request = Buffer;
+
+    return (1);
 }
 
 void    Client::Send()
 {
-    std::string http_response = "HTTP/1.1 200 OK\r\n"
-							"Content-Type: text/plain\r\n"
-							"Content-Length: 13\r\n"
-							"\r\n"
-							"Test\0";
-	send(fd, http_response.c_str(), http_response.size(), 0);
+    this->Response.append("HTTP/1.1 200 OK\r\n");
+    this->Response.append("Content-Type: text/plain\r\n");
+    this->Response.append("Content-Length: 24\r\n");
+    this->Response.append("\r\n");
+    this->Response.append("Fake response for testing");
+	send(fd, Response.c_str(), Response.size(), 0);
 }
 
 int     Client::GetFd()

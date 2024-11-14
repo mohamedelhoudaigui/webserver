@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 09:25:41 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/11/14 04:05:06 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/11/14 05:05:58 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,18 +26,29 @@
 #include <iostream>
 
 
-#define MAX_EVENTS 100
+#include "Client.hpp"
+#include "Config.hpp"
+#include "Types.hpp"
+
+#define CLIENT (void *)0x1
+#define SERVER (void *)0x2
+
+
+#define MAX_EVENTS 10000
 
 class KqueueObj
 {
 	public:
-		KqueueObj(std::fstream& LogFile, std::vector<unsigned int>& ServerSockets);
+		KqueueObj(std::fstream& LogFile, std::vector<unsigned int>& ServerSockets, ConfigFile &Conf);
 		int		Init();
 		int		GetKqueueFd();
 		void	AddServers();
 		void	Run(int (*SetNonBlocking)(int, std::fstream&));
+
 		void	ServerAct(struct kevent& event, int (*SetNonBlocking)(int, std::fstream&));
 		void	ClientAct(struct kevent& event);
+
+		void	PurgeClient(int fd);
 
 	private:
 		int KqueueFd;
@@ -45,6 +56,7 @@ class KqueueObj
 		struct kevent				event_set;
 		struct kevent				events[MAX_EVENTS];
 		std::vector<unsigned int>	&ServerSockets;
+		ConfigFile					&Conf;
 };
 
 #endif

@@ -6,15 +6,17 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 09:25:44 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/11/14 04:13:45 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/11/14 05:18:20 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../Include/KqueueObj.hpp"
 
-KqueueObj::KqueueObj(std::fstream& LogFile, std::vector<unsigned int>& ServerSockets): LogFile(LogFile), ServerSockets(ServerSockets)
-{
-}
+KqueueObj::KqueueObj(std::fstream& LogFile, std::vector<unsigned int>& ServerSockets, ConfigFile& Conf):
+LogFile(LogFile),
+ServerSockets(ServerSockets),
+Conf(Conf)
+{}
 
 
 
@@ -40,7 +42,7 @@ void	KqueueObj::AddServers()
 {
 	for (int i = 0; i < ServerSockets.size(); ++i)
 	{
-		EV_SET(&event_set, ServerSockets[i], EVFILT_READ, EV_ADD, 0, 0, (void *)1);
+		EV_SET(&event_set, ServerSockets[i], EVFILT_READ, EV_ADD, 0, 0, SERVER);
 		if (kevent(KqueueFd, &event_set, 1, NULL, 0, NULL) == -1)
 		{
 			this->LogFile << "Error in kevent" << std::endl;
@@ -61,8 +63,10 @@ void	KqueueObj::Run(int (*SetNonBlocking)(int, std::fstream&))
 			if (events[i].flags & EV_ERROR) // check if event flag is set to error
 				this->LogFile << "EV_ERROR is set in event number " << i << std::endl;
 
-			ServerAct(events[i], SetNonBlocking);
-			ClientAct(events[i]);
+			if (events[i].udata == SERVER)
+				ServerAct(events[i], SetNonBlocking);
+			else
+				ClientAct(events[i]);
 		}
 	}
 }
@@ -72,51 +76,42 @@ void	KqueueObj::ServerAct(struct kevent& event, int (*SetNonBlocking)(int, std::
 	struct sockaddr_in					ClientAddr;
 	socklen_t							ClientLen = sizeof(ClientAddr);
 
-	if (event.udata == (void *)1)
+	int client_fd = accept(event.ident, (struct sockaddr *)&ClientAddr, &ClientLen);
+	if (client_fd == -1) {
+		this->LogFile << "Error in accpet server socket number " << event.ident << std::endl;
+	}
+	// Set new socket to non-blocking
+	if (SetNonBlocking(client_fd, LogFile) == -1)
+		close(client_fd);
+	
+	// Add new client to kqueue
+	EV_SET(&event_set, client_fd, EVFILT_READ, EV_ADD, 0, 0, CLIENT);
+	if (kevent(KqueueFd, &event_set, 1, NULL, 0, NULL) == -1)
 	{
-		// Handle new connection
-		int client_fd = accept(event.ident, (struct sockaddr *)&ClientAddr, &ClientLen);
-		if (client_fd == -1) {
-			this->LogFile << "Error in accpet server socket number " << event.ident << std::endl;
-		}
-		// Set new socket to non-blocking
-		if (SetNonBlocking(client_fd, LogFile) == -1)
-			close(client_fd);
-		
-		// Add new client to kqueue
-		EV_SET(&event_set, client_fd, EVFILT_READ, EV_ADD, 0, 0, NULL);
-		if (kevent(KqueueFd, &event_set, 1, NULL, 0, NULL) == -1)
-		{
-			this->LogFile << "Failed to add new client to queue" << std::endl;
-			close(client_fd);
-		}
-		std::cout << "New client connected" << std::endl;
+		this->LogFile << "Failed to add new client to queue" << std::endl;
+		close(client_fd);
 	}
 }
 
 
 void	KqueueObj::ClientAct(struct kevent& event)
 {
-	if (event.udata == NULL)
-	{
-		char	Buffer[1024];
-		
-		int		count = read(event.ident, Buffer, 1024);
-		if (count == -1)
-		{
-			this->LogFile << "Error in reading" << std::endl;
-		}
-		else if (count == 0)
-		{
-			std::cout << "Client disconnected" << std::endl;
-			close(event.ident);
-		}
-		else
-		{
-			Buffer[count] = '\0';
-			std::cout << Buffer << std::endl;
-			write(event.ident, Buffer, count);
-			close(event.ident);
-		}
-	}
+	Client	c(LogFile);
+	int		count;
+
+	c.SetFd(event.ident);
+	
+	count = c.Recv(this->Conf.Default.GetDefaultMaxBody());
+	if (count <= 0)
+		PurgeClient(c.GetFd());
+	else
+		c.Send();
+}
+
+void	KqueueObj::PurgeClient(int fd)
+{
+	EV_SET(&event_set, fd, EVFILT_READ, EV_DELETE, 0, 0, NULL);
+	if (kevent(KqueueFd, &event_set, 1, NULL, 0, NULL) == -1)
+		LogFile << "Error purging client" << std::endl;
+	close(fd);
 }

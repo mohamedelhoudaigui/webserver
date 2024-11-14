@@ -6,22 +6,11 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 11:50:41 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/11/14 03:54:27 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/11/14 05:03:47 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../Include/Server.hpp"
-
-
-
-// to support multiple servers to listen to the same port 
-// we cant know what server the client want to connect to 
-// since we working with INADDR_ANY so parsing the request
-// should retrieve the server by the header host (or servernamew) if no server
-// is defined the request should be dropped or support a default server
-
-// the default size for listen queue is 1024 because we do not
-// support the max clients directive
 
 SocketLayer::SocketLayer(Config& c)
 {
@@ -107,25 +96,14 @@ void	SocketLayer::OpenServerSockets()
 
 void	SocketLayer::RunKqueue()
 {
-	KqueueObj	handler(LogFile, ServerSockets);
+	KqueueObj	handler(LogFile, ServerSockets, Conf);
 	handler.Init();
 	handler.AddServers();
 	handler.Run(SetNonBlocking);
 }
 
 
-void	SocketLayer::CloseClient(unsigned int ClientFd)
-{
-	close(ClientFd);
-	std::vector<unsigned int>::iterator it = find(ClientSockets.begin(), ClientSockets.end(), ClientFd);
-	ClientSockets.erase(it);
-}
-
 SocketLayer::~SocketLayer()
 {
-	for (int i = 0; i < ServerSockets.size(); ++i)
-		close(ServerSockets[i]);
-	for (int i = 0; i < ClientSockets.size(); ++i)
-		close(ClientSockets[i]);
 	this->LogFile.close();
 }
