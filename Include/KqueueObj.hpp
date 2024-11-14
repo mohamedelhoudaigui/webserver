@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 09:25:41 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/11/14 05:05:58 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/11/14 10:58:00 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@
 
 #define CLIENT (void *)0x1
 #define SERVER (void *)0x2
+#define TIME (void *)0x3
+#define CLIENT_TIMEOUT 5 // 5 seconds timeout test
 
 
 #define MAX_EVENTS 10000
@@ -47,16 +49,18 @@ class KqueueObj
 
 		void	ServerAct(struct kevent& event, int (*SetNonBlocking)(int, std::fstream&));
 		void	ClientAct(struct kevent& event);
+		void	TimeoutAct(struct kevent& event);
 
 		void	PurgeClient(int fd);
 
 	private:
 		int KqueueFd;
-		std::fstream&				LogFile;
-		struct kevent				event_set;
-		struct kevent				events[MAX_EVENTS];
-		std::vector<unsigned int>	&ServerSockets;
-		ConfigFile					&Conf;
+		std::fstream&					LogFile;
+		struct kevent					event_set;
+		struct kevent					events[MAX_EVENTS];
+		std::vector<unsigned int>		&ServerSockets;
+		std::map<unsigned int, Client>	Clients;
+		ConfigFile						&Conf;
 };
 
 #endif
