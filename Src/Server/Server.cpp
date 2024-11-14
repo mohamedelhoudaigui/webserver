@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 11:50:41 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/11/13 12:49:57 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/11/14 03:54:27 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,27 +42,12 @@ SocketLayer::SocketLayer(Config& c)
 }
 
 
-unsigned int	SocketLayer::OpenSocket(unsigned int Port)
+
+int	SocketLayer::BindSocket(int fd, int Port)
 {
 	sockaddr_in	AddrServer;
-	int fd = socket(AF_INET, SOCK_STREAM, 0);
-	if (fd < 0)
-		this->LogFile << "failed to open socket into port " << Port << std::endl;
-	int flags = fcntl(fd, F_GETFL, 0);
-	if (flags < 0)
-	{
-		close(fd);
-		this->LogFile << "failed to get socket flags on port " << Port << std::endl;
-		return (-1);
-	}
 
-    if (fcntl(fd, F_SETFL, flags | O_NONBLOCK) < 0)
-	{
-		close(fd);
-		this->LogFile << "failed to set socket flags to non-blocking on port " << Port << std::endl;
-		return (-1);
-	}
-
+	memset(&AddrServer, 0, sizeof(AddrServer));
 	AddrServer.sin_family = AF_INET;
 	AddrServer.sin_port = htons(Port);
 	AddrServer.sin_addr.s_addr = INADDR_ANY;
@@ -73,8 +58,36 @@ unsigned int	SocketLayer::OpenSocket(unsigned int Port)
 		this->LogFile << "failed to bind socket on port " << Port << std::endl;
 		return (-1);
 	}
+	return (0);
+}
 
+
+int	SocketLayer::OpenSocket(unsigned int Port)
+{
+	int fd = socket(AF_INET, SOCK_STREAM, 0);
+	if (fd < 0)
+	{
+		this->LogFile << "failed to open socket into port " << Port << std::endl;
+		return (-1);
+	}
+	if (SetNonBlocking(fd, LogFile) == -1)
+		return (-1);
+	if (BindSocket(fd, Port) == -1)
+		return (-1);
 	return (fd);
+}
+
+
+int	SocketLayer::SocketListen(int fd, int BufferSize, int Port)
+{
+	if (listen(fd, 1024) == 0)
+		this->LogFile << "Server listens on port : " << Port << " fd : " << fd << std::endl;
+	else
+	{
+		this->LogFile << "failed to listen on port " << Port << std::endl;
+		return (-1);
+	}
+	return (0);
 }
 
 void	SocketLayer::OpenServerSockets()
@@ -86,17 +99,18 @@ void	SocketLayer::OpenServerSockets()
 		int	fd = OpenSocket(port->first);
 		if (fd > 0)
 		{
-			this->ServerSockets.push_back(fd);
-			if (listen(fd, 1024) == 0)
-			{
-				this->LogFile << "Server listens on port : " << port->first << " fd : " << fd << std::endl;
-			}
-			else
-			{
-				this->LogFile << "failed to listen on port " << port->first << std::endl;
-			}
+			if (SocketListen(fd, 1024, port->first) == 0)
+				this->ServerSockets.push_back(fd);
 		}
 	}
+}
+
+void	SocketLayer::RunKqueue()
+{
+	KqueueObj	handler(LogFile, ServerSockets);
+	handler.Init();
+	handler.AddServers();
+	handler.Run(SetNonBlocking);
 }
 
 

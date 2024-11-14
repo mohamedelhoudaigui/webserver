@@ -6,7 +6,7 @@ DefaultMaxClientBody                16000
 
 
 Server {
-    Listen              2
+    Listen              44
     ServerName          default
     ErrorPage           400 401 402 ./www/Error.html
     Host                gg
@@ -21,7 +21,7 @@ Server {
 }
 
 Server {
-    Listen 3
+    Listen 33
     ServerName HttpServer
     Host  0.0.0.0
     Location / {

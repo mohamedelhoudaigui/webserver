@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 05:31:43 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/11/11 20:45:52 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/11/14 03:55:26 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 #include <sys/stat.h>
 #include <iostream>
 #include <unistd.h>
+#include <fcntl.h>
 
 #include "../Include/Types.hpp"
 
@@ -35,5 +36,7 @@ void						ParseErrorPage(std::vector<Token>& Tokens, std::map<unsigned int, std:
 void						CheckFile(std::string& file);
 void						CheckFolder(std::string& folder);
 void						CheckDigit(std::string& Token, std::string& ConfName);
+
+int	                        SetNonBlocking(int fd, std::fstream& LogFile);
 
 #endif

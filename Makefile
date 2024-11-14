@@ -1,7 +1,7 @@
 SRCS =  ./Src/main.cpp \
 		./Src/Helper.cpp \
 		./Src/Server/Server.cpp \
-		./Src/Server/SelectObj.cpp \
+		./Src/Server/KqueueObj.cpp \
 		./Src/Server/Client.cpp \
 		./Src/Config/Config.cpp \
 		./Src/Config/Assigner.cpp \
@@ -13,7 +13,7 @@ SRCS =  ./Src/main.cpp \
 		./Tests/Config/RunConfigTest.cpp \
 
 HEAD = ./Include/Server.hpp \
-		./Include/SelectObj.hpp \
+		./Include/KqueueObj.hpp \
 		./Include/Config.hpp \
 		./Include/Client.hpp \
 		./Include/Exps.hpp \

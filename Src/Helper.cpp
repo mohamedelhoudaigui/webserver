@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 05:30:53 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/11/11 20:46:38 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/11/14 03:51:43 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,4 +140,25 @@ void	CheckDigit(std::string& Token, std::string& ConfName)
 		if (Token[i] < '0' || Token[i] > '9')
 			throw std::runtime_error(ConfName + ": " + Token + " is not a valid port number");
 	}
+}
+
+//--------------server
+
+int	SetNonBlocking(int fd, std::fstream& LogFile)
+{
+	int flags = fcntl(fd, F_GETFL, 0);
+	if (flags < 0)
+	{
+		close(fd);
+		LogFile << "failed to get socket flags" << std::endl;
+		return (-1);
+	}
+
+    if (fcntl(fd, F_SETFL, flags | O_NONBLOCK) < 0)
+	{
+		close(fd);
+		LogFile << "failed to set socket flags to non-blocking " << std::endl;
+		return (-1);
+	}
+	return (0);
 }

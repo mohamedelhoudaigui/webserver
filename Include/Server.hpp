@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 11:45:34 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/11/13 11:30:36 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/11/14 03:52:26 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,20 +26,21 @@
 
 #include "Config.hpp"
 #include "Request.hpp"
-#include "SelectObj.hpp"
+#include "KqueueObj.hpp"
 #include "Client.hpp"
+#include "Helper.hpp"
 
 
 class SocketLayer
 {
 	public:
 		SocketLayer(Config& c);
-		unsigned int	OpenSocket(unsigned int Port);
+		int				OpenSocket(unsigned int Port);
 		void			OpenServerSockets();
-		void			SelectSetup();
-		void			ClientActivity();
-		void			ServerActivity();
+		int				BindSocket(int fd, int Port);
 		void			CloseClient(unsigned int ClientFd);
+		int				SocketListen(int fd, int BufferSize, int Port);
+		void			RunKqueue();
 		~SocketLayer();
 
 	private:
@@ -48,8 +49,7 @@ class SocketLayer
 		std::vector<unsigned int>			ClientSockets;
 		std::fstream						LogFile;
 		ConfigFile							Conf;
-		SelectObj							Selector;
-		std::map<int, Client>					Clients;		
+		std::map<int, Client>				Clients;		
 		
 };
 
