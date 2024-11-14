@@ -6,19 +6,17 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 09:25:44 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/11/14 11:09:15 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/11/14 11:46:18 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../Include/KqueueObj.hpp"
 
-KqueueObj::KqueueObj(std::fstream& LogFile, std::vector<unsigned int>& ServerSockets, ConfigFile& Conf):
+KqueueObj::KqueueObj(std::fstream& LogFile, std::vector<unsigned int>& ServerSockets, Config& Conf):
 LogFile(LogFile),
 ServerSockets(ServerSockets),
 Conf(Conf)
 {}
-
-
 
 int	KqueueObj::Init()
 {
@@ -120,7 +118,7 @@ void	KqueueObj::ClientAct(struct kevent& event)
 	int		count;
 
 	c.SetFd(event.ident);
-	count = c.Recv(this->Conf.Default.GetDefaultMaxBody());
+	count = c.Recv(this->Conf.GetResult().Default.GetDefaultMaxBody());
 	if (count <= 0)
 		PurgeClient(c.GetFd());
 }

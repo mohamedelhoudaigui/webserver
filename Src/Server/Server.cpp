@@ -6,31 +6,28 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 11:50:41 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/11/14 05:03:47 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/11/14 11:44:51 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../Include/Server.hpp"
 
-SocketLayer::SocketLayer(Config& c)
+SocketLayer::SocketLayer(Config& c): Conf(c)
 {
-	ConfigFile res = c.GetResult();
+	ConfigFile res = Conf.GetResult();
 	std::vector<ServerConf>::iterator Server;
 
 	for (Server = res.servers.begin(); Server != res.servers.end(); ++Server)
 	{
 		std::vector<unsigned int>::iterator Port;
-		for (Port = Server->Port.begin(); Port != Server->Port.end(); ++Port)
+		for (Port = Server->Port.begin(); Port != Server->Port.end(); ++Port) //map stores ports without dups
 			this->SocketPorts[*Port] += 1;
 	}
-	
+
 	this->LogFile.open("/Users/mel-houd/Desktop/webserver/Logs/ServerLog", std::ios::out | std::ios::trunc);
 	if (!LogFile.is_open())
 		std::cout << "log file not open !" << std::endl;
-	this->Conf = c.GetResult();
 }
-
-
 
 int	SocketLayer::BindSocket(int fd, int Port)
 {

@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 09:25:41 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/11/14 10:58:00 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/11/14 11:38:58 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@
 class KqueueObj
 {
 	public:
-		KqueueObj(std::fstream& LogFile, std::vector<unsigned int>& ServerSockets, ConfigFile &Conf);
+		KqueueObj(std::fstream& LogFile, std::vector<unsigned int>& ServerSockets, Config& Conf);
 		int		Init();
 		int		GetKqueueFd();
 		void	AddServers();
@@ -60,7 +60,7 @@ class KqueueObj
 		struct kevent					events[MAX_EVENTS];
 		std::vector<unsigned int>		&ServerSockets;
 		std::map<unsigned int, Client>	Clients;
-		ConfigFile						&Conf;
+		Config							&Conf;
 };
 
 #endif
