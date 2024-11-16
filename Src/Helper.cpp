@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 05:30:53 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/11/14 03:51:43 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/11/16 04:48:19 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,4 +161,12 @@ int	SetNonBlocking(int fd, std::fstream& LogFile)
 		return (-1);
 	}
 	return (0);
+}
+
+int	EnvLen(char **env)
+{
+	int	i = 0;
+	while (env[i])
+		i++;
+	return (i);
 }

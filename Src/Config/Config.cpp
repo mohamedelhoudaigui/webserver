@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 04:29:25 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/11/13 05:51:40 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/11/16 05:03:10 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,4 +57,9 @@ ConfigLines	Config::GetLines()
 ConfigFile	Config::GetResult()
 {
 	return (this->Result);
+}
+
+std::fstream&	Config::GetLog()
+{
+	return (this->File);
 }

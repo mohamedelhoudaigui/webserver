@@ -3,6 +3,7 @@ SRCS =  ./Src/main.cpp \
 		./Src/Server/Server.cpp \
 		./Src/Server/KqueueObj.cpp \
 		./Src/Server/Client.cpp \
+		./Src/CGI/CGI.cpp \
 		./Src/Config/Config.cpp \
 		./Src/Config/Assigner.cpp \
 		./Src//Config/Checker.cpp \
@@ -11,11 +12,13 @@ SRCS =  ./Src/main.cpp \
 		./Src/Config/Tokens.cpp \
 		./Src/Config/Syntax.cpp \
 		./Tests/Config/RunConfigTest.cpp \
+		./Tests/CGI/CGI_test.cpp \
 
 HEAD = ./Include/Server.hpp \
 		./Include/KqueueObj.hpp \
 		./Include/Config.hpp \
 		./Include/Client.hpp \
+		./Include/CGI.hpp \
 		./Include/Exps.hpp \
 		./Include/Helper.hpp \
 		./Include/Types.hpp \

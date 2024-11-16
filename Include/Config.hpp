@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 02:49:00 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/24 04:00:31 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/11/16 05:02:49 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ class Config
 		//Getters.cpp
 		ConfigLines		GetLines();
 		ConfigFile		GetResult();
+		std::fstream&	GetLog();
 
 	private:
 		std::vector<std::string>	GlobalKeys;
