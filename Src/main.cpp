@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 11:43:46 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/11/16 05:19:45 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/11/16 11:08:46 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,20 +20,27 @@ int main(int ac, char **av ,char **env)
 {
 	// testing :
 	//RunTests();
-	TestCGI();
+	//TestCGI();
 
-	// try {
-	// 	Config c("./Tests/Config/Files/valid");
-	// 	c.Parse();
+	if (ac != 2)
+	{
+		std::cout << "usage: ./webserv {ConfigFile}" << std::endl;
+		return (1);
+	}
 
-	// 	CGI cgi();
-	// 	SocketLayer layer(c);
-	// 	layer.OpenServerSockets();
-	// 	layer.RunKqueue();
-	// }
-	// catch (const std::exception& e)
-	// {
-	// 	std::cout << e.what() << std::endl;	
-	// }
+	try {
+		Config c(av[1]);
+		c.Parse();
+
+		CGI cgi;
+
+		SocketLayer server(c);
+		server.OpenServerSockets();
+		server.RunKqueue();
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << e.what() << std::endl;	
+	}
 
 }

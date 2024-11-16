@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 11:30:04 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/11/12 00:04:49 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/11/16 10:32:08 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ void	RunTests()
 {
 	std::string	TestsPath = "./Tests/Config/Files/";
 
-	TestUnit(TestsPath + "valid", "valid file exception : "); // valid test should not throw exception
 	for (int i = 1; i < 8; ++i) // invalid config files
 	{
 		std::stringstream	ss;

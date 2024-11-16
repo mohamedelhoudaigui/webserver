@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 11:16:08 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/11/14 05:19:09 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/11/16 07:50:19 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int    Client::Recv(int BufferSize)
 {
    char	Buffer[BufferSize];
 		
-    int		count = read(fd, Buffer, BufferSize);
+    int		count = recv(fd, Buffer, BufferSize, 0);
     if (count < 0)
     {
         this->LogFile << "Error in reading" << std::endl;

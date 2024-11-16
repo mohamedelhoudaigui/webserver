@@ -3,7 +3,6 @@ DefaultRoot                         ./www/Default
 DefaultUploadDir                    ./www/upload
 DefaultIndex                        ./www/Default/index.html
 DefaultMaxClientBody                16000
-CgiPath                             ./Src/CGI/
 
 Server {
     Listen              44
