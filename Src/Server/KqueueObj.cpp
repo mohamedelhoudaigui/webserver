@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 09:25:44 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/11/14 11:46:18 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/11/17 11:26:35 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ void	KqueueObj::ServerAct(struct kevent& event, int (*SetNonBlocking)(int, std::
 		return ;
 	}
 
-	// Add a timer event for the client
+	//Add a timer event for the client
     struct kevent timer_event;
     EV_SET(&timer_event, client_fd, EVFILT_TIMER, EV_ADD | EV_ONESHOT, 0, CLIENT_TIMEOUT * 1000, TIME);
     if (kevent(KqueueFd, &timer_event, 1, NULL, 0, NULL) == -1)
@@ -121,6 +121,11 @@ void	KqueueObj::ClientAct(struct kevent& event)
 	count = c.Recv(this->Conf.GetResult().Default.GetDefaultMaxBody());
 	if (count <= 0)
 		PurgeClient(c.GetFd());
+	else
+	{
+		c.Send();
+		PurgeClient(c.GetFd());
+	}
 }
 
 void	KqueueObj::TimeoutAct(struct kevent& event)

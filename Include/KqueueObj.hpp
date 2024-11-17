@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 09:25:41 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/11/14 11:38:58 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/11/17 11:27:44 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,15 @@
 #include "Config.hpp"
 #include "Types.hpp"
 
-#define CLIENT (void *)0x1
-#define SERVER (void *)0x2
-#define TIME (void *)0x3
-#define CLIENT_TIMEOUT 5 // 5 seconds timeout test
+// codes to define event type
+
+#define CLIENT	(void *)0x1
+#define SERVER	(void *)0x2
+#define TIME	(void *)0x3 
+#define CLIENT_TIMEOUT 10 // 10 seconds timeout test
 
 
-#define MAX_EVENTS 10000
+#define MAX_EVENTS 10000 // max (clients + timeout + server) events
 
 class KqueueObj
 {

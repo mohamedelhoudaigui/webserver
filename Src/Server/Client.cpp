@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 11:16:08 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/11/16 07:50:19 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/11/17 11:20:43 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,9 @@ void    Client::Send()
 {
     this->Response.append("HTTP/1.1 200 OK\r\n");
     this->Response.append("Content-Type: text/plain\r\n");
-    this->Response.append("Content-Length: 24\r\n");
+    this->Response.append("Content-Length: 0\r\n");
     this->Response.append("\r\n");
-    this->Response.append("Fake response for testing");
+    this->Response.append("");
 	send(fd, Response.c_str(), Response.size(), 0);
 }
 

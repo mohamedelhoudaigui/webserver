@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 23:48:03 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/11/16 12:11:13 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/11/17 14:55:54 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ class   CGI
 		void	Execute();
 		void	ReadPipe(int pipe_fd, std::string& s);
 		void	WritePipe(int pipe_fd, std::string& s);
+		char**	MakeEnv();
 };
 
 

@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 05:09:11 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/11/16 12:13:20 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/11/17 15:18:02 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,20 @@
 void	TestCGI(char **env)
 {
 	CGI c;
-	std::string	script = "/Users/mel-houd/Desktop/webserver/Tests/CGI/python_script.py";
+	std::string	ScriptPath = "/Users/mel-houd/Desktop/webserver/Tests/CGI/python_script.py";
+	std::string	ScriptName = "python_script.py";
 
 	cgi_params p;
-	p.PATH_INFO = script;
-	p.HTTP_USER_AGENT = script;
-	p.QUERY_STRING = script;
-	p.REMOTE_ADDR = script;
-	p.REQUEST_METHOD = script;
-	p.SCRIPT_NAME = script;
-	p.SERVER_NAME = script;
-	p.SERVER_PORT = script;
+	p.PATH_INFO = ScriptPath;
+	p.SCRIPT_NAME = ScriptName;
+
+	p.HTTP_USER_AGENT = "test_user_agent";
+	p.QUERY_STRING = "test_query_string";
+	p.REMOTE_ADDR = "test_remote_addr";
+	p.REQUEST_METHOD = "test_req_method";
+	p.SERVER_NAME = "test_server_name";
+	p.SERVER_PORT = "test_server_port";
+
 	std::string	Request = "hello world\n";
 
 	c.CGISetup(p, Request, env);
