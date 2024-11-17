@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 02:49:00 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/11/16 05:02:49 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/11/17 10:08:30 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ class Config
 	public:
 		//Config.cpp
 		Config(std::string FileName);
-		void		Init();
 		void		Parse();
 		//Tokens.cpp
 		void		Tokeniser();
@@ -74,7 +73,7 @@ class Config
 		ConfigLines					ConfLines;
 };
 
-void	RunTests();
+void	TestConfig();
 
 
 

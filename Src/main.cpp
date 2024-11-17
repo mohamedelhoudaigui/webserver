@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 11:43:46 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/11/16 11:08:46 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/11/17 10:42:47 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@
 int main(int ac, char **av ,char **env)
 {
 	// testing :
-	//RunTests();
-	//TestCGI();
+	//TestConfig();
+	//TestCGI(env);
 
 	if (ac != 2)
 	{

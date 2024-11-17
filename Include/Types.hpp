@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 08:34:31 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/24 06:47:38 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/11/17 10:41:26 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,14 +59,12 @@ typedef struct ConfigLines
 
 typedef struct DefaultConf
 {
-	unsigned int				DefaultMaxClients;
 	unsigned int				DefaultMaxClientBody;
 	std::string					DefaultErrorPage;
 	std::string					DefaultRoot;
 	std::string					DefaultUploadDir;
 	std::string					DefaultIndex;
 
-	unsigned int				GetDefaultMaxClients();
 	unsigned int				GetDefaultMaxBody();
 	std::string&				GetDefaultErrorPage();
 	std::string&				GetDefaultRoot();
@@ -104,12 +102,10 @@ typedef struct RouteConf
 }	RouteConf;
 
 
-
 typedef struct ServerConf
 {
 	DefaultConf*						Default;
 
-	unsigned int						MaxClients;
 	std::string							Host;
 	std::string							ServerName;
 	std::vector<unsigned int>			Port;
@@ -118,7 +114,6 @@ typedef struct ServerConf
 
 	std::string&						GetHost();
 	std::string&						GetServerName();
-	unsigned int						GetMaxClients();
 	bool								CheckPort(unsigned int Port);
 	bool								CheckLocation(std::string& LocationPath);
 	std::string&						GetErrorPage(unsigned int ErrorCode); // throws

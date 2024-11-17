@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 18:51:31 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/10/24 06:45:12 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/11/17 10:42:30 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,21 +85,7 @@ unsigned int	DefaultConf::GetDefaultMaxBody()
 	return (this->DefaultMaxClientBody);
 }
 
-
-unsigned int	DefaultConf::GetDefaultMaxClients()
-{
-	return (this->DefaultMaxClients);
-}
-
-
 //ServerGetters :
-
-unsigned int	ServerConf::GetMaxClients()
-{
-	if (this->MaxClients == 0)
-		return (this->Default->GetDefaultMaxClients());
-	return (this->MaxClients);
-}
 
 std::string&	ServerConf::GetHost()
 {

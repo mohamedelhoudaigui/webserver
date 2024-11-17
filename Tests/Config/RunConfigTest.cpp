@@ -6,14 +6,14 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 11:30:04 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/11/16 10:32:08 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/11/17 10:08:58 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../Include/Config.hpp"
 
 
-static void	TestUnit(std::string FileName, std::string Note)
+static void	UnitTest(std::string FileName, std::string Note)
 {
 	try {
 		Config c(FileName);
@@ -23,7 +23,7 @@ static void	TestUnit(std::string FileName, std::string Note)
 	}
 }
 
-void	RunTests()
+void	TestConfig()
 {
 	std::string	TestsPath = "./Tests/Config/Files/";
 
@@ -31,6 +31,6 @@ void	RunTests()
 	{
 		std::stringstream	ss;
 		ss << i;
-		TestUnit(TestsPath + ss.str(), ss.str() + " good : ");
+		UnitTest(TestsPath + ss.str(), ss.str() + " good : ");
 	}
 }

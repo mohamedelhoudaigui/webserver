@@ -1,10 +1,14 @@
-ErrorPage      ./www/Error.html
+#no Host directive in server scope
+
+DefaultErrorPage                    ./www/Error.html
+DefaultRoot                         ./www/Default
+DefaultUploadDir                    ./www/upload
+DefaultIndex                        ./www/Default/index.html
+DefaultMaxClientBody                16000
 
 Server {
     Listen 80
     ServerName www.example.com
-    Root /var/www/
-
 
     Location / {
         Index index.html

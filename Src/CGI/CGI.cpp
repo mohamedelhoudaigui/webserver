@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 23:48:05 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/11/16 11:08:18 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/11/16 12:11:47 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,21 +22,11 @@ CGI::~CGI()
 	
 }
 
-void CGI::CGISetup(cgi_params& Params, std::string Request)
+void CGI::CGISetup(cgi_params& Params, std::string Request, char **e)
 {
-	const char    *env[8];
-	
-	env[0] = Params.SERVER_NAME.c_str();
-	env[1] = Params.SERVER_PORT.c_str();
-	env[2] = Params.REMOTE_ADDR.c_str();
-	env[3] = Params.HTTP_USER_AGENT.c_str();
-	env[4] = Params.REQUEST_METHOD.c_str();
-	env[5] = Params.QUERY_STRING.c_str();
-	env[6] = Params.PATH_INFO.c_str();
-	env[7] = Params.SCRIPT_NAME.c_str();
-
-	this->env = env;
+	this->server_env = e;
 	this->Request = Request;
+	this->Params = Params;
 
 	pipe(this->stdin_pipe);
 	pipe(this->stdout_pipe);
@@ -67,8 +57,20 @@ void CGI::WritePipe(int pipe_fd, std::string& s)
 
 void CGI::Execute()
 {
-	ProcId = fork();
+	char    **env;
+	
+	env = (char **)calloc(sizeof(char *), 9);
+	env[0] = strdup(Params.SERVER_NAME.c_str());
+	env[1] = strdup(Params.SERVER_PORT.c_str());
+	env[2] = strdup(Params.REMOTE_ADDR.c_str());
+	env[3] = strdup(Params.HTTP_USER_AGENT.c_str());
+	env[4] = strdup(Params.REQUEST_METHOD.c_str());
+	env[5] = strdup(Params.QUERY_STRING.c_str());
+	env[6] = strdup(Params.PATH_INFO.c_str());
+	env[7] = strdup(Params.SCRIPT_NAME.c_str());
+	env[8] = NULL;
 
+	ProcId = fork();
 	if (ProcId == 0)
 	{
 		dup2(stdin_pipe[0], STDIN_FILENO);
@@ -84,8 +86,7 @@ void CGI::Execute()
         close(this->stderr_pipe[0]);
         close(this->stderr_pipe[1]);
 
-
-		execve(env[6], const_cast<char **>(&env[6]), const_cast<char **>(env));
+		execve(Params.PATH_INFO.c_str(), NULL, env);
 		std::cout << "Error executing CGI" << std::endl;
 		exit(1);
 	}

@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 23:48:03 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/11/16 11:07:54 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/11/16 12:11:13 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,15 +43,16 @@ class   CGI
 	public:
 		CGI();
 		~CGI();
-		void	CGISetup(cgi_params& Params, std::string Request);
+		void	CGISetup(cgi_params& Params, std::string Request, char **e);
 
 		std::string&	GetResponse();
 		std::string&	GetError();
 		
 	private:
 		pid_t			ProcId;
-		const char		**env;
+		char			**server_env;
 		std::string		Request;
+		cgi_params		Params;
 
 		int				stdin_pipe[2];
 		int				stdout_pipe[2];
@@ -66,6 +67,6 @@ class   CGI
 };
 
 
-void	TestCGI();
+void	TestCGI(char **env);
 
 #endif

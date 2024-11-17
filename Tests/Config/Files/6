@@ -1,6 +1,10 @@
-ClientMaxBody   16000
-MaxClients          100
-ErrorPage           ./www/Error.html
+#missing Host and Listen in server scope
+
+DefaultErrorPage                    ./www/Error.html
+DefaultRoot                         ./www/Default
+DefaultUploadDir                    ./www/upload
+DefaultIndex                        ./www/Default/index.html
+DefaultMaxClientBody                16000
 
 
 Server {

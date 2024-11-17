@@ -1,8 +1,9 @@
+#no closure tag
+
 DefaultErrorPage                    ./www/Error.html
 DefaultRoot                         ./www/Default
 DefaultUploadDir                    ./www/upload
 DefaultIndex                        ./www/Default/index.html
-DefaultMaxClients                   900
 DefaultMaxClientBody                16000
 
 

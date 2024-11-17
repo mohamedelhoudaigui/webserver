@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 05:30:53 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/11/16 04:48:19 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/11/17 10:14:10 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,20 +116,20 @@ void	ParseErrorPage(std::vector<Token>& Tokens, std::map<unsigned int, std::stri
 	}
 }
 
-void	CheckFile(std::string& file)
+void	CheckFile(std::string& file, std::string directive)
 {
 	std::fstream	f;
 	f.open(file.c_str());
 	if (!f.good())
-		throw std::runtime_error(file + ": file doesn't exist");
+		throw std::runtime_error(directive + ": " + file + ": doesn't exist");
 	f.close();
 }
 
- void	CheckFolder(std::string& folder)
+ void	CheckFolder(std::string& folder, std::string Directive)
  {
     struct stat sb;
 	if (!(stat(folder.c_str(), &sb) == 0 && S_ISDIR(sb.st_mode)))
-		throw std::runtime_error(folder + ": folder doesnt exist");
+		throw std::runtime_error(Directive + ": " + folder + ": doesnt exist");
 }
 
 

@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 18:32:18 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/11/13 05:49:48 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/11/17 10:41:54 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,6 @@ void	Config::AssignGlobalParams(Token& Key, std::vector<Token>& Tokens)
 		this->Result.Default.DefaultRoot = PairValueStr(Tokens, "DefaultRoot");
 	else if (Key.Token == "DefaultMaxClientBody")
 		this->Result.Default.DefaultMaxClientBody = PairValueNum(Tokens, "DefaultMaxClientBody");
-	else if (Key.Token == "DefaultMaxClients")
-		this->Result.Default.DefaultMaxClients = PairValueNum(Tokens, "DefaultMaxClients");
-	
 }
 
 // assign server scope from config file

@@ -1,25 +1,38 @@
-
+#invalid scope http
 
 http {
-    error_log /logs/error.log;
-    access_log /logs/access.log;
+    DefaultErrorPage                    ./www/Error.html
+    DefaultRoot                         ./www/Default
+    DefaultUploadDir                    ./www/upload
+    DefaultIndex                        ./www/Default/index.html
+    DefaultMaxClientBody                16000
 
-    root /;
-    server {
-        root /hhh;
-        error_page 500  /errors/index.hmtl;
-        listen 90;
-        server_name localhost;
-        location {
-            root /www;
-            index index.html;
-            autoindex on|off;
+    Server {
+        Listen              9
+        ServerName          default
+        ErrorPage           400 401 402 ./www/Error.html
+        Host                gg
 
-            return 404 "https:/...";
-
-            cgi_pass /wwww/index.php;
-
-            methods GET, PUT, POST, DELETE;
+        Location / {
+            Root            ./www/Default
+            Index           index.html
+            AutoIndex       on
+            Methods         GET POST
+            Redir           /new-page
         }
     }
+
+    Server {
+        Listen 33
+        ServerName HttpServer
+        Host  0.0.0.0
+
+        Location / {
+            Root ./www/Default
+            Index index.html
+            AutoIndex       on
+            Methods         GET POST PUT
+        }
+    }
+
 }

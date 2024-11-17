@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 18:33:16 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/11/13 05:51:34 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/11/17 10:11:00 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,10 @@ void	Config::CheckResult()
 void	Config::CheckGlobalParams()
 {
 	// check files existense
-	CheckFile(Result.Default.DefaultErrorPage);
-	CheckFile(Result.Default.DefaultIndex);
-	CheckFolder(Result.Default.DefaultRoot);
-	CheckFolder(Result.Default.DefaultUploadDir);
+	CheckFile(Result.Default.DefaultErrorPage, "DefaultErrorPage");
+	CheckFile(Result.Default.DefaultIndex, "DefaultIndex");
+	CheckFolder(Result.Default.DefaultRoot, "DefaultRoot");
+	CheckFolder(Result.Default.DefaultUploadDir, "DefaultUploadDir");
 	if (Result.Default.DefaultMaxClientBody == 0)
 	{
 		throw std::runtime_error("missing or invalid default configuration (DefaultMaxClients or DefaultMaxClientBody)");
@@ -100,7 +100,7 @@ void	Config::CheckIndex(RouteConf& Location)
 	else
 	{
 		std::string	FullPath = Location.Root + "/" + Location.Index;
-		CheckFile(FullPath);
+		CheckFile(FullPath, "Index");
 	}
 }
 

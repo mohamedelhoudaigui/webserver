@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 05:31:43 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/11/14 03:55:26 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/11/17 09:09:37 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@ std::vector<std::string>	MultiValueStr(std::vector<Token>& Tokens, std::string C
 bool						PairValueBool(std::vector<Token>& Tokens, std::string ConfName);
 void	                    MultiValueNum(std::vector<Token>& Tokens, std::string ConfName, std::vector<unsigned int>& Buffer);
 void						ParseErrorPage(std::vector<Token>& Tokens, std::map<unsigned int, std::string>& ErrorPage);
-void						CheckFile(std::string& file);
-void						CheckFolder(std::string& folder);
+void						CheckFile(std::string& file, std::string Directive);
+void						CheckFolder(std::string& folder, std::string Directive);
 void						CheckDigit(std::string& Token, std::string& ConfName);
 
 int	                        SetNonBlocking(int fd, std::fstream& LogFile);
