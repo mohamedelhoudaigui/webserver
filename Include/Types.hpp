@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 08:34:31 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/11/17 10:41:26 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/11/17 15:47:31 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ typedef struct RouteConf
 
 	bool							DirList;
 	bool							AutoIndex;
+	bool							IsCgi;
 	std::string						Location;
 	std::string						Redir;
 	std::string						Index;
@@ -95,6 +96,7 @@ typedef struct RouteConf
 	bool							CheckAutoIndex();
 	bool							CheckRedirection();
 	bool							CheckUploadDir();
+	bool							CheckIsCgi();
 	bool							CheckMethod(std::string& Method);
 	std::string&					GetRedirection(); // throws
 	std::string&					GetUploadDir();

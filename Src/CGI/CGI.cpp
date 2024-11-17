@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 23:48:05 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/11/17 15:15:40 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/11/17 16:10:08 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,9 @@ CGI::~CGI()
 	
 }
 
-void CGI::CGISetup(cgi_params& Params, std::string Request, char **e)
+void CGI::CGISetup(cgi_params &Params, std::string Request, char **e)
 {
-	this->server_env = e;
-	this->Request = Request;
 	this->Params = Params;
-
 
 	pipe(this->stdin_pipe);
 	pipe(this->stdout_pipe);
@@ -61,7 +58,9 @@ void CGI::Execute()
 	ProcId = fork();
 	if (ProcId == 0)
 	{
-		char ** env = MakeEnv();
+		char *env[9];
+		MakeEnv(env);
+
 		dup2(stdin_pipe[0], STDIN_FILENO);
 		dup2(stdout_pipe[1], STDOUT_FILENO);
 		dup2(stderr_pipe[1], STDERR_FILENO);
@@ -85,7 +84,8 @@ void CGI::Execute()
 		close(this->stdout_pipe[1]);
 		close(this->stderr_pipe[1]);
 
-		WritePipe(this->stdin_pipe[1], this->Request);
+		WritePipe(this->stdin_pipe[1], this->Params.Request);
+
 		ReadPipe(this->stdout_pipe[0], this->Response);
 		ReadPipe(this->stderr_pipe[0], this->Error);
 
@@ -98,14 +98,8 @@ void CGI::Execute()
 	}
 }
 
-
-
-char** CGI::MakeEnv()
+void CGI::MakeEnv(char *res[])
 {
-	char	**res;
-
-	res = (char **)calloc(sizeof(char *), 8 + 1);
-
 	res[0] = strdup(std::string("SERVER_NAME=" + Params.SERVER_NAME).c_str());
 	res[1] = strdup(std::string("SERVER_PORT=" + Params.SERVER_PORT).c_str());
 
@@ -119,7 +113,6 @@ char** CGI::MakeEnv()
 	res[7] = strdup(std::string("SCRIPT_NAME=" + Params.SCRIPT_NAME).c_str());
 
 	res[8] = NULL;
-	return (res);
 }
 
 std::string&	CGI::GetResponse()

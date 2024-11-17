@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 18:32:18 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/11/17 10:41:54 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/11/17 15:49:12 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ void	Config::AssignLocation(Token& Key, std::vector<Token>& Tokens)
 		Location.AutoIndex = false;
 		Location.DirList = false;
 		Location.Default = &Result.Default;
+		Location.IsCgi = false;
 		this->Result.servers.back().Routes.push_back(Location);
 		return ;
 	}
@@ -75,7 +76,8 @@ void	Config::AssignLocation(Token& Key, std::vector<Token>& Tokens)
 		this->Result.servers.back().Routes.back().Methods =  MultiValueStr(Tokens, "Methods");
 	else if (Key.Token == "Root")
 		this->Result.servers.back().Routes.back().Root =  PairValueStr(Tokens, "Root");
-	
+	else if (Key.Token == "IsCgi")
+		this->Result.servers.back().Routes.back().Root =  PairValueBool(Tokens, "IsCgi");
 }
 
 void	Config::AssignTokens()

@@ -17,6 +17,10 @@ Server {
         Methods         GET POST
         Redir           /new-page
     }
+
+    Location /cgi {
+        IsCgi           on
+    }
 }
 
 Server {

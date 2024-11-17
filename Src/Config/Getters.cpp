@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 18:51:31 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/11/17 10:42:30 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/11/17 15:50:29 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -211,4 +211,9 @@ std::string&	RouteConf::GetRedirection()
 std::string&	RouteConf::GetLocationPath()
 {
 	return (this->Location);
+}
+
+bool	RouteConf::CheckIsCgi()
+{
+	return (this->IsCgi);
 }
