@@ -1,0 +1,69 @@
+HTTP/1.1 (RFC 2616) Fundamentals:
+
+    Mini-Tasks:
+        a) Request parsing
+        - Parse request line (GET /path HTTP/1.1)
+        - Parse headers (key: value)
+        - Handle different methods (GET, POST, DELETE)
+
+        b) Protocol states
+        - Implement state machine for parsing
+        - Handle incomplete requests
+        - Manage connection states
+
+        c) Header handling
+        - Case-insensitive comparison
+        - Multi-value headers
+        - Required headers validation
+
+        Example Request:
+        GET /index.html HTTP/1.1
+        Host: localhost:8080
+        Connection: keep-alive
+
+I/O Multiplexing with C++98:
+    Mini-Tasks:
+        a) Event monitoring
+        - Track active connections
+        - Monitor read/write readiness
+        - Handle timeouts
+
+        b) Buffer management
+        - Implement circular buffer
+        - Handle partial reads/writes
+        - Memory management without leaks
+
+        c) Connection management
+        - Track connection states
+        - Handle connection timeouts
+        - Clean up resources properly
+
+        Data Structures Needed:
+        - Connection class
+        - Buffer class
+        - Event handler class
+
+Basic Server
+    Goals:
+        - Create single-thread server
+        - Accept connections
+        - Echo received data
+        - Proper error handling
+        - Resource cleanup
+
+        Test:
+        - Use telnet to connect
+        - Send/receive data
+        - Check memory leaks
+
+Event Handling
+   Goals:
+        - Implement kqueue wrapper
+        - Handle multiple clients
+        - Non-blocking operations
+        - Timeout management
+
+        Test:
+        - Multiple concurrent connections
+        - Large data transfers
+        - Connection timeouts
