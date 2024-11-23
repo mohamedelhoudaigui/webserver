@@ -56,7 +56,7 @@ bool HttpHeaders::isValidContentLength(const std::string& value) {
 
 bool HttpHeaders::isValidHost(const std::string &value) {
     //Could be a host name or ip:port
-    size_t colonPosition = line.find(':');
+    size_t colonPosition = value.find(':');
     if (colonPosition != std::string::npos) {
         //validate port
         std::string port = value.substr(colonPosition + 1);

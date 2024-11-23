@@ -9,7 +9,7 @@ SRCS =  ./Src/main.cpp \
 		./Src//Config/Checker.cpp \
 		./Src/Config/Exps.cpp \
 		./Src//Config/Getters.cpp \
-		./Src/Request/HttpParser.cpp \
+		./Src/Request/HttpRequest.cpp \
 		./Src/Config/Tokens.cpp \
 		./Src/Config/Syntax.cpp \
 		./Tests/Config/RunConfigTest.cpp \
@@ -23,7 +23,7 @@ HEAD = ./Include/Server.hpp \
 		./Include/Exps.hpp \
 		./Include/Helper.hpp \
 		./Include/Types.hpp \
-		./Include/HttpParser.hpp \
+		./Include/HttpRequest.hpp \
 		./Include/HttpHeaders.hpp \
 
 OBJ_DIR = Objects
