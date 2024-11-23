@@ -4,13 +4,18 @@
 
 #include <string>
 
-class HTTPHeader {
-private:
-    static bool isValidFieldName(const std::string& name);
-    static bool isValidFieldValue(const std::string& value);
-
-public:
-    static bool isValidHeader(const std::string& line);
+class HTTPHeaders {
+    private:
+        static const size_t MAX_KEY = 256;
+        static const size_t MAX_VALUE = 4096;
+        static const size_t MAX_COUNT = 100;
+        static bool isValidFieldKey(const std::string& key);
+        static bool isValidFieldValue(const std::string& value);
+    public:
+        static bool isValidHeader(const std::string& line);
+        static bool isValidContentLength(const std::string& value);
+        static bool isValidHost(const std::string& value);
+        
 };
 
 #endif
