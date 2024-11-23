@@ -25,7 +25,6 @@
 #include <fcntl.h>
 
 #include "Config.hpp"
-#include "Request.hpp"
 #include "KqueueObj.hpp"
 #include "Client.hpp"
 #include "Helper.hpp"

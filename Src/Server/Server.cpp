@@ -24,7 +24,7 @@ SocketLayer::SocketLayer(Config& c): Conf(c)
 			this->SocketPorts[*Port] += 1;
 	}
 
-	this->LogFile.open("/Users/mel-houd/Desktop/webserver/Logs/ServerLog", std::ios::out | std::ios::trunc);
+	this->LogFile.open("./Logs/ServerLog", std::ios::out | std::ios::trunc);
 	if (!LogFile.is_open())
 		std::cout << "log file not open !" << std::endl;
 }

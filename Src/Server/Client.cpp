@@ -40,7 +40,8 @@ int    Client::Recv(int BufferSize)
     Buffer[count] = '\0';
     std::cout << Buffer << std::endl;
     this->Request = Buffer;
-
+    //TODO: Request Parser here
+    
     return (1);
 }
 
