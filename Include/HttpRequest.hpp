@@ -2,7 +2,7 @@
 
 #include <string>
 #include <iostream>
-#include <sstring>
+#include <sstream>
 #include "HttpHeaders.hpp"
 
 class HttpRequest {
