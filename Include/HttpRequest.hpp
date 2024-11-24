@@ -10,7 +10,7 @@ class HttpRequest {
         std::string method;
         std::string uri;
         std::string http_version;
-        static const char*  valid_methods[];
+        // static const char*  valid_methods[];
         bool    isValidMethod(const std::string& method) const;
         bool    isValidUri(const std::string& uri) const;
     public:

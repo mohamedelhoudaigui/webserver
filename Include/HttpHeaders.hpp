@@ -3,8 +3,9 @@
 
 
 #include <string>
+#include <sstream>
 
-class HTTPHeaders {
+class HttpHeaders {
     private:
         static const size_t MAX_KEY = 256;
         static const size_t MAX_VALUE = 4096;

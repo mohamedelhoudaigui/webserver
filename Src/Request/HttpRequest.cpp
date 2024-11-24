@@ -1,4 +1,5 @@
 #include "../../Include/HttpRequest.hpp"
+const char* valid_methods[] = {"GET", "POST", "DELETE"};
 
 HttpRequest::HttpRequest() {}
 HttpRequest::~HttpRequest() {}
