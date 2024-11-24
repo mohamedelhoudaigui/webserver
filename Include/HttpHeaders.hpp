@@ -20,24 +20,24 @@ class HTTPHeaders {
 
 #endif
 
-/*
-    Rules for field-name:
-        - Must start with a letter (A-Z, a-z)
-        - Can contain letters, digits, hyphen
-        - Cannot contain spaces
-        - Case-insensitive
-        - No special characters except hyphen
 
-        Valid examples:
-        Content-Type: text/html
-        Accept: *'/*
-        X-Custom-Header: value
+    // Rules for field-name:
+    //     - Must start with a letter (A-Z, a-z)
+    //     - Can contain letters, digits, hyphen
+    //     - Cannot contain spaces
+    //     - Case-insensitive
+    //     - No special characters except hyphen
 
-        Invalid examples:
-        Content Type: text/html    (space in name)
-        @Accept: *'/*              (special character)
-        : value                   (no name)
-*/
+    //     Valid examples:
+    //     Content-Type: text/html
+    //     //Accept: */*
+    //     X-Custom-Header: value
+
+    //     Invalid examples:
+    //     Content Type: text/html    (space in name)
+    //     @Accept: *'/*              (special character)
+    //     : value                   (no name)
+
 
 /*
     Rules for field-value:

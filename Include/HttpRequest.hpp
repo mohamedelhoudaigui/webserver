@@ -19,7 +19,8 @@ class HttpRequest {
         const   std::string& getMethod() const;
         const   std::string& getUri() const;
         void    parseUri(std::string &path, std::string &query) const;
-}
+        ~HttpRequest();
+};
 
 
 //required http request line 
