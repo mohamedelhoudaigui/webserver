@@ -1,6 +1,7 @@
 #include "../../Include/HttpRequest.hpp"
 
 HttpRequest::HttpRequest() {}
+HttpRequest::~HttpRequest() {}
 
 bool    HttpRequest::isValidMethod(const std::string& method) const {
     for (short i = 0; i < 3; i++) {
@@ -37,7 +38,7 @@ bool    HttpRequest::Parser(const std::string& line) {
     end = line.find(' ', start);
     if (end == std::string::npos)
         return false;
-    uri = line.substr(start, end - start)
+    uri = line.substr(start, end - start);
     if (!isValidUri(uri))
         return false;
     return true;
@@ -46,4 +47,4 @@ bool    HttpRequest::Parser(const std::string& line) {
 const std::string& HttpRequest::getMethod() const { return method; }
 const std::string& HttpRequest::getUri() const { return uri; }
 
-void    HttpRequest::parseUri() {}
+void    HttpRequest::parseUri(std::string &path, std::string &query) const {}
