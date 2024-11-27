@@ -3,8 +3,9 @@
 
 
 #include <string>
+#include <sstream>
 
-class HTTPHeaders {
+class HttpHeaders {
     private:
         static const size_t MAX_KEY = 256;
         static const size_t MAX_VALUE = 4096;
@@ -15,7 +16,7 @@ class HTTPHeaders {
         static bool isValidHeader(const std::string& line);
         static bool isValidContentLength(const std::string& value);
         static bool isValidHost(const std::string& value);
-        
+        static std::string& trim(std::string &content, std::string needl);
 };
 
 #endif

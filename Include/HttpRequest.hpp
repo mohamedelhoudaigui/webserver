@@ -1,23 +1,30 @@
 #pragma once
 
+#include <map>
 #include <string>
 #include <iostream>
 #include <sstream>
 #include "HttpHeaders.hpp"
+
+//TODO
 
 class HttpRequest {
     private:
         std::string method;
         std::string uri;
         std::string http_version;
-        static const char*  valid_methods[];
+        std::map<std::string, std::string> headers;
+        // std::fstream body;
+        // std::string file_body_name;
         bool    isValidMethod(const std::string& method) const;
         bool    isValidUri(const std::string& uri) const;
+        bool    isValidVersion(const std::string& version) const;
     public:
         HttpRequest();
         bool Parser(const std::string& line);
         const   std::string& getMethod() const;
         const   std::string& getUri() const;
+        const   std::string& getHttpVersion() const;
         void    parseUri(std::string &path, std::string &query) const;
         ~HttpRequest();
 };

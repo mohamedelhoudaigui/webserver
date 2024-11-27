@@ -3,7 +3,7 @@
 
 bool HttpHeaders::isValidFieldKey(const std::string& key) {
     //return false if the key is empty
-    if (name.empty()) 
+    if (key.empty()) 
         return false;
     // First char must be letter
     if (!isalpha(key[0])) 
@@ -38,20 +38,20 @@ bool HttpHeaders::isValidHeader(const std::string& line) {
     // Trim value
     value.erase(0, value.find_first_not_of(" \t"));
     value.erase(value.find_last_not_of(" \t\r\n") + 1);
-    return isValidFieldName(key) && isValidFieldValue(value);
+    return isValidFieldKey(key) && isValidFieldValue(value);
 }
 
 bool HttpHeaders::isValidContentLength(const std::string& value) {
-    std::istringstream iss(value);
-    size_t length
+    std::istringstream ss(value);
+    size_t length;
     // Must be a valid and positive number
     for (size_t i = 0; i < value.length(); i++) {
         if (!isdigit(value[i]))
             return false;
     }
     // Convert and verify Valid positive number
-    iss >> length;
-    return !iss.fail() && length > 0;
+    ss >> length;
+    return !ss.fail() && length > 0;
 }
 
 bool HttpHeaders::isValidHost(const std::string &value) {
@@ -64,11 +64,17 @@ bool HttpHeaders::isValidHost(const std::string &value) {
             if (!isdigit(port[i]))
                 return false;
         }
-        std::istringstream iss(port);
+        std::istringstream ss(port);
         int portNum;
-        iss >> portNum;
+        ss >> portNum;
         if (portNum < 1 || portNum > 65535)
             return false;
     }
     return true;
+}
+
+std::string& HttpHeaders::trim(std::string &content, std::string needl) {
+    content.erase(0, content.find_first_not_of(needl));
+    content.erase(content.find_last_not_of(needl) + 1);
+    return content;
 }
