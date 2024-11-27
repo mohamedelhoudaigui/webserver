@@ -16,7 +16,7 @@ class HttpHeaders {
         static bool isValidHeader(const std::string& line);
         static bool isValidContentLength(const std::string& value);
         static bool isValidHost(const std::string& value);
-        
+        static std::string& trim(std::string &content, std::string needl);
 };
 
 #endif

@@ -72,3 +72,9 @@ bool HttpHeaders::isValidHost(const std::string &value) {
     }
     return true;
 }
+
+std::string& HttpHeaders::trim(std::string &content, std::string needl) {
+    content.erase(0, content.find_first_not_of(needl));
+    content.erase(content.find_last_not_of(needl) + 1);
+    return content;
+}
