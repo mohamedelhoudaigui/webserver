@@ -1,0 +1,10 @@
+SERVER_NAME: test_server_name
+SERVER_PORT: test_server_port
+REMOTE_ADDR: test_remote_addr
+HTTP_USER_AGENT: test_user_agent
+REQUEST_METHOD: test_req_method
+QUERY_STRING: test_query_string
+PATH_INFO: /Users/mel-houd/Desktop/webserver/Tests/CGI/python_script
+SCRIPT_NAME: python_script
+__CF_USER_TEXT_ENCODING: 0x1935A:0x0:0x0
+LC_CTYPE: UTF-8

@@ -35,7 +35,7 @@ CC = c++
 
 RM = rm -f
 
-CFLAGS = -std=c++98 -g -fsanitize=address
+CFLAGS = -std=c++98 -g
 
 NAME = webserv
 

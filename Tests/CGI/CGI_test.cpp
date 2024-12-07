@@ -6,23 +6,26 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 05:09:11 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/11/17 15:18:02 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/12/07 02:59:13 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "../../Include/CGI.hpp"
 
-void	TestCGI(char **env)
-{
-	CGI c;
-	std::string	ScriptPath = "/Users/mel-houd/Desktop/webserver/Tests/CGI/python_script.py";
-	std::string	ScriptName = "python_script.py";
 
-	cgi_params p;
+void	TestCGI()
+{
+	std::fstream	a("./testLog");
+	CGI				c;
+	cgi_params		p;
+
+	std::string	ScriptPath = "/Users/mel-houd/Desktop/webserver/Tests/CGI/python_script";
+	std::string	ScriptName = "python_script";
+	std::string	execBinary = "/usr/bin/python3";
+
 	p.PATH_INFO = ScriptPath;
 	p.SCRIPT_NAME = ScriptName;
-
 	p.HTTP_USER_AGENT = "test_user_agent";
 	p.QUERY_STRING = "test_query_string";
 	p.REMOTE_ADDR = "test_remote_addr";
@@ -30,9 +33,9 @@ void	TestCGI(char **env)
 	p.SERVER_NAME = "test_server_name";
 	p.SERVER_PORT = "test_server_port";
 
-	std::string	Request = "hello world\n";
+	std::string	ReqBody = "hello world\n";
 
-	c.CGISetup(p, Request, env);
+	c.CGISetup(p, ReqBody, execBinary);
 
 	std::cout << c.GetResponse() << std::endl;
 }

@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 23:48:03 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/11/17 16:10:38 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/12/07 02:42:59 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@
 #include <cstdlib>
 #include <fstream>
 #include <sys/socket.h>
+#include <sys/fcntl.h>
+
 
 typedef struct cgi_params
 {
@@ -36,7 +38,7 @@ typedef struct cgi_params
 	std::string PATH_INFO; // script info
 	std::string SCRIPT_NAME;
 
-	std::string	Request;
+	std::string	ReqBody;
 
 }   cgi_params;
 
@@ -45,7 +47,7 @@ class   CGI
 	public:
 		CGI();
 		~CGI();
-		void	CGISetup(cgi_params &Params, std::string Request, char **e);
+		void	CGISetup(cgi_params &Params, std::string& Request, std::string& execBinary);
 
 		std::string&	GetResponse();
 		std::string&	GetError();
@@ -54,20 +56,17 @@ class   CGI
 		pid_t			ProcId;
 		cgi_params		Params;
 
+		int				FdOut;
 		int				stdin_pipe[2];
-		int				stdout_pipe[2];
-		int				stderr_pipe[2];
-
 		std::string		Response;
 		std::string		Error;
 
-		void	Execute();
+		void	Execute(std::string& execBinary);
 		void	ReadPipe(int pipe_fd, std::string& s);
 		void	WritePipe(int pipe_fd, std::string& s);
-		void	MakeEnv(char *res[]);
 };
 
 
-void	TestCGI(char **env);
+void	TestCGI();
 
 #endif

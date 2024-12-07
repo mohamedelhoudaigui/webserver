@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 19:56:40 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/11/29 21:52:36 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/12/04 18:27:30 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,11 @@ HttpResponse*	AHttpResponseBuilder::GetResult()
 
 
 //----------------------concrete builder-------------------
+
+void	HttpResponseBuilder::SetRequest(HttpRequest& Request)
+{
+	this->Request = Request;
+}
 
 void	HttpResponseBuilder::BuildHttpVersion()
 {

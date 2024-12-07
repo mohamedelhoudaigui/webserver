@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 19:25:15 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/11/29 20:05:42 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/12/04 18:26:47 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 #include <string>
 #include <map>
 #include <iostream>
+
+#include "HttpRequest.hpp"
 
 //product:
 
@@ -58,11 +60,14 @@ class	AHttpResponseBuilder
 class	HttpResponseBuilder : public AHttpResponseBuilder
 {
 	public:
+		void	SetRequest(HttpRequest& Request);
 		void	BuildHttpVersion();
 		void	BuildStatusCode();
 		void	BuildStatus();
 		void	BuildHeader();
 		void	BuildBody();
+	private:
+		HttpRequest	Request;
 };
 
 
