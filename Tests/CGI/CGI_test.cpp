@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 05:09:11 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/12/07 02:59:13 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/12/07 04:34:00 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	TestCGI()
 
 	std::string	ScriptPath = "/Users/mel-houd/Desktop/webserver/Tests/CGI/python_script";
 	std::string	ScriptName = "python_script";
-	std::string	execBinary = "/usr/bin/python3";
+	std::string	execBinary = "/bin/bash";
 
 	p.PATH_INFO = ScriptPath;
 	p.SCRIPT_NAME = ScriptName;
