@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 09:25:41 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/11/17 11:27:44 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/12/09 23:39:13 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 #include <fcntl.h>
 #include <fstream>
 #include <vector>
+#include <map>
 #include <algorithm>
 #include <netinet/in.h>
 #include <unistd.h>
@@ -32,9 +33,10 @@
 
 // codes to define event type
 
-#define CLIENT	(void *)0x1
-#define SERVER	(void *)0x2
-#define TIME	(void *)0x3 
+#define CLIENT_READ		(void *)0x1
+#define CLIENT_WRITE	(void *)0x2
+#define SERVER			(void *)0x3
+#define TIME			(void *)0x4 
 #define CLIENT_TIMEOUT 10 // 10 seconds timeout test
 
 
@@ -57,12 +59,12 @@ class KqueueObj
 
 	private:
 		int KqueueFd;
-		std::fstream&					LogFile;
-		struct kevent					event_set;
-		struct kevent					events[MAX_EVENTS];
-		std::vector<unsigned int>		&ServerSockets;
-		std::map<unsigned int, Client>	Clients;
-		Config							&Conf;
+		std::fstream&						LogFile;
+		struct kevent						event_set;
+		struct kevent						events[MAX_EVENTS];
+		std::vector<unsigned int>			&ServerSockets;
+		std::map<struct kevent, Client>		Clients;
+		Config								&Conf;
 };
 
 #endif

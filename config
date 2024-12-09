@@ -5,10 +5,10 @@ DefaultIndex                        ./www/Default/index.html
 DefaultMaxClientBody                16000
 
 Server {
-    Listen              444
+    Listen              444 555
     Host                gg
 
     Location / {
-        Methods         GET POST
+        Methods         GET POST PUT
     }
 }

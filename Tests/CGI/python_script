@@ -1,6 +1,21 @@
-#!/usr/bin/python3
-import sys
-import os
+#!/usr/bin/python
 
-for key, value in os.environ.items():
-    print(f"{key}: {value}")
+import os
+import sys
+
+def main():
+    # Print environment variables
+    print "=== Environment Variables ===\n"
+    for key, value in sorted(os.environ.items()):
+        print "%s: %s" % (key, value)
+    
+    # Print standard input
+    print "\n=== Standard Input ===\n"
+    stdin_data = sys.stdin.read()
+    if stdin_data:
+        print stdin_data
+    else:
+        print "(No input data received)"
+
+if __name__ == "__main__":
+    main()

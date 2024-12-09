@@ -6,13 +6,14 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 11:16:20 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/11/14 05:06:11 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/12/09 23:44:36 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CLIENT_HPP
 #define CLIENT_HPP
 
+#include "HttpRequest.hpp"
 #include <string>
 #include <sys/socket.h>
 #include <iostream>
@@ -23,18 +24,22 @@
 
 class   Client
 {
-    public:
-        Client(std::fstream& LogFile);
-        int     Recv(int BufferSize);
-        void    Send();
-        void    SetFd(int fd);
-        int     GetFd();
+	private:
+		int             fd;
+		std::string     Request;
+		std::string     Response;
+		std::fstream&   LogFile;
+		HttpRequestParser *parser;
 
-    private:
-        int fd;
-        std::string     Request;
-        std::string     Response;
-        std::fstream&   LogFile;
+	public:
+		Client(std::fstream& LogFile);
+		int			Recv(int BufferSize);
+		void		Send();
+		void		SetFd(int fd);
+		int			GetFd();
+		int 		handleRequest(const std::string& requestData);
+		Client& operator=(const Client& other) const;
+		~Client();
 };
 
 

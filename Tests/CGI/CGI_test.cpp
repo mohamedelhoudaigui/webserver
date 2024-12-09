@@ -6,36 +6,32 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 05:09:11 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/12/07 04:34:00 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/12/09 21:18:27 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "../../Include/CGI.hpp"
 
 
 void	TestCGI()
 {
-	std::fstream	a("./testLog");
-	CGI				c;
-	cgi_params		p;
+	CGI						cgi;
+	HttpRequestBuilder		request_builder;
+	std::string 			request;
+	HttpRequest*			Req;
+    
+    request = "GET /index.html HTTP/1.1\r\n";
+    request += "Host: www.example.com\r\n";
+    request += "User-Agent: CustomBrowser/1.0\r\n";
+    request += "Accept: text/html\r\n";
+    request += "Connection: close\r\n";
+    request += "\r\n";
 
-	std::string	ScriptPath = "/Users/mel-houd/Desktop/webserver/Tests/CGI/python_script";
-	std::string	ScriptName = "python_script";
-	std::string	execBinary = "/bin/bash";
+	request_builder.parseRequest(request);
+	request_builder.setBody("zbi hadi body\r\nzbi hadi body\r\nzbi hadi body\r\nzbi hadi body\r\nzbi hadi body\r\nzbi hadi body\r\n");
+	Req = request_builder.build();
+	cgi.CGISetup(*Req);
 
-	p.PATH_INFO = ScriptPath;
-	p.SCRIPT_NAME = ScriptName;
-	p.HTTP_USER_AGENT = "test_user_agent";
-	p.QUERY_STRING = "test_query_string";
-	p.REMOTE_ADDR = "test_remote_addr";
-	p.REQUEST_METHOD = "test_req_method";
-	p.SERVER_NAME = "test_server_name";
-	p.SERVER_PORT = "test_server_port";
-
-	std::string	ReqBody = "hello world\n";
-
-	c.CGISetup(p, ReqBody, execBinary);
-
-	std::cout << c.GetResponse() << std::endl;
+	std::cout << cgi.GetResponse() << std::endl;
+	std::cout << cgi.GetError() << std::endl;
 }

@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 09:25:44 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/11/17 11:26:35 by mel-houd         ###   ########.fr       */
+/*   Updated: 2024/12/09 23:45:31 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,13 +59,15 @@ void	KqueueObj::Run(int (*SetNonBlocking)(int, std::fstream&))
 		for (int i = 0; i < number_events; ++i) // loop on how much events we have
 		{
 			if (events[i].flags & EV_ERROR) // check if event flag is set to error
-				this->LogFile << "EV_ERROR is set in event number " << i << std::endl;
+				this->LogFile << "EV_ERROR is se " << std::endl;
 
 			if (events[i].udata == SERVER)
 				ServerAct(events[i], SetNonBlocking);
-			else if (events[i].udata == CLIENT)
+			else if (events[i].udata == CLIENT_READ)
 				ClientAct(events[i]);
-			else if (events[i].udata == TIME)
+			else if (events[i].udata == CLIENT_WRITE)
+				ClientAct(events[i]);
+			else if (events[i].udata == TIME) // removed for now (i will add it later)
 				TimeoutAct(events[i]);
 		}
 	}
@@ -81,15 +83,15 @@ void	KqueueObj::ServerAct(struct kevent& event, int (*SetNonBlocking)(int, std::
 		this->LogFile << "Error in accpet server socket number " << event.ident << std::endl;
 		return ;
 	}
-	// Set new socket to non-blocking
+
 	if (SetNonBlocking(client_fd, LogFile) == -1)
 	{
 		close(client_fd);
 		return ;
 	}
 
-	// Add new client to kqueue (dont set client to write event it doesnt woek for some reason)
-	EV_SET(&event_set, client_fd, EVFILT_READ, EV_ADD, 0, 0, CLIENT);
+	// Add new client to kqueue (read)
+	EV_SET(&event_set, client_fd, EVFILT_READ, EV_ADD, 0, 0, CLIENT_READ);
 	if (kevent(KqueueFd, &event_set, 1, NULL, 0, NULL) == -1)
 	{
 		this->LogFile << "Failed to add new client (read) to queue" << std::endl;
@@ -97,34 +99,50 @@ void	KqueueObj::ServerAct(struct kevent& event, int (*SetNonBlocking)(int, std::
 		return ;
 	}
 
+	// Add new client to kqueue (write)
+	EV_SET(&event_set, client_fd, EVFILT_WRITE, EV_ADD, 0, 0, CLIENT_WRITE);
+	if (kevent(KqueueFd, &event_set, 1, NULL, 0, NULL) == -1)
+	{
+		this->LogFile << "Failed to add new client (write) to queue" << std::endl;
+		close(client_fd);
+		return ;
+	}
+
 	//Add a timer event for the client
-    struct kevent timer_event;
-    EV_SET(&timer_event, client_fd, EVFILT_TIMER, EV_ADD | EV_ONESHOT, 0, CLIENT_TIMEOUT * 1000, TIME);
-    if (kevent(KqueueFd, &timer_event, 1, NULL, 0, NULL) == -1)
-    {
-        this->LogFile << "Error adding timer event to kqueue" << std::endl;
-        close(client_fd);
-        return;
-    }
+    // struct kevent timer_event;
+    // EV_SET(&timer_event, client_fd, EVFILT_TIMER, EV_ADD | EV_ONESHOT, 0, CLIENT_TIMEOUT * 1000, TIME);
+    // if (kevent(KqueueFd, &timer_event, 1, NULL, 0, NULL) == -1)
+    // {
+    //     this->LogFile << "Error adding timer event to kqueue" << std::endl;
+    //     close(client_fd);
+    //     return;
+    // }
 
 	Client c(LogFile);
-	c.SetFd(client_fd);	
-	Clients.insert(std::make_pair(client_fd, c));
+	c.SetFd(client_fd);
+	// Clients[event] = c;
 }
 
 void	KqueueObj::ClientAct(struct kevent& event)
 {
-	Client	c(LogFile);
-	int		count;
+	if (event.udata == CLIENT_READ)
+	{
+		Client	c(LogFile);
+		int		count;
 
-	c.SetFd(event.ident);
-	count = c.Recv(this->Conf.GetResult().Default.GetDefaultMaxBody());
-	if (count <= 0)
-		PurgeClient(c.GetFd());
+		c.SetFd(event.ident);
+		count = c.Recv(this->Conf.GetResult().Default.GetDefaultMaxBody());
+		if (count < 0) // you could do <= 0 (depends on connection flag)
+			PurgeClient(c.GetFd());
+		else
+		{
+			c.Send();
+			// PurgeClient(c.GetFd()); (uncomment if coonnection type : closed)
+		}
+	}
 	else
 	{
-		c.Send();
-		PurgeClient(c.GetFd());
+		std::cout << event.ident << std::endl;
 	}
 }
 
@@ -140,5 +158,4 @@ void	KqueueObj::PurgeClient(int fd)
 	if (kevent(KqueueFd, &event_set, 1, NULL, 0, NULL) == -1)
 		LogFile << "Error purging client" << std::endl;
 	close(fd);
-	Clients.erase(fd);
 }

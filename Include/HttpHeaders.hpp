@@ -1,5 +1,4 @@
-#ifndef HTTP_HEADER_HPP
-#define HTTP_HEADER_HPP
+#pragma once
 
 
 #include <string>
@@ -19,7 +18,7 @@ class HttpHeaders {
         static std::string& trim(std::string &content, std::string needl);
 };
 
-#endif
+
 
 
     // Rules for field-name:

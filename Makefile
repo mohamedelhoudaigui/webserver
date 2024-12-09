@@ -11,6 +11,7 @@ SRCS =  ./Src/main.cpp \
 		./Src//Config/Getters.cpp \
 		./Src/Request/HttpRequest.cpp \
 		./Src/Request/HttpHeaders.cpp \
+		./Src/Request/HttpRequestBuilder.cpp \
 		./Src/Config/Tokens.cpp \
 		./Src/Config/Syntax.cpp \
 		./Tests/Config/RunConfigTest.cpp \
