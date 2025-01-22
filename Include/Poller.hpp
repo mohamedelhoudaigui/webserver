@@ -33,6 +33,7 @@ class Poller
         void    Run();
         void    ServerAct(struct epoll_event event);
         void    ClientAct(struct epoll_event event);
+        void    ClientPurge();
         ~Poller();
 
     private:
