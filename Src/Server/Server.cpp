@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 11:50:41 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/11/14 11:44:51 by mel-houd         ###   ########.fr       */
+/*   Updated: 2025/01/22 13:05:28 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,7 @@ SocketLayer::SocketLayer(Config& c): Conf(c)
 		std::stringstream ss;
 		ss << Server->Port;
 		if (fd > 0)
-		{
-			Logger(DEBUG, "socket open in port " + ss.str());
 			this->ServerSockets.push_back(fd);
-		}
 		else
 			Logger(WARNING, "failed to listen on port " + ss.str());
 	}
@@ -43,6 +40,14 @@ int	SocketLayer::OpenSocket(unsigned int Port)
 		return (-1);
 	if (BindSocket(fd, Port) == -1)
 		return (-1);
+	if (listen(fd, 5) == -1)
+		return (-1);
+	else
+	{
+		std::stringstream ss;
+		ss << Port;
+		Logger(INFO, "Server listening on port " + ss.str());
+	}
 	return (fd);
 }
 
@@ -66,8 +71,9 @@ int	SocketLayer::BindSocket(int fd, int Port)
 
 void	SocketLayer::Run()
 {
+	Poller	poller(this->ServerSockets);
+	poller.Run();
 }
-
 
 SocketLayer::~SocketLayer()
 {}

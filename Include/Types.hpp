@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 08:34:31 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/11/17 15:47:31 by mel-houd         ###   ########.fr       */
+/*   Updated: 2025/01/22 13:02:42 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,12 @@
 #include <string>
 #include <vector>
 #include <map>
-#include <algorithm>
 #include <stdexcept>
+#include <algorithm>
 
 #define MAX_PORT 65535
 #define MAX_CLIENT_BODY 10240
+#define MAX_EVENTS 3000
 
 #define RESET   "\033[0m"
 #define BLUE    "\033[34m"

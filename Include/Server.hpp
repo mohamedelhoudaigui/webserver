@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 11:45:34 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/11/14 11:37:48 by mel-houd         ###   ########.fr       */
+/*   Updated: 2025/01/22 13:03:13 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 #include <cstring>
 
 #include "Config.hpp"
+#include "Poller.hpp"
 #include "Client.hpp"
 #include "Tools.hpp"
 

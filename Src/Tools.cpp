@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Helper.cpp                                         :+:      :+:    :+:   */
+/*   Tools.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 05:30:53 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/11/17 10:14:10 by mel-houd         ###   ########.fr       */
+/*   Updated: 2025/01/22 12:09:29 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,4 +189,12 @@ void	Logger(STATE s, std::string log_msg)
 			break ;
 	}
 	std::cout << RESET << log_msg << std::endl;
+}
+
+void	close_sockets(std::vector<unsigned int>& sockets)
+{
+	for (int i = 0; i < sockets.size(); ++i)
+	{
+		close(sockets[i]);
+	}
 }

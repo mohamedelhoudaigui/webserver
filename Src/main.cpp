@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 11:43:46 by mel-houd          #+#    #+#             */
-/*   Updated: 2025/01/22 11:19:32 by mel-houd         ###   ########.fr       */
+/*   Updated: 2025/01/22 13:05:40 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,5 @@ int main(int ac, char **av)
 	catch (const std::exception& e)
 	{
 		Logger(FATAL, e.what());
-		exit(1);
 	}
 }
