@@ -31,9 +31,9 @@ int main(int ac, char **av)
 		Config c(av[1]);
 		c.Parse();
 
-		SocketLayer server(c);
-		server.OpenServerSockets();
-		server.RunKqueue();
+		//SocketLayer server(c);
+		//server.OpenServerSockets();
+		//server.RunKqueue();
 	}
 	catch (const std::exception& e)
 	{

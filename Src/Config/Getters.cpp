@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "../../Include/Types.hpp"
-#include "../../Include/Exps.hpp"
 
 
 //global Getters :
@@ -51,7 +50,7 @@ ServerConf&	ConfigFile::GetServer(std::string& Host, unsigned int Port)
 				return (*server);
 		}
 	}
-	throw GetterExc(NotFound);
+	throw std::runtime_error("NotFound");
 }
 
 // default getters:
@@ -134,7 +133,7 @@ RouteConf&	ServerConf::GetLocation(std::string& LocationPath)
 		if (LocationPath == route->Location)
 			return (*route);
 	}
-	throw GetterExc(NotFound);
+	throw std::runtime_error("NotFound");
 }
 
 
@@ -204,7 +203,7 @@ std::string&	RouteConf::GetIndex()
 std::string&	RouteConf::GetRedirection()
 {
 	if (this->Redir.empty())
-		throw GetterExc(NotFound);
+		throw std::runtime_error("NotFound");
 	return (this->Redir);
 }
 

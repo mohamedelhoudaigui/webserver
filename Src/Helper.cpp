@@ -163,7 +163,7 @@ int	SetNonBlocking(int fd, std::fstream& LogFile)
 	return (0);
 }
 
-int	EnvLen(char **env)
+int EnvLen(char **env)
 {
 	int	i = 0;
 	while (env[i])

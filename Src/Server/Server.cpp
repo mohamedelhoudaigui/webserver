@@ -91,12 +91,8 @@ void	SocketLayer::OpenServerSockets()
 	}
 }
 
-void	SocketLayer::RunKqueue()
+void	SocketLayer::Run()
 {
-	KqueueObj	handler(LogFile, ServerSockets, Conf);
-	handler.Init();
-	handler.AddServers();
-	handler.Run(SetNonBlocking);
 }
 
 

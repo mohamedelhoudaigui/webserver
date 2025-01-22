@@ -24,6 +24,8 @@
 #include <sys/fcntl.h>
 #include <vector>
 #include <map>
+#include <cstring>
+
 #include "HttpRequest.hpp"
 
 class   CGI

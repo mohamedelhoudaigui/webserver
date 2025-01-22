@@ -23,9 +23,9 @@
 #include <unistd.h>
 #include <vector>
 #include <fcntl.h>
+#include <cstring>
 
 #include "Config.hpp"
-#include "KqueueObj.hpp"
 #include "Client.hpp"
 #include "Helper.hpp"
 
@@ -40,7 +40,7 @@ class SocketLayer
 		int				BindSocket(int fd, int Port);
 		int				SocketListen(int fd, int BufferSize, int Port);
 
-		void			RunKqueue();
+		void			Run();
 		~SocketLayer();
 
 	private:
