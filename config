@@ -2,10 +2,10 @@ DefaultErrorPage                    ./www/Error.html
 DefaultRoot                         ./www/Default
 DefaultUploadDir                    ./www/upload
 DefaultIndex                        ./www/Default/index.html
-DefaultMaxClientBody                16000
+DefaultMaxClientBody                10240
 
 Server {
-    Listen              444 555
+    Listen              4448
     Host                gg
 
     Location / {

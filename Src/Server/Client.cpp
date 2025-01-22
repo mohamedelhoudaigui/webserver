@@ -1,7 +1,7 @@
 #include "../../Include/Client.hpp"
 #include "../../Include/HttpRequest.hpp"
 
-Client::Client(std::fstream& LogFile): LogFile(LogFile)
+Client::Client()
 {
     parser = new HttpRequestParser(8192);
 }
@@ -16,7 +16,6 @@ int Client::handleRequest(const std::string& requestData) {
     
     if (!parser->feed(requestData))
     {
-        LogFile << "Error parsing request or request too large gg bro" << std::endl;
         Response = "HTTP/1.1 400 Bad Request\r\n\r\n";
         Send();
         return (-1);
@@ -26,17 +25,10 @@ int Client::handleRequest(const std::string& requestData) {
     {
         HttpRequest* request = parser->getRequest();
         if (!request) {
-            LogFile << "Error getting parsed request" << std::endl;
             Response = "HTTP/1.1 400 Bad Request\r\n\r\n";
             Send();
             return -1;
         }
-
-        // Log request details
-        LogFile << "Request received:\n"
-                << "Method: " << request->getMethod() << "\n"
-                << "URI: " << request->getUri() << "\n"
-                << "Version: " << request->getHttpVersion() << std::endl;
 
         Response = "HTTP/1.1 200 OK\r\n";
         Response += "Content-Type: text/plain\r\n";
@@ -54,10 +46,7 @@ int    Client::Recv(int BufferSize)
     char	Buffer[BufferSize];
     int		count = recv(fd, Buffer, BufferSize, 0);
     if (count < 0)
-    {
-        this->LogFile << "Error in reading" << std::endl;
         return (-1);
-    }
     else if (count == 0)
     {
         std::cout << "Client disconnected" << std::endl;

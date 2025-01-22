@@ -1,7 +1,7 @@
-
 SRCS =  ./Src/main.cpp \
-		./Src/Helper.cpp \
+		./Src/Tools.cpp \
 		./Src/Server/Server.cpp \
+		./Src/Server/Poller.cpp \
 		./Src/Server/Client.cpp \
 		./Src/CGI/CGI.cpp \
 		./Src/Config/Config.cpp \
@@ -15,10 +15,11 @@ SRCS =  ./Src/main.cpp \
 		./Tests/CGI/CGI_test.cpp \
 
 HEAD = ./Include/Server.hpp \
+		./Include/Poller.hpp \
 		./Include/Config.hpp \
 		./Include/Client.hpp \
 		./Include/CGI.hpp \
-		./Include/Helper.hpp \
+		./Include/Tools.hpp \
 		./Include/Types.hpp \
 		./Include/HttpRequest.hpp \
 		./Include/HttpHeaders.hpp \

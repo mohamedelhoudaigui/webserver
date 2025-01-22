@@ -10,9 +10,17 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../Include/Helper.hpp"
+#include "../Include/Tools.hpp"
 
-// trims spaces tabs and \n from the end and the beginning
+void	CheckDigit(std::string& Token, std::string& ConfName)
+{
+    for (int i = 0; i < Token.size(); ++i)
+    {
+        if (Token[i] < '0' || Token[i] > '9')
+            throw std::runtime_error(ConfName + ": " + Token + " is not a valid number value");
+    }
+}
+
 std::string TrimAll(const std::string& Line)
 {
     std::string::const_iterator start = Line.begin();
@@ -32,7 +40,7 @@ std::string TrimAll(const std::string& Line)
 }
 
 // checks and gets the value(unsigned int) from a TokenLine
-unsigned int	PairValueNum(std::vector<Token>& Tokens, std::string ConfName)
+unsigned int	PairValueNum(std::vector<Token>& Tokens, std::string ConfName, long Maxvalue)
 {
 	if (Tokens.size() != 2)
 		throw std::runtime_error(ConfName + ": need one value");
@@ -45,8 +53,8 @@ unsigned int	PairValueNum(std::vector<Token>& Tokens, std::string ConfName)
     }
 
 	long long	Ret = std::atoll(Tokens[1].Token.c_str());
-	if (Ret > UINT_MAX)
-		throw std::runtime_error(ConfName + ": invalid value" + Value);
+	if (Ret > Maxvalue)
+		throw std::runtime_error(ConfName + ": invalid value " + Value);
 
 	return static_cast<unsigned int>(Ret);
 }
@@ -71,6 +79,7 @@ std::vector<std::string>	MultiValueStr(std::vector<Token>& Tokens, std::string C
 	}
 	return (Values);
 }
+
 
 void	MultiValueNum(std::vector<Token>& Tokens, std::string ConfName, std::vector<unsigned int>& Buffer)
 {
@@ -133,31 +142,23 @@ void	CheckFile(std::string& file, std::string directive)
 }
 
 
-void	CheckDigit(std::string& Token, std::string& ConfName)
-{
-	for (int i = 0; i < Token.size(); ++i)
-	{
-		if (Token[i] < '0' || Token[i] > '9')
-			throw std::runtime_error(ConfName + ": " + Token + " is not a valid port number");
-	}
-}
 
 //--------------server
 
-int	SetNonBlocking(int fd, std::fstream& LogFile)
+int	SetNonBlocking(int fd)
 {
 	int flags = fcntl(fd, F_GETFL, 0);
 	if (flags < 0)
 	{
 		close(fd);
-		LogFile << "failed to get socket flags" << std::endl;
+		Logger(WARNING, "failed to get fd flags");
 		return (-1);
 	}
 
     if (fcntl(fd, F_SETFL, flags | O_NONBLOCK) < 0)
 	{
 		close(fd);
-		LogFile << "failed to set socket flags to non-blocking " << std::endl;
+		Logger(WARNING, "failed to set fd flags to non-blocking");
 		return (-1);
 	}
 	return (0);
@@ -169,4 +170,23 @@ int EnvLen(char **env)
 	while (env[i])
 		i++;
 	return (i);
+}
+
+void	Logger(STATE s, std::string log_msg)
+{
+	switch (s) {
+		case INFO:
+			std::cout << BLUE << "[INFO]: ";
+			break ;
+		case DEBUG:
+			std::cout << GREEN << "[DEBUG]: ";
+			break ;
+		case WARNING:
+			std::cout << YELLOW << "[WARNING]: ";
+			break ;
+		case FATAL:
+			std::cout << RED << "[FATAL]: ";
+			break ;
+	}
+	std::cout << RESET << log_msg << std::endl;
 }

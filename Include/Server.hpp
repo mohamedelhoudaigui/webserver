@@ -27,7 +27,7 @@
 
 #include "Config.hpp"
 #include "Client.hpp"
-#include "Helper.hpp"
+#include "Tools.hpp"
 
 
 class SocketLayer
@@ -36,7 +36,6 @@ class SocketLayer
 		SocketLayer(Config& c);
 		int				OpenSocket(unsigned int Port);
 		void			OpenServerSockets();
-
 		int				BindSocket(int fd, int Port);
 		int				SocketListen(int fd, int BufferSize, int Port);
 
@@ -44,9 +43,7 @@ class SocketLayer
 		~SocketLayer();
 
 	private:
-		std::map<unsigned int, int>			SocketPorts; // map just for ignoring duplicated ports
 		std::vector<unsigned int>			ServerSockets;
-		std::fstream						LogFile;
 		Config&								Conf;	
 		
 };

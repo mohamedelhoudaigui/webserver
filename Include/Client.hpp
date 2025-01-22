@@ -28,11 +28,10 @@ class   Client
 		int             fd;
 		std::string     Request;
 		std::string     Response;
-		std::fstream&   LogFile;
 		HttpRequestParser *parser;
 
 	public:
-		Client(std::fstream& LogFile);
+		Client();
 		int			Recv(int BufferSize);
 		void		Send();
 		void		SetFd(int fd);

@@ -15,9 +15,12 @@
 
 Config::Config(std::string FileName)
 {
+	Logger(INFO, "config file parse:");
 	File.open(FileName.c_str());
 	if (!File.is_open())
 		throw std::runtime_error("Error opening config file");
+
+	Logger(DEBUG, "ready to read config file");
 
 	GlobalKeys.push_back("DefaultErrorPage");
 	GlobalKeys.push_back("Server");
@@ -40,6 +43,9 @@ Config::Config(std::string FileName)
 	LocationKeys.push_back("Root");
 	LocationKeys.push_back("Methods");
 	LocationKeys.push_back("IsCgi");
+
+	Logger(DEBUG, "added config keys");
+
 }
 
 void	Config::Parse() // main parser
@@ -48,6 +54,7 @@ void	Config::Parse() // main parser
 	CheckSyntaxError();
 	AssignTokens();
 	CheckResult();
+	Logger(DEBUG, "parsing config file is done");
 }
 
 ConfigLines	Config::GetLines()

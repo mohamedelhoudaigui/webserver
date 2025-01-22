@@ -19,9 +19,22 @@
 #include <algorithm>
 #include <stdexcept>
 
-enum Error
+#define MAX_PORT 65535
+#define MAX_CLIENT_BODY 10240
+
+#define RESET   "\033[0m"
+#define BLUE    "\033[34m"
+#define GREEN   "\033[32m"
+#define YELLOW  "\033[33m"
+#define RED     "\033[31m"
+
+
+enum STATE
 {
-	NotFound = 400,
+	INFO = 0,
+	DEBUG = 1,
+	WARNING = 2,
+	FATAL = 3,
 };
 
 enum Scope
@@ -111,7 +124,7 @@ typedef struct ServerConf
 
 	std::string							Host;
 	std::string							ServerName;
-	std::vector<unsigned int>			Port;
+	unsigned int		            	Port;
 	std::vector<RouteConf>				Routes;
 	std::map<unsigned int, std::string>	ErrorPage;
 

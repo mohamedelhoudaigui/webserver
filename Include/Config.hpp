@@ -24,7 +24,7 @@
 #include <algorithm>
 #include <unistd.h>
 
-#include "Helper.hpp"
+#include "Tools.hpp"
 #include "Types.hpp"
 
 
@@ -48,7 +48,6 @@ class Config
 		void		CheckResult();
 		void		CheckGlobalParams();
 		void		CheckServerNames();
-		void		CheckPorts(std::vector<unsigned int>& Ports);
 		void		CheckServers();
 		void		CheckIndex(RouteConf& Location);
 		void		CheckMethods(RouteConf& Location);

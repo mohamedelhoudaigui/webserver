@@ -24,7 +24,7 @@ void	Config::AssignGlobalParams(Token& Key, std::vector<Token>& Tokens)
 	else if (Key.Token == "DefaultRoot")
 		this->Result.Default.DefaultRoot = PairValueStr(Tokens, "DefaultRoot");
 	else if (Key.Token == "DefaultMaxClientBody")
-		this->Result.Default.DefaultMaxClientBody = PairValueNum(Tokens, "DefaultMaxClientBody");
+		this->Result.Default.DefaultMaxClientBody = PairValueNum(Tokens, "DefaultMaxClientBody", MAX_CLIENT_BODY);
 }
 
 // assign server scope from config file
@@ -38,7 +38,7 @@ void	Config::AssignServer(Token& Key, std::vector<Token>& Tokens)
 		return ;
 	}
 	else if (Key.Token == "Listen")
-		MultiValueNum(Tokens, "Listen", this->Result.servers.back().Port);
+		this->Result.servers.back().Port = PairValueNum(Tokens, "Listen", MAX_PORT);
 	else if (Key.Token ==  "ServerName")
 		this->Result.servers.back().ServerName = PairValueStr(Tokens, "ServerName");
 	else if (Key.Token == "Host")
@@ -92,6 +92,7 @@ void	Config::AssignTokens()
 		AssignServer(Key, Tokens);
 		AssignLocation(Key, Tokens);
 	}
+	Logger(DEBUG, "tokens assigning passed");
 }
 
 void	Config::CheckResult()
@@ -109,10 +110,6 @@ void	Config::CheckGlobalParams()
 	CheckFile(Result.Default.DefaultIndex, "DefaultIndex");
 	CheckFolder(Result.Default.DefaultRoot, "DefaultRoot");
 	CheckFolder(Result.Default.DefaultUploadDir, "DefaultUploadDir");
-	if (Result.Default.DefaultMaxClientBody == 0)
-	{
-		throw std::runtime_error("missing or invalid default configuration (DefaultMaxClients or DefaultMaxClientBody)");
-	}
 }
 
 //Check uniques ServerNames
@@ -144,7 +141,6 @@ void	Config::CheckServers()
 		if (it->Host.empty())
 			throw std::runtime_error("Server params error: invalid parameters");
 
-		CheckPorts(it->Port);
 		CheckLocations(it->Routes, *it);
 	}
 }
@@ -154,19 +150,6 @@ void	Config::CheckLocations(std::vector<RouteConf>& Locations, ServerConf& Serve
 	for (std::vector<RouteConf>::iterator it = Locations.begin(); it != Locations.end(); ++it)
 	{
 		CheckMethods(*it);
-	}
-}
-
-void	Config::CheckPorts(std::vector<unsigned int>& Ports)
-{
-	std::vector<unsigned int>::iterator it;
-
-	if (Ports.size() == 0)
-		throw std::runtime_error("No port assigned to server");
-	for (it = Ports.begin(); it != Ports.end(); ++it)
-	{
-		if (*it > 65535)
-			throw std::runtime_error("Invalid port number");
 	}
 }
 
@@ -193,6 +176,6 @@ void	Config::CheckMethods(RouteConf& Loaction)
 	for (it = Loaction.Methods.begin(); it !=Loaction.Methods.end(); ++it)
 	{
 		if (*it != "GET" && *it != "POST" && *it != "DELETE" && *it != "PUT")
-			throw std::runtime_error("Location params error: invalid HTPP method: " + *it);
+			throw std::runtime_error("Location params error invalid HTPP method: " + *it);
 	}
 }

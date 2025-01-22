@@ -22,35 +22,23 @@ bool			ConfigFile::CheckServer(std::string& Host, unsigned int Port)
 
 	for (it = Servers.begin(); it != Servers.end(); ++it)
 	{
-		if (it->Host == Host)
-		{
-			std::vector<unsigned int>::iterator PortIt;
-			for (PortIt = it->Port.begin(); PortIt != it->Port.end(); ++PortIt)	
-			{
-				if (Port == *PortIt)
-				{
-					return (true);
-				}
-			}	
-		}
+		if (it->Host == Host && Port == it->Port)
+			return (true);
 	}
 	return (false);
 }
 
 ServerConf&	ConfigFile::GetServer(std::string& Host, unsigned int Port)
 {
-	std::vector<ServerConf>::iterator server;
+	std::vector<ServerConf>::iterator it;
 	std::vector<ServerConf>& Servers = this->servers;
 
-	for (server = Servers.begin(); server != Servers.end(); ++server)
+	for (it = Servers.begin(); it != Servers.end(); ++it)
 	{
-		if (server->Host == Host)
-		{
-			if (server->CheckPort(Port))
-				return (*server);
-		}
+		if (it->Host == Host && Port == it->Port)
+			return (*it);
 	}
-	throw std::runtime_error("NotFound");
+	throw std::runtime_error("server not found");
 }
 
 // default getters:
@@ -91,14 +79,6 @@ std::string&	ServerConf::GetHost()
 	return (this->Host);
 }
 
-bool			ServerConf::CheckPort(unsigned int Port)
-{
-	std::vector<unsigned int>::iterator it;
-	it = find(this->Port.begin(), this->Port.end(), Port);
-	if (it == this->Port.end())
-		return (false);
-	return (true);
-}
 
 std::string&	ServerConf::GetServerName()
 {

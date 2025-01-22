@@ -22,10 +22,11 @@ void	Config::Tokeniser()
 		Buffer = TrimAll(Buffer);
 		if (Buffer != "" && Buffer[0] != '#')
 		{
-			TokeniseLine(TrimAll(Buffer));
+			TokeniseLine(Buffer);
 		}
 	}
 	File.close();
+	Logger(DEBUG, "tokenising process finished");
 }
 
 void	Config::TokeniseLine(const std::string& LineStr) // tokenizer
@@ -41,30 +42,20 @@ void	Config::TokeniseLine(const std::string& LineStr) // tokenizer
 		if (Buffer != "")
 		{
 			Token	token;
+            token.Token = Buffer;
 
 			if (Buffer == "}") // close Token
-			{
-				token.Token = Buffer;
 				token.Type = CLOSE;
-			}
 			else if (Buffer == "{") // open Token
-			{
-				token.Token = Buffer;
 				token.Type = OPEN;
-			}
 
 			else if (Key && Buffer != "}" && Buffer != "{") // key Token
 			{
-				token.Token = Buffer;
 				token.Type = KEY;
 				Key = false;
 			}
-
-			else // value Token
-			{
-				token.Token = Buffer;
+			else
 				token.Type = VALUE;
-			}
 
 			Line.Tokens.push_back(token);
 		}
@@ -102,7 +93,9 @@ void	Config::CheckScope(Token& Key, std::vector<Token>& Tokens, Scope& s)
 void	Config::CheckSyntaxError()
 {
 	Scope s = GLOBAL;
-	for (std::vector<TokenLine>::iterator it = ConfLines.TokenLines.begin(); it != ConfLines.TokenLines.end(); ++it)
+    std::vector<TokenLine>::iterator it;
+
+	for (it = ConfLines.TokenLines.begin(); it != ConfLines.TokenLines.end(); ++it)
 	{
 		Token Key = it->Tokens[0];
 
@@ -138,4 +131,5 @@ void	Config::CheckSyntaxError()
 	}
 	if (s != GLOBAL)
 		throw std::runtime_error("Closure tag not found !");
+	Logger(DEBUG, "syntax error checked");
 }

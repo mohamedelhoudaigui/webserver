@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Helper.hpp                                         :+:      :+:    :+:   */
+/*   Tools.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -28,7 +28,7 @@
 
 std::string					TrimAll(const std::string& Line);
 std::string					PairValueStr(std::vector<Token>& Tokens, std::string ConfName);
-unsigned int				PairValueNum(std::vector<Token>& Tokens, std::string ConfName);
+unsigned int				PairValueNum(std::vector<Token>& Tokens, std::string ConfName, long Maxvalue);
 std::vector<std::string>	MultiValueStr(std::vector<Token>& Tokens, std::string ConfName);
 bool						PairValueBool(std::vector<Token>& Tokens, std::string ConfName);
 void	                    MultiValueNum(std::vector<Token>& Tokens, std::string ConfName, std::vector<unsigned int>& Buffer);
@@ -36,7 +36,7 @@ void						ParseErrorPage(std::vector<Token>& Tokens, std::map<unsigned int, std:
 void						CheckFile(std::string& file, std::string Directive);
 void						CheckFolder(std::string& folder, std::string Directive);
 void						CheckDigit(std::string& Token, std::string& ConfName);
-
-int	                        SetNonBlocking(int fd, std::fstream& LogFile);
+int	                        SetNonBlocking(int fd);
+void                        Logger(STATE s, std::string log_msg);
 
 #endif
