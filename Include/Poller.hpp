@@ -31,6 +31,8 @@ class Poller
     public:
         Poller(std::vector<unsigned int>& ServerSockets);
         void    Run();
+        void    ServerAct(struct epoll_event event);
+        void    ClientAct(struct epoll_event event);
         ~Poller();
 
     private:

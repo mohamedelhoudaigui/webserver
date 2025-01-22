@@ -42,6 +42,45 @@ Poller::~Poller()
     close(epoll_fd);
 }
 
+void    Poller::ServerAct(struct epoll_event event)
+{
+    struct sockaddr_in client_addr;
+    socklen_t client_len = sizeof(client_addr);
+
+    int client_fd = accept(event.data.fd, (struct sockaddr*)&client_addr, &client_len);
+    if (client_fd == -1)
+    {
+        Logger(WARNING, "error accepting connection");
+        return ;
+    }
+
+    event.events = EPOLLIN;
+    event.data.fd = client_fd;
+
+    if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, client_fd, &event) == -1)
+    {
+        Logger (WARNING, "error adding client socket to epoll");
+        close(client_fd);
+    }
+}
+
+void    Poller::ClientAct(struct epoll_event event)
+{
+    char buffer[1024];
+    int bytes_received = recv(event.data.fd, buffer, sizeof(buffer), 0);
+
+    if (bytes_received <= 0)
+    {
+        Logger(INFO, "client disconnected");
+        close(event.data.fd);
+    }
+    else
+    {
+        buffer[bytes_received] = '\0';
+        Logger (DEBUG, std::string("Received: ") + buffer);
+    }
+
+}
 
 void    Poller::Run()
 {
@@ -54,42 +93,9 @@ void    Poller::Run()
         for (int i = 0; i < num_events; ++i)
         {
             if (find(ServerSockets.begin(), ServerSockets.end(), events[i].data.fd) != ServerSockets.end())
-            {
-                struct sockaddr_in client_addr;
-                socklen_t client_len = sizeof(client_addr);
-
-                int client_fd = accept(events[i].data.fd, (struct sockaddr*)&client_addr, &client_len);
-                if (client_fd == -1)
-                {
-                    Logger(WARNING, "error accepting connection");
-                    continue;
-                }
-
-                event.events = EPOLLIN;
-                event.data.fd = client_fd;
-
-                if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, client_fd, &event) == -1)
-                {
-                    Logger (WARNING, "error adding client socket to epoll");
-                    close(client_fd);
-                }
-            }
+                ServerAct(events[i]);
             else
-            {
-                char buffer[1024];
-                int bytes_received = recv(events[i].data.fd, buffer, sizeof(buffer), 0);
-
-                if (bytes_received <= 0)
-                {
-                    Logger(INFO, "client disconnected");
-                    close(events[i].data.fd);
-                }
-                else
-                {
-                    buffer[bytes_received] = '\0';
-                    Logger (DEBUG, std::string("Received: ") + buffer);
-                }
-            }
+                ClientAct(events[i]);
         }
     }
 }
