@@ -29,13 +29,22 @@
 #define YELLOW  "\033[33m"
 #define RED     "\033[31m"
 
-
-enum STATE
+enum ReqParserState
 {
-	INFO = 0,
-	DEBUG = 1,
-	WARNING = 2,
-	FATAL = 3,
+	REQUEST_LINE,
+	HEADERS,
+	BODY,
+	COMPLETE,
+	ERROR
+};
+
+
+enum LOG_STATE
+{
+	INFO,
+	DEBUG,
+	WARNING,
+	FATAL,
 };
 
 enum Scope

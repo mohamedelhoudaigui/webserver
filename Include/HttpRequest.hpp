@@ -5,6 +5,8 @@
 #include <iostream>
 #include <sstream>
 #include <cstdlib>
+
+#include "Types.hpp"
 #include "HttpHeaders.hpp"
 
 //class Product
@@ -39,14 +41,6 @@ class HttpRequest
 		bool    isChunked() const;
 		size_t	getContentLength() const;
 		~HttpRequest();
-};
-
-enum ReqParserState {
-	REQUEST_LINE,
-	HEADERS,
-	BODY,
-	COMPLETE,
-	ERROR
 };
 
 // Builder class for constructing requests

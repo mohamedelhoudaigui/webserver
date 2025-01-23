@@ -172,7 +172,7 @@ int EnvLen(char **env)
 	return (i);
 }
 
-void	Logger(STATE s, std::string log_msg)
+void	Logger(LOG_STATE s, std::string log_msg)
 {
 	switch (s) {
 		case INFO:

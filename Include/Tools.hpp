@@ -38,6 +38,6 @@ void						CheckFolder(std::string& folder, std::string Directive);
 void						CheckDigit(std::string& Token, std::string& ConfName);
 int	                        SetNonBlocking(int fd);
 void	                    close_sockets(std::vector<unsigned int>& sockets);
-void                        Logger(STATE s, std::string log_msg);
+void                        Logger(LOG_STATE s, std::string log_msg);
 
 #endif

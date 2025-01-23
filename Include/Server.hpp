@@ -27,7 +27,6 @@
 
 #include "Config.hpp"
 #include "Poller.hpp"
-#include "Client.hpp"
 #include "Tools.hpp"
 
 
