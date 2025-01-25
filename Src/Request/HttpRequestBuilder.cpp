@@ -132,24 +132,16 @@ bool HttpRequestBuilder::parseRequest(const std::string& raw_request)
     std::istringstream stream(raw_request);
     std::string request_line;
     
-    if (!std::getline(stream, request_line))
-        return false;
-
-    if (request_line[request_line.length() - 1] == '\r')
-        request_line.erase(request_line.length() - 1);
-
+    if (!std::getline(stream, request_line)) return false;
+    if (request_line[request_line.length() - 1] == '\r') request_line.erase(request_line.length() - 1);
     if (!parseRequestLine(request_line))
         return false;
-
     if (!parseHeaders(stream))
         return false;
-
     if (request->chunked)
-        ;
-        // return parseChunkedBody(stream);
+        return parseChunkedBody(stream);
     else if (request->content_length > 0)
-    ;
-        // return parseBody(stream);
+        return parseBody(stream);
 
     return true;
 }
@@ -172,27 +164,33 @@ HttpRequestParser::HttpRequestParser(size_t max_size)
 
 bool HttpRequestParser::feed(const std::string& data)
 {
-    buffer += data;
-    state = REQUEST_LINE;
-    switch (state) {
-        case REQUEST_LINE:
-            if (buffer.find("\r\n") != std::string::npos)
-                state = HEADERS;
-            // break;
-        case HEADERS:
-            if (buffer.find("\r\n\r\n") != std::string::npos)
-                state = BODY;
-            // break;
-        case BODY:
-            if (builder.parseRequest(buffer)) {
-                state = COMPLETE;
-                return true;
-            }
-            break;
-        default:
-            break;
+    if (buffer.length() + data.length() > max_request_size) {
+        state = ERROR;
+        return false;
     }
-    return false;
+    buffer += data;
+    while (true) {
+        switch (state) {
+            case REQUEST_LINE:
+                if (!parseRequestLine())
+                    return false;
+                break;
+            case HEADERS:
+                if (!parseHeaders())
+                    return false;
+                break;
+            case BODY:
+                if (builder.getRequest()->isChunked())
+                    return parseChunkedBody();
+                else
+                    return parseBody();
+                break;
+            case COMPLETE:
+                return true;
+            case ERROR:
+                return false;
+        }
+    }
 }
 
 bool HttpRequestParser::isComplete() const {

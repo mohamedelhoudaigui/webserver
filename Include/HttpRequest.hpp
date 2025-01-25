@@ -90,6 +90,13 @@ class HttpRequestParser {
 		ReqParserState state;
 		size_t max_size;
 		size_t max_request_size;
+		size_t parsePosition;  // Track parsing position
+		size_t bodyBytesRead;  // Track body bytes read
+		
+		bool parseRequestLine();
+		bool parseHeaders();
+		bool parseBody();
+		bool parseChunkedBody();
 
 	public:
 		HttpRequestParser(size_t max_size);

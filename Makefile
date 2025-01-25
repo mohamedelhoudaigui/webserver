@@ -29,11 +29,11 @@ OBJ_DIR = Objects
 
 OBJS = $(patsubst %.cpp, $(OBJ_DIR)/%.o, $(SRCS))
 
-CC = g++-10
+CC = c++
 
 RM = rm -f
 
-CFLAGS = -std=c++98 -g
+CFLAGS = -std=c++98 -g -fsanitize=address
 
 NAME = webserv
 
@@ -55,5 +55,7 @@ fclean: clean
 	$(RM) $(NAME)
 
 re: fclean all
+test:
+	python tester.py --host 127.0.0.1 --port 4448 --clients 1024
 
 .PHONY: clean
