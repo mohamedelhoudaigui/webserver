@@ -56,6 +56,6 @@ fclean: clean
 
 re: fclean all
 test:
-	python tester.py --host 127.0.0.1 --port 4448 --clients 1024
+	python tester.py --host 127.0.0.1 --port 4448 --clients 100
 
 .PHONY: clean
