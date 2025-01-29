@@ -29,7 +29,7 @@ OBJ_DIR = Objects
 
 OBJS = $(patsubst %.cpp, $(OBJ_DIR)/%.o, $(SRCS))
 
-CC = g++-10
+CC = c++
 
 RM = rm -f
 
