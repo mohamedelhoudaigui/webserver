@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "../../Include/Poller.hpp"
-
+#include "../../Include/Client.hpp"
 
 
 Poller::Poller(std::vector<unsigned int>& ServerSockets): ServerSockets(ServerSockets)
@@ -66,19 +66,23 @@ void    Poller::ServerAct(struct epoll_event event)
 
 void    Poller::ClientAct(struct epoll_event event)
 {
-    char buffer[1024];
-    int bytes_received = recv(event.data.fd, buffer, sizeof(buffer), 0);
+    // char buffer[1024];
+    // int bytes_received = recv(event.data.fd, buffer, sizeof(buffer), 0);
 
-    if (bytes_received <= 0)
-    {
-        Logger(INFO, "client disconnected");
-        close(event.data.fd);
-    }
-    else
-    {
-        buffer[bytes_received] = '\0';
-        Logger (DEBUG, std::string("Received: ") + buffer);
-    }
+    // if (bytes_received <= 0)
+    // {
+    //     Logger(INFO, "client disconnected");
+    //     close(event.data.fd);
+    // }
+    // else
+    // {
+    //     buffer[bytes_received] = '\0';
+
+    //     Logger (DEBUG, std::string("Received: ") + buffer);
+    // }
+    Client c;
+    c.SetFd(event.data.fd);
+    c.Recv(1024);
 
 }
 

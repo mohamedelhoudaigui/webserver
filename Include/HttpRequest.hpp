@@ -68,15 +68,15 @@ class GET : public Request {
 		GET();
 		~GET();
 		void parseRequestLine(const std::string& line);
-		void parseHeaders(std::istringstream& stream);
-		void parseUri();
+		// void parseHeaders(std::istringstream& stream);
+		// void parseUri();
 		void parseBody(std::istringstream& stream);
-		void parseChunkedBody(std::istringstream& stream);
-		void parseMultipartBody(std::istringstream& stream);
+		// void parseChunkedBody(std::istringstream& stream);
+		// void parseMultipartBody(std::istringstream& stream);
 		bool validateMethod(const std::string& method) const;
-		bool validateUri(const std::string& uri) const;
-		bool validateVersion(const std::string& version) const;
-		void reset();
+		// bool validateUri(const std::string& uri) const;
+		// bool validateVersion(const std::string& version) const;
+		// void reset();
 };
 
 class POST : public Request {

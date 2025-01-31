@@ -45,7 +45,7 @@ class SocketLayer
 
 	private:
 		std::vector<unsigned int>			ServerSockets;
-		Config&								Conf;	
+		Config&								Conf;
 		
 };
 

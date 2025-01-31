@@ -61,9 +61,10 @@ void CGI::WritePipe(int pipe_fd, const std::string& s)
 std::vector<std::string>	CGI::PrepareEnv(Request &request)
 {
 	std::vector<std::string>						env;
-	std::map<std::string, std::string>				headers = request.getHeaders();
+	std::map<std::string, std::string>				headers;
 	std::map<std::string, std::string>::iterator	it;
 
+	// headers = request.getHeaders();
 	env.push_back("GATEWAY_INTERFACE=CGI/1.1");
 	env.push_back("SERVER_PROTOCOL=HTTP/1.1");
 	for (it = headers.begin(); it != headers.end(); ++it)

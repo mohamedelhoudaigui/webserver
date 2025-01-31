@@ -51,16 +51,16 @@ int Client::Recv(int BufferSize) {
     
     if (count <= 0)
         return count;
-
-    Buffer[count] = '\0';
+    Buffer[count - 1] = '\0';
     request_buffer.append(Buffer);
-    
+
     try {
         processRequest();
+        std::cout << "hhehe" << std::endl;
+        Send();
         return keep_alive ? 1 : -1;
     } catch (const std::exception& e) {
         response = "HTTP/1.1 400 Bad Request\r\n\r\n";
-        Send();
         return -1;
     }
 }
@@ -83,6 +83,10 @@ void Client::processRequest() {
     
     try {
         current_request->parseRequest(request_buffer);
+        std::cout << current_request->getMethod() << std::endl;
+        std::cout << current_request->getUri() << std::endl;
+        std::cout << current_request->getHttpVersion() << std::endl;
+        std::cout << current_request->getBody() << std::endl;
         buildResponse();
         requests_handled++;
         
@@ -120,6 +124,7 @@ void Client::buildResponse() {
 }
 
 void Client::Send() {
+
     send(fd, response.c_str(), response.size(), 0);
     response.clear();
 }

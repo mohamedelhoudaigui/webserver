@@ -85,8 +85,8 @@ void Request::parseUri() {
     path = UriValidator::normalizePath(UriValidator::percentDecode(path));
     
     // Validate query string if present
-    if (!query.empty() && !UriValidator::isValidQuery(query))
-        throw std::runtime_error("Invalid query string format");
+    // if (!query.empty() && !UriValidator::isValidQuery(query))
+    //     throw std::runtime_error("Invalid query string format");
 }
 
 void Request::parseHeaders(std::istringstream& stream) {
@@ -308,3 +308,40 @@ void Request::setKeepAliveTimeout(time_t timeout) {
 void Request::setMaxKeepAliveRequests(size_t max_requests) {
     max_keep_alive_requests = max_requests;
 } 
+
+
+const std::string& Request::getMethod() const {
+    return method;
+}
+
+const std::string& Request::getUri() const {
+    return uri;
+}
+
+const std::string& Request::getHttpVersion() const {
+    return http_version;
+}
+
+const std::string& Request::getQuery() const {
+    return query;
+}
+
+const std::string& Request::getPath() const {
+    return path;
+}
+
+const std::string& Request::getBody() const {
+    return body;
+}
+
+const std::map<std::string, std::string>& Request::getHeaders() const {
+    return headers;
+}
+
+bool Request::isChunked() const {
+    return chunked;
+}
+
+size_t Request::getContentLength() const {
+    return content_length;
+}
