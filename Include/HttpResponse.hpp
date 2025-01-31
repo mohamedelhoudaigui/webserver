@@ -60,14 +60,14 @@ class	AHttpResponseBuilder
 class	HttpResponseBuilder : public AHttpResponseBuilder
 {
 	public:
-		void	SetRequest(HttpRequest& Request);
+		void	SetRequest(Request& Request);
 		void	BuildHttpVersion();
 		void	BuildStatusCode();
 		void	BuildStatus();
 		void	BuildHeader();
 		void	BuildBody();
 	private:
-		HttpRequest	Request;
+		Request	Request;
 };
 
 

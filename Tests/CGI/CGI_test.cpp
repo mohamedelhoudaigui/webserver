@@ -16,9 +16,9 @@
 void	TestCGI()
 {
 	CGI						cgi;
-	HttpRequestBuilder		request_builder;
+	Request		request_builder;
 	std::string 			request;
-	HttpRequest*			Req;
+	Request*			Req;
     
     request = "GET /index.html HTTP/1.1\r\n";
     request += "Host: www.example.com\r\n";
@@ -28,8 +28,8 @@ void	TestCGI()
     request += "\r\n";
 
 	request_builder.parseRequest(request);
-	request_builder.setBody("zbi hadi body\r\nzbi hadi body\r\nzbi hadi body\r\nzbi hadi body\r\nzbi hadi body\r\nzbi hadi body\r\n");
-	Req = request_builder.build();
+	// request_builder.setBody("zbi hadi body\r\nzbi hadi body\r\nzbi hadi body\r\nzbi hadi body\r\nzbi hadi body\r\nzbi hadi body\r\n");
+	// Req = request_builder.build();
 	cgi.CGISetup(*Req);
 
 	std::cout << cgi.GetResponse() << std::endl;

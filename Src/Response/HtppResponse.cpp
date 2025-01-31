@@ -57,7 +57,7 @@ HttpResponse*	AHttpResponseBuilder::GetResult()
 
 //----------------------concrete builder-------------------
 
-void	HttpResponseBuilder::SetRequest(HttpRequest& Request)
+void	HttpResponseBuilder::SetRequest(Request& Request)
 {
 	this->Request = Request;
 }

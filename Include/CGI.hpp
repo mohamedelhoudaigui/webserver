@@ -33,7 +33,7 @@ class   CGI
 	public:
 		CGI();
 		~CGI();
-		void						CGISetup(HttpRequest &request);
+		void						CGISetup(Request &request);
 
 		std::string&				GetResponse();
 		std::string&				GetError();
@@ -47,8 +47,8 @@ class   CGI
 		std::string					Response;
 		std::string					Error;
 
-		void						Execute(HttpRequest &request);
-		std::vector<std::string>			PrepareEnv(HttpRequest &request);
+		void						Execute(Request &request);
+		std::vector<std::string>			PrepareEnv(Request &request);
 		void						WritePipe(int pipe_fd, const std::string& s);
 		void						ReadPipe(int pipe_fd, std::string& s);
 };

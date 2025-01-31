@@ -23,7 +23,7 @@ CGI::~CGI()
 
 }
 
-void CGI::CGISetup(HttpRequest &request)
+void CGI::CGISetup(Request &request)
 {
 	Error.clear();
 	Response.clear();
@@ -58,7 +58,7 @@ void CGI::WritePipe(int pipe_fd, const std::string& s)
 }
 
 
-std::vector<std::string>	CGI::PrepareEnv(HttpRequest &request)
+std::vector<std::string>	CGI::PrepareEnv(Request &request)
 {
 	std::vector<std::string>						env;
 	std::map<std::string, std::string>				headers = request.getHeaders();
@@ -73,7 +73,7 @@ std::vector<std::string>	CGI::PrepareEnv(HttpRequest &request)
 	return (env);
 }
 
-void CGI::Execute(HttpRequest &request)
+void CGI::Execute(Request &request)
 {
 	ProcId = fork();
 	if (ProcId == 0)
