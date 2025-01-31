@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 02:49:00 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/11/17 10:08:30 by mel-houd         ###   ########.fr       */
+/*   Updated: 2025/01/26 11:14:10 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,15 +46,13 @@ class Config
 
 		//Checker.cpp
 		void		CheckResult();
-		void		CheckGlobalParams();
-		void		CheckServerNames();
 		void		CheckServers();
-		void		CheckIndex(RouteConf& Location);
+		void		CheckAutoIndex(RouteConf& Location);
 		void		CheckMethods(RouteConf& Location);
 		void		CheckLocations(std::vector<RouteConf>& Locations, ServerConf& Server);
 
 		//Syntax.cpp
-		void		CheckScope(Token& Key, std::vector<Token>& Tokens, Scope& s);
+		void		CheckScope(std::vector<Token>& Tokens, Scope& s);
 		void		CheckScopeKeyWord(std::string& Key, std::vector<std::string>& Keys);
 		void		CheckSyntaxError();
 

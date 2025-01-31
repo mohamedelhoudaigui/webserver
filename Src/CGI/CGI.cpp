@@ -23,7 +23,7 @@ CGI::~CGI()
 
 }
 
-void CGI::CGISetup(HttpRequest &request)
+void CGI::CGISetup(Request& request)
 {
 	Error.clear();
 	Response.clear();
@@ -34,8 +34,22 @@ void CGI::CGISetup(HttpRequest &request)
 		std::cerr << "CGI: Error piping stderr" << std::endl;
 	if (pipe(this->stdout_pipe) == -1)
 		std::cerr << "CGI: Error piping stdout" << std::endl;
-	Execute(request);
+
+    // set cgi output and error into nonBlocking
+    SetNonBlocking(stdout_pipe[0]);
+    SetNonBlocking(stderr_pipe[0]);
 }
+
+int CGI::GetStdoutFd()
+{
+    return (stdout_pipe[0]);
+}
+
+int CGI::GetStderrFd()
+{
+    return (stderr_pipe[0]);
+}
+
 
 void CGI::ReadPipe(int pipe_fd, std::string& s)
 {
@@ -58,13 +72,22 @@ void CGI::WritePipe(int pipe_fd, const std::string& s)
 }
 
 
-std::vector<std::string>	CGI::PrepareEnv(HttpRequest &request)
+std::vector<std::string>	CGI::PrepareEnv(Request& request)
 {
 	std::vector<std::string>						env;
-	std::map<std::string, std::string>				headers = request.getHeaders();
+	std::map<std::string, std::string>				headers = request.headers;
 	std::map<std::string, std::string>::iterator	it;
 
-	env.push_back("GATEWAY_INTERFACE=CGI/1.1");
+    // provide at least this env vars :
+    // CONTENT_LENGTH (if body)
+    // CONTENT_TYPE (if body)
+    // PATH_INFO
+    // REQUEST_METHOD
+    // SCRIPT_NAME
+    // PATH_INFO
+    // SERVER_NAME
+    // cgi dzeb mrid fkero deja request mparsya w khesek te3tih had 9lawi
+    env.push_back("GATEWAY_INTERFACE=CGI/1.1");
 	env.push_back("SERVER_PROTOCOL=HTTP/1.1");
 	for (it = headers.begin(); it != headers.end(); ++it)
 	{
@@ -73,7 +96,7 @@ std::vector<std::string>	CGI::PrepareEnv(HttpRequest &request)
 	return (env);
 }
 
-void CGI::Execute(HttpRequest &request)
+void CGI::Execute(Request& request)
 {
 	ProcId = fork();
 	if (ProcId == 0)
@@ -93,7 +116,7 @@ void CGI::Execute(HttpRequest &request)
 
 		// prepare pipes:
 		dup2(stdin_pipe[0], STDIN_FILENO);
-		dup2(stderr_pipe[1], STDOUT_FILENO);
+		dup2(stdout_pipe[1], STDOUT_FILENO);
 		dup2(stderr_pipe[1], STDERR_FILENO);
 
 		// clean up:
@@ -115,7 +138,7 @@ void CGI::Execute(HttpRequest &request)
 		close(this->stdout_pipe[1]);
 
 		// write Request Body in the STDIN
-		WritePipe(this->stdin_pipe[1], request.getBody());
+		WritePipe(this->stdin_pipe[1], request.body);
 
 		// read Any errors from STDERR (better for debuging)
 		ReadPipe(this->stderr_pipe[0], this->Error);
@@ -124,7 +147,7 @@ void CGI::Execute(HttpRequest &request)
 		ReadPipe(this->stdout_pipe[0], this->Response);
 
 		// need to be removed (add the output file to the kqueue)
-		waitpid(ProcId, NULL, 0);
+		waitpid(ProcId, NULL, WNOHANG);
 	}
 	else
 	{

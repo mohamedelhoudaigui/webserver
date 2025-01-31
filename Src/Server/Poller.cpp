@@ -12,8 +12,6 @@
 
 #include "../../Include/Poller.hpp"
 
-
-
 Poller::Poller(std::vector<unsigned int>& ServerSockets): ServerSockets(ServerSockets)
 {
     epoll_fd = epoll_create1(0);
@@ -32,14 +30,41 @@ Poller::Poller(std::vector<unsigned int>& ServerSockets): ServerSockets(ServerSo
             Logger(WARNING, "error adding server socket to epoll");
             close(ServerSockets[i]);
         }
-        else
-            Logger(DEBUG, "server socket added to epoll");
     }
 }
 
 Poller::~Poller()
 {
     close(epoll_fd);
+}
+
+int Poller::wrapper_wait()
+{
+    int num_events = epoll_wait(epoll_fd, events, MAX_EVENTS, -1);
+    if (num_events == -1)
+        throw std::runtime_error("error in epoll_wait");
+    return (num_events);
+}
+
+void    Poller::wrapper_add(int fd, int add_type)
+{
+    event.events = add_type;
+    event.data.fd = fd;
+
+    if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, fd, &event) == -1)
+    {
+        Logger (WARNING, "error adding client socket to epoll");
+        close(fd);
+    }
+}
+
+void    Poller::wrapper_delete(int fd)
+{
+    if (epoll_ctl(epoll_fd, EPOLL_CTL_DEL, fd, NULL) == -1)
+    {
+        Logger (WARNING, "error removing client socket from epoll");
+        close(fd);
+    }
 }
 
 void    Poller::ServerAct(struct epoll_event event)
@@ -54,41 +79,43 @@ void    Poller::ServerAct(struct epoll_event event)
         return ;
     }
 
-    event.events = EPOLLIN;
-    event.data.fd = client_fd;
-
-    if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, client_fd, &event) == -1)
-    {
-        Logger (WARNING, "error adding client socket to epoll");
-        close(client_fd);
-    }
+    wrapper_add(client_fd, EPOLLIN);
 }
 
-void    Poller::ClientAct(struct epoll_event event)
+void Poller::ClientAct(struct epoll_event event)
 {
-    char buffer[1024];
-    int bytes_received = recv(event.data.fd, buffer, sizeof(buffer), 0);
-
-    if (bytes_received <= 0)
-    {
-        Logger(INFO, "client disconnected");
-        close(event.data.fd);
-    }
+    if (requests.find(event.data.fd) == requests.end())
+        requests[event.data.fd] = Request(); // create new Request if not exists
+    Request& req = requests[event.data.fd]; // get reference to stored Request
+    int ret = req.ReadBuffer(event); // read and parse 1 recv buffer
+    if (ret == -1) // recv consumed all the request
+        ClientPurge(event);
     else
     {
-        buffer[bytes_received] = '\0';
-        Logger (DEBUG, std::string("Received: ") + buffer);
+        switch (req.status)
+        {
+            case INIT:
+                std::cout << "INIT" << std::endl;
+                break ;
+            case OK:
+                std::cout << "OK" << std::endl;
+                break ;
+            case PENDING:
+                std::cout << "PENDING" << std::endl;
+                break ;
+            case INVALID:
+                std::cout << "INVALID" << std::endl;
+                break ;
+        }
     }
-
+    //print_info(req.GetResult());
 }
 
 void    Poller::Run()
 {
     while (true)
     {
-        int num_events = epoll_wait(epoll_fd, events, MAX_EVENTS, -1);
-        if (num_events == -1)
-            throw std::runtime_error("error in epoll_wait");
+        int num_events = wrapper_wait();
 
         for (int i = 0; i < num_events; ++i)
         {
@@ -98,4 +125,12 @@ void    Poller::Run()
                 ClientAct(events[i]);
         }
     }
+}
+
+void    Poller::ClientPurge(struct epoll_event client)
+{
+    requests.erase(client.data.fd);
+    wrapper_delete(client.data.fd);
+    close(client.data.fd);
+    Logger(INFO, "client purged");
 }

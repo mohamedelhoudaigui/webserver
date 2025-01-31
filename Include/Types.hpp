@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 08:34:31 by mel-houd          #+#    #+#             */
-/*   Updated: 2025/01/22 13:02:42 by mel-houd         ###   ########.fr       */
+/*   Updated: 2025/01/26 11:24:18 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,26 +18,48 @@
 #include <map>
 #include <stdexcept>
 #include <algorithm>
+#include <stdio.h>
 
 #define MAX_PORT 65535
-#define MAX_CLIENT_BODY 10240
+#define MAX_CLIENT_BODY 102400
+#define MAX_HEADER_LEN 1024
+#define MAX_HEADER_NUM 100
 #define MAX_EVENTS 3000
+#define BUFFER_SIZE 40960
+
+
+#define HTTP_VERSION "HTTP/1.1"
+#define CONT_LEN "content-length"
+#define HOST "host"
+#define HTTP_DELIM '\r'
 
 #define RESET   "\033[0m"
 #define BLUE    "\033[34m"
-#define GREEN   "\033[32m"
 #define YELLOW  "\033[33m"
+#define GREEN   "\033[32m"
 #define RED     "\033[31m"
+#define VIOLET  "\033[35m"
 
-enum ReqParserState
+
+// -------------- macro functions:
+#define CHECK_ERROR(condition, code, msg) \
+    if (condition) {                      \
+        SetResultTrue(code, msg);         \
+        return;                           \
+    }
+
+
+
+enum REQ_STATE
 {
-	REQUEST_LINE,
-	HEADERS,
-	BODY,
-	COMPLETE,
-	ERROR
+    INIT,
+    OK,
+    PENDING,
+    INVALID,
+    CGI,
 };
 
+// -------------- logger types :
 
 enum LOG_STATE
 {
@@ -47,19 +69,21 @@ enum LOG_STATE
 	FATAL,
 };
 
+
+// ------------- parsing and  config files types :
 enum Scope
 {
-	GLOBAL = 0,
-	SERVER = 1,
-	LOCATION = 2,
+    GLOBAL = 0,
+    SERVER = 1,
+    LOCATION = 2,
 };
 
 enum TokenType
 {
-	KEY = 0,
-	VALUE = 1,
-	OPEN = 2,
-	CLOSE = 3,
+    KEY = 0,
+    VALUE = 1,
+    OPEN = 2,
+    CLOSE = 3,
 };
 
 typedef struct Token
@@ -83,17 +107,13 @@ typedef struct ConfigLines
 
 typedef struct DefaultConf
 {
-	unsigned int				DefaultMaxClientBody;
+	unsigned int				MaxBodyLimit;
 	std::string					DefaultErrorPage;
-	std::string					DefaultRoot;
-	std::string					DefaultUploadDir;
-	std::string					DefaultIndex;
+	std::string					Root;
 
-	unsigned int				GetDefaultMaxBody();
+	unsigned int				GetMaxBodyLimit();
 	std::string&				GetDefaultErrorPage();
-	std::string&				GetDefaultRoot();
-	std::string&				GetDefaultUploadDir();
-	std::string&				GetDefaultIndex();
+	std::string&				GetRoot();
 
 }			DefaultConf;
 
@@ -109,7 +129,6 @@ typedef struct RouteConf
 	std::string						Index;
 	std::string						UploadDir;
 	std::string						Root;
-	unsigned int					MaxClientBody;
 	std::vector<std::string>		Methods;
 
 	std::string&					GetLocationPath();
@@ -134,11 +153,13 @@ typedef struct ServerConf
 
 	std::string							Host;
 	std::string							ServerName;
+	std::string							Root;
 	unsigned int		            	Port;
 	std::vector<RouteConf>				Routes;
 	std::map<unsigned int, std::string>	ErrorPage;
 
 	std::string&						GetHost();
+	std::string&						GetRoot();
 	std::string&						GetServerName();
 	bool								CheckPort(unsigned int Port);
 	bool								CheckLocation(std::string& LocationPath);
@@ -158,5 +179,6 @@ typedef struct ConfigFile
 
 }	ConfigFile;
 
+//----------------------
 
 #endif

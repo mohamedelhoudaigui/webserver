@@ -25,6 +25,9 @@
 
 #include "Types.hpp"
 #include "Tools.hpp"
+#include "Request.hpp"
+#include "Response.hpp"
+#include "CGI.hpp"
 
 class Poller
 {
@@ -33,7 +36,12 @@ class Poller
         void    Run();
         void    ServerAct(struct epoll_event event);
         void    ClientAct(struct epoll_event event);
-        void    ClientPurge();
+        void    ClientPurge(struct epoll_event client);
+
+        int     wrapper_wait();
+        void    wrapper_add(int fd, int add_type);
+        void    wrapper_delete(int fd);
+
         ~Poller();
 
     private:
@@ -41,6 +49,7 @@ class Poller
         struct epoll_event  event; // used to register an event before pushing it to events pool.
         struct epoll_event  events[MAX_EVENTS]; // main events pool.
         std::vector<unsigned int>& ServerSockets;
+        std::map<unsigned int, Request> requests;
 };
 
 

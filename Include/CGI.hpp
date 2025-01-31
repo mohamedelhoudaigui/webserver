@@ -26,17 +26,26 @@
 #include <map>
 #include <cstring>
 
-#include "HttpRequest.hpp"
+#include "Request.hpp"
+
+/*from CGI rfc:*/
+/*The server acts as an application gateway.  It receives the request*/
+/*from the client, selects a CGI script to handle the request, converts*/
+/*the client request to a CGI request, executes the script and converts*/
+/*the CGI response into a response for the client.*/
 
 class   CGI
 {
 	public:
 		CGI();
 		~CGI();
-		void						CGISetup(HttpRequest &request);
+		void						CGISetup(Request& request);
 
 		std::string&				GetResponse();
 		std::string&				GetError();
+        int                         GetStdoutFd();
+        int                         GetStderrFd();
+        void						Execute(Request& request);
 		
 	private:
 		pid_t						ProcId;
@@ -47,13 +56,12 @@ class   CGI
 		std::string					Response;
 		std::string					Error;
 
-		void						Execute(HttpRequest &request);
-		std::vector<std::string>			PrepareEnv(HttpRequest &request);
+		std::vector<std::string>			PrepareEnv(Request& request);
 		void						WritePipe(int pipe_fd, const std::string& s);
 		void						ReadPipe(int pipe_fd, std::string& s);
 };
 
 
-void	TestCGI();
+void	TestCGI(char **av);
 
 #endif

@@ -63,9 +63,9 @@ class	HttpResponseBuilder : public AHttpResponseBuilder
 		void	SetRequest(HttpRequest& Request);
 		void	BuildHttpVersion();
 		void	BuildStatusCode();
-		void	BuildStatus();
-		void	BuildHeader();
-		void	BuildBody();
+		//void	BuildStatus();
+		//void	BuildHeader();
+		//void	BuildBody();
 	private:
 		HttpRequest	Request;
 };
