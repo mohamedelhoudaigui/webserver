@@ -25,35 +25,41 @@
 #include <vector>
 #include <map>
 #include <cstring>
+#include <algorithm>
 
 #include "HttpRequest.hpp"
+#include "Types.hpp"
+#include "Tools.hpp"
+/*from CGI rfc:*/
+/*The server acts as an application gateway.  It receives the request*/
+/*from the client, selects a CGI script to handle the request, converts*/
+/*the client request to a CGI request, executes the script and converts*/
+/*the CGI response into a response for the client.*/
 
 class   CGI
 {
 	public:
 		CGI();
 		~CGI();
-		void						CGISetup(Request &request);
+		void						CGISetup(Request& request);
+        void						Execute(Request& request);
 
-		std::string&				GetResponse();
-		std::string&				GetError();
+        int                         GetStdoutFd(); // use this to inject cgi into epoll
+		std::string&				GetResponse(); // cgi output here
 		
 	private:
-		pid_t						ProcId;
-
 		int							stdin_pipe[2];
-		int							stderr_pipe[2];
 		int							stdout_pipe[2];
-		std::string					Response;
-		std::string					Error;
+		std::string					CgiResponse;
 
-		void						Execute(Request &request);
-		std::vector<std::string>			PrepareEnv(Request &request);
+		std::vector<std::string>	PrepareEnv(Request& request);
+        std::string                 convert_header_name(const std::string& header_name);
+
 		void						WritePipe(int pipe_fd, const std::string& s);
 		void						ReadPipe(int pipe_fd, std::string& s);
 };
 
 
-void	TestCGI();
+void	TestCGI(char **av);
 
 #endif

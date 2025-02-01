@@ -23,18 +23,20 @@ CGI::~CGI()
 
 }
 
-void CGI::CGISetup(Request &request)
+void CGI::CGISetup(Request& request)
 {
-	Error.clear();
-	Response.clear();
-
 	if (pipe(this->stdin_pipe) == -1)
 		std::cerr << "CGI: Error piping stding" << std::endl;
-	if (pipe(this->stderr_pipe) == -1)
-		std::cerr << "CGI: Error piping stderr" << std::endl;
 	if (pipe(this->stdout_pipe) == -1)
 		std::cerr << "CGI: Error piping stdout" << std::endl;
-	Execute(request);
+
+    // set cgi output and error into nonBlocking
+    SetNonBlocking(stdout_pipe[0]);
+}
+
+int CGI::GetStdoutFd()
+{
+    return (stdout_pipe[0]);
 }
 
 void CGI::ReadPipe(int pipe_fd, std::string& s)
@@ -57,34 +59,43 @@ void CGI::WritePipe(int pipe_fd, const std::string& s)
     close(pipe_fd);
 }
 
-
-std::vector<std::string>	CGI::PrepareEnv(Request &request)
+std::string CGI::convert_header_name(const std::string& header_name)
 {
-	std::vector<std::string>						env;
-	std::map<std::string, std::string>				headers;
-	std::map<std::string, std::string>::iterator	it;
+    std::string converted = to_upper(header_name);
+    std::replace(converted.begin(), converted.end(), '-', '_');
+    return ("HTTP_" + converted);
+}
 
-	// headers = request.getHeaders();
-	env.push_back("GATEWAY_INTERFACE=CGI/1.1");
-	env.push_back("SERVER_PROTOCOL=HTTP/1.1");
+std::vector<std::string>	CGI::PrepareEnv(Request& request)
+{
+	std::vector<std::string>    env;
+	const std::map<std::string, std::string>& headers = request.getHeaders();
+	std::map<std::string, std::string>::const_iterator	it;
+
+    env.push_back("REQUEST_METHOD=" + request.getMethod());
+    env.push_back("SCRIPT_NAME=" + request.getPath());
+    env.push_back("QUERY_STRING=" + request.getQuery());
+    env.push_back("SERVER_PROTOCOL=" + request.getHttpVersion());
+    env.push_back("CONTENT_LENGTH=" + request.getContentLength());
+    // env.push_back("CONTENT_TYPE=" + request.getContentType()); // not implemented yet
 	for (it = headers.begin(); it != headers.end(); ++it)
 	{
-		env.push_back(it->first + "=" + it->second);
+		env.push_back(convert_header_name(it->first) + "=" + it->second);
 	}
 	return (env);
 }
 
-void CGI::Execute(Request &request)
+void CGI::Execute(Request& request)
 {
-	ProcId = fork();
+	pid_t   ProcId = fork();
 	if (ProcId == 0)
 	{
 		// setup executable for execve:
 		char	*argv[2];
-		argv[0] = strdup("./Tests/CGI/python_script");
+		argv[0] = strdup(request.getPath().c_str()); // change it to SCRIPT_NAME
 		argv[1] = NULL;
 
-		std::vector<std::string> env = PrepareEnv(request);
+        std::vector<std::string> env = PrepareEnv(request);
 		std::vector<char *>			execve_env;
 		for (int i = 0; i < env.size(); ++i)
 		{
@@ -94,51 +105,41 @@ void CGI::Execute(Request &request)
 
 		// prepare pipes:
 		dup2(stdin_pipe[0], STDIN_FILENO);
-		dup2(stderr_pipe[1], STDOUT_FILENO);
-		dup2(stderr_pipe[1], STDERR_FILENO);
+		dup2(stdout_pipe[1], STDOUT_FILENO);
 
 		// clean up:
 		close(this->stdin_pipe[0]);
         close(this->stdin_pipe[1]);
 		close(this->stdout_pipe[0]);
         close(this->stdout_pipe[1]);
-        close(this->stderr_pipe[1]);
-        close(this->stderr_pipe[1]);
 
 		execve(argv[0], argv, &execve_env[0]);
 		// in case execve failed:
+        Logger(FATAL, "execve failed");
 		exit(1);
 	}
 	else if (ProcId > 0)
 	{
 		close(this->stdin_pipe[0]);
-		close(this->stderr_pipe[1]);
 		close(this->stdout_pipe[1]);
 
 		// write Request Body in the STDIN
 		WritePipe(this->stdin_pipe[1], request.getBody());
 
-		// read Any errors from STDERR (better for debuging)
-		ReadPipe(this->stderr_pipe[0], this->Error);
-
 		// read output:
-		ReadPipe(this->stdout_pipe[0], this->Response);
+		ReadPipe(this->stdout_pipe[0], this->CgiResponse);
 
 		// need to be removed (add the output file to the kqueue)
-		waitpid(ProcId, NULL, 0);
+		waitpid(ProcId, NULL, WNOHANG);
 	}
 	else
 	{
-		std::cerr << "Error Forking CGI" << std::endl;
+		Logger(FATAL, "Error Forking CGI");
 	}
 }
 
 std::string&	CGI::GetResponse()
 {
-	return (Response);
+	return (CgiResponse);
 }
 
-std::string&	CGI::GetError()
-{
-	return (Error);
-}

@@ -12,8 +12,8 @@ SRCS =	Src/main.cpp \
 	Src/Request/HttpHeaders.cpp \
 	Src/Request/Methods.cpp \
 	Src/Request/UriValidator.cpp \
-	Tests/Config/RunConfigTest.cpp \
-	Tests/CGI/CGI_test.cpp \
+	Tests/Config/RunConfigTest.cpp
+	# Tests/CGI/CGI_test.cpp \
 
 HEAD = Include/Server.hpp \
 		Include/Poller.hpp \
@@ -35,7 +35,7 @@ CC = g++
 
 RM = rm -f
 
-CFLAGS = -std=c++98 -g -fsanitize=address
+CFLAGS = -std=c++98 -g #-fsanitize=address
 
 NAME = webserv
 

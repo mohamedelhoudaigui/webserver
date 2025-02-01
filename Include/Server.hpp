@@ -27,7 +27,6 @@
 
 #include "Config.hpp"
 #include "Poller.hpp"
-#include "Client.hpp"
 #include "Tools.hpp"
 
 
@@ -45,7 +44,7 @@ class SocketLayer
 
 	private:
 		std::vector<unsigned int>			ServerSockets;
-		Config&								Conf;
+		Config&								Conf;	
 		
 };
 

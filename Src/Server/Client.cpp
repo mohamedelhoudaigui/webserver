@@ -10,7 +10,7 @@ Client::Client()
 {}
 
 Client::~Client() {
-    delete current_request;
+    /*delete current_request;*/
 }
 
 Client::Client(const Client& other) {
@@ -56,7 +56,6 @@ int Client::Recv(int BufferSize) {
 
     try {
         processRequest();
-        std::cout << "hhehe" << std::endl;
         Send();
         return keep_alive ? 1 : -1;
     } catch (const std::exception& e) {
@@ -74,13 +73,15 @@ void Client::processRequest() {
         if (first_line.find("GET") == 0)
             current_request = new GET();
         else if (first_line.find("POST") == 0)
+        {
             current_request = new POST();
+        }
         else if (first_line.find("DELETE") == 0)
             current_request = new DELETE();
         else
             throw std::runtime_error("Invalid HTTP method");
     }
-    
+ 
     try {
         current_request->parseRequest(request_buffer);
         std::cout << current_request->getMethod() << std::endl;

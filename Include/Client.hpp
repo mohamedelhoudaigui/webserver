@@ -22,7 +22,8 @@
 #include <sstream>
 #include <ctime>
 
-class Client {
+class Client
+{
 private:
 	int             fd;
 	std::string     request_buffer;

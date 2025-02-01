@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 18:51:31 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/11/17 15:50:29 by mel-houd         ###   ########.fr       */
+/*   Updated: 2025/01/26 11:27:07 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,28 +49,11 @@ std::string&	DefaultConf::GetDefaultErrorPage()
 }
 
 
-std::string&	DefaultConf::GetDefaultRoot()
+std::string&	DefaultConf::GetRoot()
 {
-	return (this->DefaultRoot);
+	return (this->Root);
 }
 
-
-std::string&	DefaultConf::GetDefaultIndex()
-{
-	return (this->DefaultIndex);
-}
-
-
-std::string&	DefaultConf::GetDefaultUploadDir()
-{
-	return (this->DefaultUploadDir);
-}
-
-
-unsigned int	DefaultConf::GetDefaultMaxBody()
-{
-	return (this->DefaultMaxClientBody);
-}
 
 //ServerGetters :
 
@@ -119,13 +102,6 @@ RouteConf&	ServerConf::GetLocation(std::string& LocationPath)
 
 // Location Getters:
 
-unsigned int	RouteConf::GetMaxBody()
-{
-	if (this->MaxClientBody == 0)
-		return (this->Default->GetDefaultMaxBody());
-	return (this->MaxClientBody);
-}
-
 bool	RouteConf::CheckDirectoryListing()
 {
 	return (this->DirList);
@@ -161,22 +137,16 @@ bool	RouteConf::CheckMethod(std::string& Method)
 
 std::string&	RouteConf::GetRoot()
 {
-	if (this->Root.empty())
-		return (this->Default->GetDefaultRoot());
 	return (this->Root);
 }
 
 std::string&	RouteConf::GetUploadDir()
 {
-	if (this->UploadDir.empty())
-		return (this->Default->GetDefaultUploadDir());
 	return (this->UploadDir);
 }
 
 std::string&	RouteConf::GetIndex()
 {
-	if (this->Index.empty())
-		return (this->Default->GetDefaultIndex());
 	return (this->Index);
 }
 

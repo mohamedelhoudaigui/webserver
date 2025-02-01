@@ -12,10 +12,10 @@
 
 #include "../../Include/CGI.hpp"
 
-
+// deprecated
 void	TestCGI()
 {
-	CGI						cgi;
+	CGI						c;
 	Request		request_builder;
 	std::string 			request;
 	Request*			Req;
@@ -30,8 +30,8 @@ void	TestCGI()
 	request_builder.parseRequest(request);
 	// request_builder.setBody("zbi hadi body\r\nzbi hadi body\r\nzbi hadi body\r\nzbi hadi body\r\nzbi hadi body\r\nzbi hadi body\r\n");
 	// Req = request_builder.build();
-	cgi.CGISetup(*Req);
+	c.CGISetup(*Req);
 
-	std::cout << cgi.GetResponse() << std::endl;
-	std::cout << cgi.GetError() << std::endl;
+	std::cout << c.GetResponse() << std::endl;
+	std::cout << c.GetError() << std::endl;
 }

@@ -35,8 +35,8 @@ void Request::parseRequest(const std::string& raw_request) {
         request_line.erase(request_line.length() - 1);
         
     parseRequestLine(request_line);
-    parseHeaders(stream);
-    
+    parseHeaders(stream); // ------------------------------
+    std::cout << " ------------ " << this->method << std::endl;
     if (chunked)
         parseChunkedBody(stream);
     else if (content_length > 0)
@@ -53,7 +53,7 @@ void Request::parseRequestLine(const std::string& line) {
     method = line.substr(0, first_space);
     uri = line.substr(first_space + 1, last_space - first_space - 1);
     http_version = line.substr(last_space + 1);
-
+    /*std::cout << method << " " << uri << " " << http_version << std::endl;*/
     if (!validateMethod(method) || !validateUri(uri) || !validateVersion(http_version))
         throw std::runtime_error("Invalid request line components");
         
@@ -96,7 +96,8 @@ void Request::parseHeaders(std::istringstream& stream) {
     std::string current_header;
     bool in_folded_header = false;
 
-    while (std::getline(stream, line) && !line.empty() && line != "\r") {
+    while (std::getline(stream, line) && !line.empty() && line != "\r")
+    {
         if (header_count >= MAX_HEADERS)
             throw std::runtime_error("Too many headers");
             
@@ -125,10 +126,10 @@ void Request::parseHeaders(std::istringstream& stream) {
     // Process last header
     if (in_folded_header)
         processHeaders(HttpHeaders::unfold(current_header));
-        
     // Validate all required headers are present and valid
     if (!HttpHeaders::validateRequiredHeaders(headers))
         throw std::runtime_error("Missing or invalid required headers");
+    std::cout << " ------------ " << this->method << std::endl;
 }
 
 void Request::processHeaders(const std::string& header) {

@@ -72,8 +72,10 @@ void	Config::CheckScopeKeyWord(std::string& Key, std::vector<std::string>& Keys)
 }
 
 
-void	Config::CheckScope(Token& Key, std::vector<Token>& Tokens, Scope& s)
+void	Config::CheckScope(std::vector<Token>& Tokens, Scope& s)
 {
+    Token& Key = Tokens[0];
+
 	switch (s)
 	{
 		case GLOBAL:
@@ -127,7 +129,7 @@ void	Config::CheckSyntaxError()
 				s = SERVER;
 		}
 		else
-			CheckScope(Key, it->Tokens, s);
+			CheckScope(it->Tokens, s);
 	}
 	if (s != GLOBAL)
 		throw std::runtime_error("Closure tag not found !");
