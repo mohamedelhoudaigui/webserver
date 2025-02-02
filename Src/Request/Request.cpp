@@ -35,8 +35,7 @@ void Request::parseRequest(const std::string& raw_request) {
         request_line.erase(request_line.length() - 1);
         
     parseRequestLine(request_line);
-    parseHeaders(stream); // ------------------------------
-    std::cout << " ------------ " << this->method << std::endl;
+    parseHeaders(stream);
     if (chunked)
         parseChunkedBody(stream);
     else if (content_length > 0)
@@ -129,7 +128,6 @@ void Request::parseHeaders(std::istringstream& stream) {
     // Validate all required headers are present and valid
     if (!HttpHeaders::validateRequiredHeaders(headers))
         throw std::runtime_error("Missing or invalid required headers");
-    std::cout << " ------------ " << this->method << std::endl;
 }
 
 void Request::processHeaders(const std::string& header) {
