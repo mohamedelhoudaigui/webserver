@@ -5,14 +5,11 @@
 #include <iostream>
 #include <sstream>
 #include <cstdlib>
-#include "HttpHeaders.hpp"
 
+#include "HttpHeaders.hpp"
 
 class Request {
 	protected:
-
-		static const size_t MAX_BODY_SIZE = 1048576; // 1MB default
-		static const size_t MAX_HEADER_COUNT = 100;
 
 		std::string							method;
 		std::string							uri;
@@ -38,7 +35,9 @@ class Request {
 		virtual bool validateUri(const std::string& uri) const;
 		virtual bool validateVersion(const std::string& version) const;
 		virtual void processHeaders(const std::string& stream);
+
 	public:
+
 		Request();
 		virtual ~Request();
 		const   std::string& getMethod() const;
@@ -59,7 +58,6 @@ class Request {
 		void setKeepAliveTimeout(time_t timeout);
 		void setMaxKeepAliveRequests(size_t max_requests);
 		virtual void reset();
-
 		virtual void parseRequest(const std::string& raw_request);
 };
 

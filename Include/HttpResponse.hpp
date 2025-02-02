@@ -1,17 +1,4 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   HttpResponse.hpp                                   :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/29 19:25:15 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/12/04 18:26:47 by mel-houd         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-#ifndef HTTPRESPONSE_HPP
-#define HTTPRESPONSE_HPP
+#pragma once
 
 #include <string>
 #include <map>
@@ -70,5 +57,3 @@ class	HttpResponseBuilder : public AHttpResponseBuilder
 		Request	Request;
 };
 
-
-#endif

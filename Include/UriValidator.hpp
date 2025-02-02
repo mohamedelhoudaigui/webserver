@@ -1,5 +1,4 @@
-#ifndef URI_VALIDATOR_HPP
-#define URI_VALIDATOR_HPP
+#pragma once
 
 #include <string>
 #include <map>
@@ -25,4 +24,3 @@ public:
     static bool hasTraversalAttempt(const std::string& path);
 };
 
-#endif 

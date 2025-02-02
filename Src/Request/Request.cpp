@@ -211,7 +211,6 @@ void Request::parseBody(std::istringstream& stream) {
 void Request::parseChunkedBody(std::istringstream& stream) {
     std::string chunk_size_str;
     size_t total_size = 0;
-    const size_t MAX_BODY_SIZE = 1048576; // 1MB limit
     
     while (std::getline(stream, chunk_size_str)) {
         if (chunk_size_str[chunk_size_str.length() - 1] == '\r')

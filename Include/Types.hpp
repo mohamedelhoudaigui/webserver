@@ -1,17 +1,4 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   Types.hpp                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/13 08:34:31 by mel-houd          #+#    #+#             */
-/*   Updated: 2025/01/26 11:24:18 by mel-houd         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-#ifndef TYPES_HPP
-#define TYPES_HPP
+#pragma once
 
 #include <string>
 #include <vector>
@@ -20,18 +7,13 @@
 #include <algorithm>
 #include <stdio.h>
 
+#define MAX_HEADER_VALUE_LENGTH 4096
+#define MAX_HEADER_NAME_LENGTH 256
+#define MAX_BODY_SIZE 1048576
+#define MAX_HEADER_COUNT 100
 #define MAX_PORT 65535
-#define MAX_CLIENT_BODY 102400
-#define MAX_HEADER_LEN 1024
-#define MAX_HEADER_NUM 100
 #define MAX_EVENTS 3000
-#define BUFFER_SIZE 40960
 
-
-#define HTTP_VERSION "HTTP/1.1"
-#define CONT_LEN "content-length"
-#define HOST "host"
-#define HTTP_DELIM '\r'
 
 #define RESET   "\033[0m"
 #define BLUE    "\033[34m"
@@ -47,17 +29,6 @@
         SetResultTrue(code, msg);         \
         return;                           \
     }
-
-
-
-enum REQ_STATE
-{
-    INIT,
-    OK,
-    PENDING,
-    INVALID,
-    CGI,
-};
 
 // -------------- logger types :
 
@@ -180,6 +151,3 @@ typedef struct ConfigFile
 
 }	ConfigFile;
 
-//----------------------
-
-#endif
