@@ -7,6 +7,7 @@
 #include <cstdlib>
 
 #include "HttpHeaders.hpp"
+#include "UriValidator.hpp"
 
 class Request {
 	protected:

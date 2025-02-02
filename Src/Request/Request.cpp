@@ -1,5 +1,4 @@
 #include "../../Include/HttpRequest.hpp"
-#include "../../Include/UriValidator.hpp"
 
 Request::Request() 
     : chunked(false)
@@ -27,16 +26,15 @@ void Request::reset() {
 void Request::parseRequest(const std::string& raw_request) {
     std::istringstream stream(raw_request);
     std::string request_line;
-    
+
     if (!std::getline(stream, request_line))
         throw std::runtime_error("Empty request");
-        
+
     if (request_line[request_line.length() - 1] == '\r')
         request_line.erase(request_line.length() - 1);
-        
+
     parseRequestLine(request_line);
-    parseHeaders(stream); // ------------------------------
-    std::cout << " ------------ " << this->method << std::endl;
+    parseHeaders(stream);
     if (chunked)
         parseChunkedBody(stream);
     else if (content_length > 0)
@@ -46,7 +44,7 @@ void Request::parseRequest(const std::string& raw_request) {
 void Request::parseRequestLine(const std::string& line) {
     std::string::size_type first_space = line.find(' ');
     std::string::size_type last_space = line.rfind(' ');
-    
+
     if (first_space == std::string::npos || last_space == std::string::npos || first_space == last_space)
         throw std::runtime_error("Invalid request line format");
 
@@ -56,7 +54,7 @@ void Request::parseRequestLine(const std::string& line) {
     /*std::cout << method << " " << uri << " " << http_version << std::endl;*/
     if (!validateMethod(method) || !validateUri(uri) || !validateVersion(http_version))
         throw std::runtime_error("Invalid request line components");
-        
+
     parseUri();
 }
 
@@ -66,7 +64,7 @@ void Request::parseUri() {
 
     std::string::size_type query_pos = uri.find('?');
     std::string::size_type fragment_pos = uri.find('#');
-    
+
     // Extract path
     if (query_pos != std::string::npos) {
         path = uri.substr(0, query_pos);
@@ -77,13 +75,13 @@ void Request::parseUri() {
         path = uri.substr(0, fragment_pos);
         query.clear();
     }
-    
+
     // Validate and sanitize path
     if (!UriValidator::isValidPath(path))
         throw std::runtime_error("Invalid path format");
-        
+
     path = UriValidator::normalizePath(UriValidator::percentDecode(path));
-    
+
     // Validate query string if present
     // if (!query.empty() && !UriValidator::isValidQuery(query))
     //     throw std::runtime_error("Invalid query string format");
@@ -100,10 +98,10 @@ void Request::parseHeaders(std::istringstream& stream) {
     {
         if (header_count >= MAX_HEADERS)
             throw std::runtime_error("Too many headers");
-            
+
         if (line[line.length() - 1] == '\r')
             line.erase(line.length() - 1);
-            
+
         // Handle header folding
         if (line[0] == ' ' || line[0] == '\t') {
             if (!in_folded_header)
@@ -111,31 +109,30 @@ void Request::parseHeaders(std::istringstream& stream) {
             current_header += "\r\n" + line;
             continue;
         }
-        
+ 
         // Process previous header if exists
         if (in_folded_header) {
             processHeaders(HttpHeaders::unfold(current_header));
             current_header.clear();
         }
-        
+ 
         current_header = line;
         in_folded_header = true;
         header_count++;
     }
-    
+ 
     // Process last header
     if (in_folded_header)
         processHeaders(HttpHeaders::unfold(current_header));
     // Validate all required headers are present and valid
     if (!HttpHeaders::validateRequiredHeaders(headers))
         throw std::runtime_error("Missing or invalid required headers");
-    std::cout << " ------------ " << this->method << std::endl;
 }
 
 void Request::processHeaders(const std::string& header) {
     if (!HttpHeaders::isValidHeader(header))
         throw std::runtime_error("Invalid header format: " + header);
-        
+ 
     std::string::size_type colon = header.find(':');
     if (colon == std::string::npos)
         throw std::runtime_error("Invalid header format");
@@ -143,7 +140,7 @@ void Request::processHeaders(const std::string& header) {
     std::string key = header.substr(0, colon);
     std::string value = header.substr(colon + 1);
     HttpHeaders::trim(value, " \t");
-    
+ 
     // Special header processing
     if (key == "Content-Length") {
         if (!HttpHeaders::isValidContentLength(value))
@@ -181,29 +178,29 @@ void Request::processHeaders(const std::string& header) {
             std::string timeout_str = value.substr(pos + 8);
             keep_alive_timeout = std::atoi(timeout_str.c_str());
         }
-        
+ 
         pos = value.find("max=");
         if (pos != std::string::npos) {
             std::string max_str = value.substr(pos + 4);
             max_keep_alive_requests = std::atoi(max_str.c_str());
         }
     }
-    
+ 
     // Check for duplicate headers
     if (headers.find(key) != headers.end())
         throw std::runtime_error("Duplicate header: " + key);
-        
+
     headers[key] = value;
 }
 
 void Request::parseBody(std::istringstream& stream) {
     if (content_length == 0)
         return;
-        
+
     char* buffer = new char[content_length + 1];
     stream.read(buffer, content_length);
     buffer[content_length] = '\0';
-    
+
     body.assign(buffer, content_length);
     delete[] buffer;
 }
@@ -211,31 +208,31 @@ void Request::parseBody(std::istringstream& stream) {
 void Request::parseChunkedBody(std::istringstream& stream) {
     std::string chunk_size_str;
     size_t total_size = 0;
-    
+
     while (std::getline(stream, chunk_size_str)) {
         if (chunk_size_str[chunk_size_str.length() - 1] == '\r')
             chunk_size_str.erase(chunk_size_str.length() - 1);
-            
+ 
         // Convert hex string to size_t
         size_t chunk_size;
         std::istringstream hex_stream(chunk_size_str);
         hex_stream >> std::hex >> chunk_size;
-        
+ 
         if (chunk_size == 0)
             break;
-            
+ 
         if (total_size + chunk_size > MAX_BODY_SIZE)
             throw std::runtime_error("Body too large");
-            
+ 
         char* chunk = new char[chunk_size + 1];
         stream.read(chunk, chunk_size);
         chunk[chunk_size] = '\0';
-        
+ 
         body.append(chunk, chunk_size);
         delete[] chunk;
-        
+ 
         total_size += chunk_size;
-        
+ 
         // Skip CRLF
         stream.ignore(2);
     }
@@ -246,17 +243,17 @@ void Request::parseMultipartBody(std::istringstream& stream) {
     size_t pos = boundary.find("boundary=");
     if (pos == std::string::npos)
         throw std::runtime_error("No boundary in multipart content");
-        
+
     boundary = "--" + boundary.substr(pos + 9);
     std::string line;
-    
+
     while (std::getline(stream, line)) {
         if (line[line.length() - 1] == '\r')
             line.erase(line.length() - 1);
-            
+
         if (line == boundary || line == boundary + "--")
             continue;
-            
+
         // Parse part headers and content
         // This is a simplified version - real implementation would need to handle
         // Content-Disposition, Content-Type, etc.
