@@ -8,6 +8,8 @@
 
 #include "HttpHeaders.hpp"
 #include "UriValidator.hpp"
+#include "Tools.hpp"
+#include "Types.hpp"
 
 class Request {
 	protected:

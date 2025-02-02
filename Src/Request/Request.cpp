@@ -98,7 +98,7 @@ void Request::parseHeaders(std::istringstream& stream) {
 
     while (std::getline(stream, line) && !line.empty() && line != "\r")
     {
-        if (header_count >= MAX_HEADERS)
+        if (header_count >= MAX_HEADER_COUNT)
             throw std::runtime_error("Too many headers");
 
         if (line[line.length() - 1] == '\r')
