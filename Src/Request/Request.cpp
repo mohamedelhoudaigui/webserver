@@ -24,6 +24,8 @@ void Request::reset() {
 }
 
 void Request::parseRequest(const std::string& raw_request) {
+    Logger(INFO, "starting to parse request");//------logger
+
     std::istringstream stream(raw_request);
     std::string request_line;
 
@@ -34,7 +36,9 @@ void Request::parseRequest(const std::string& raw_request) {
         request_line.erase(request_line.length() - 1);
 
     parseRequestLine(request_line);
+    Logger(INFO, "parsed request line : " + method + " " + uri + " " + http_version);
     parseHeaders(stream);
+    Logger(INFO, "parsed headers");//------logger
     if (chunked)
         parseChunkedBody(stream);
     else if (content_length > 0)
@@ -51,7 +55,6 @@ void Request::parseRequestLine(const std::string& line) {
     method = line.substr(0, first_space);
     uri = line.substr(first_space + 1, last_space - first_space - 1);
     http_version = line.substr(last_space + 1);
-    /*std::cout << method << " " << uri << " " << http_version << std::endl;*/
     if (!validateMethod(method) || !validateUri(uri) || !validateVersion(http_version))
         throw std::runtime_error("Invalid request line components");
 
@@ -89,9 +92,8 @@ void Request::parseUri() {
 
 void Request::parseHeaders(std::istringstream& stream) {
     std::string line;
-    size_t header_count = 0;
-    const size_t MAX_HEADERS = 100;
     std::string current_header;
+    size_t header_count = 0;
     bool in_folded_header = false;
 
     while (std::getline(stream, line) && !line.empty() && line != "\r")
@@ -117,6 +119,7 @@ void Request::parseHeaders(std::istringstream& stream) {
         }
  
         current_header = line;
+        Logger(INFO, "current header : " + current_header);//------logger
         in_folded_header = true;
         header_count++;
     }
@@ -191,21 +194,21 @@ void Request::processHeaders(const std::string& header) {
         throw std::runtime_error("Duplicate header: " + key);
 
     headers[key] = value;
+    Logger(DEBUG, "header stored : " + key + "=" + headers[key]);//------logger
 }
 
-void Request::parseBody(std::istringstream& stream) {
-    if (content_length == 0)
-        return;
-
+void Request::parseBody(std::istringstream& stream)
+{
+    Logger(INFO, "normal body parse");//-------logger
     char* buffer = new char[content_length + 1];
     stream.read(buffer, content_length);
-    buffer[content_length] = '\0';
-
+    buffer[content_length] = '\0'; // -- ISSUE HERE ! : body parts can be binary !
     body.assign(buffer, content_length);
     delete[] buffer;
 }
 
 void Request::parseChunkedBody(std::istringstream& stream) {
+    Logger(INFO, "chunked body parse");//-------logger
     std::string chunk_size_str;
     size_t total_size = 0;
 
