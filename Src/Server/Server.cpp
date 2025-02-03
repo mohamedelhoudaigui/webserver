@@ -71,7 +71,7 @@ int	SocketLayer::BindSocket(int fd, int Port)
 
 void	SocketLayer::Run()
 {
-	Poller	poller(this->ServerSockets);
+	Poller	poller(this->ServerSockets, Conf);
 	poller.Run();
 }
 

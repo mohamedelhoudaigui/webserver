@@ -12,7 +12,7 @@
 
 #include "../../Include/Poller.hpp"
 
-Poller::Poller(std::vector<unsigned int>& ServerSockets): ServerSockets(ServerSockets)
+Poller::Poller(std::vector<unsigned int>& ServerSockets, Config& config): ServerSockets(ServerSockets), config(config)
 {
     epoll_fd = epoll_create1(0);
     if (epoll_fd == -1)
@@ -87,7 +87,7 @@ void Poller::ClientAct(struct epoll_event event)
 
     if (clients.find(event.data.fd) == clients.end())
     {
-        clients[event.data.fd] = Client();
+        clients[event.data.fd] = Client(&config);
         clients[event.data.fd].SetFd(event.data.fd);
     }
     Client& client = clients[event.data.fd];

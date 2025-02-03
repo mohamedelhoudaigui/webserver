@@ -5,15 +5,14 @@
 #include <iostream>
 #include <sstream>
 #include <cstdlib>
-
 #include "HttpHeaders.hpp"
+#include "Router.hpp"
 #include "UriValidator.hpp"
 #include "Tools.hpp"
 #include "Types.hpp"
 
 class Request {
 	protected:
-
 		std::string							method;
 		std::string							uri;
 		std::string							http_version;
@@ -38,7 +37,6 @@ class Request {
 		virtual bool validateUri(const std::string& uri) const;
 		virtual bool validateVersion(const std::string& version) const;
 		virtual void processHeaders(const std::string& stream);
-
 	public:
 
 		Request();

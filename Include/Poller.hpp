@@ -15,11 +15,12 @@
 #include "HttpRequest.hpp"
 #include "Client.hpp"
 #include "CGI.hpp"
+#include "Config.hpp"
 
 class Poller
 {
     public:
-        Poller(std::vector<unsigned int>& ServerSockets);
+        Poller(std::vector<unsigned int>& ServerSockets, Config& config);
         void    Run();
         void    ServerAct(struct epoll_event event);
         void    ClientAct(struct epoll_event event);
@@ -37,5 +38,6 @@ class Poller
         struct epoll_event  events[MAX_EVENTS]; // main events pool.
         std::vector<unsigned int>& ServerSockets;
         std::map<unsigned int, Client> clients;
+        Config&                 config;
 };
 

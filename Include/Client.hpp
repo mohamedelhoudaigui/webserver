@@ -1,6 +1,7 @@
 #pragma once
 
 #include "HttpRequest.hpp"
+#include "Config.hpp"
 #include <string>
 #include <sys/socket.h>
 #include <iostream>
@@ -21,14 +22,18 @@ private:
 	bool            keep_alive;
 	static const size_t MAX_REQUESTS = 100;
 	static const time_t TIMEOUT = 5; // 5 seconds
+	Config*				config;
 
 	void processRequest();
 	void buildResponse();
 	bool hasTimedOut() const;
 	void updateLastActivity();
+	void handleCGI(RouteConf& location);
+	void handleStaticFile(RouteConf& location);
 
 public:
-	Client();
+	Client() {};
+	Client(Config* config);
 	~Client();
 	Client(const Client& other);
 	Client& operator=(const Client& other);

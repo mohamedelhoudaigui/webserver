@@ -1,11 +1,12 @@
 #include "../../Include/Client.hpp"
 #include "../../Include/HttpRequest.hpp"
 
-Client::Client()
+Client::Client(Config* config)
     : fd(-1)
     , requests_handled(0)
     , last_activity(time(NULL))
     , keep_alive(true)
+    , config(config)
 {
     current_request = NULL;
 }
@@ -80,10 +81,15 @@ void Client::processRequest() {
                 throw std::runtime_error("Invalid HTTP method");
         }
 
-        if (!current_request) // Additional safety check
-            throw std::runtime_error("Failed to create request object");
 
         current_request->parseRequest(request_buffer);
+
+        Router router(config->GetResult());
+        RouteConf& location = router.route(*current_request);
+        if (location.CheckIsCgi())
+            handleCGI(location);
+        else
+            handleStaticFile(location);
         buildResponse();
         requests_handled++;
         
@@ -142,4 +148,24 @@ void Client::reset() {
     requests_handled = 0;
     last_activity = time(NULL);
     keep_alive = true;
+}
+
+void Client::handleCGI(RouteConf& location) {
+    // Basic CGI implementation
+    // TODO: Implement full CGI handling
+    response = "HTTP/1.1 501 Not Implemented\r\n";
+    response += "Content-Type: text/plain\r\n";
+    response += "Content-Length: 21\r\n";
+    response += "\r\n";
+    response += "CGI not implemented yet";
+}
+
+void Client::handleStaticFile(RouteConf& location) {
+    // Basic static file implementation
+    // TODO: Implement full static file handling
+    response = "HTTP/1.1 501 Not Implemented\r\n";
+    response += "Content-Type: text/plain\r\n";
+    response += "Content-Length: 28\r\n";
+    response += "\r\n";
+    response += "Static files not implemented yet";
 }
