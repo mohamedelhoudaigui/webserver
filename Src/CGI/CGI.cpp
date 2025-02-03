@@ -115,7 +115,6 @@ void CGI::Execute(Request& request)
 
 		execve(argv[0], argv, &execve_env[0]);
 		// in case execve failed:
-        Logger(FATAL, "execve failed");
 		exit(1);
 	}
 	else if (ProcId > 0)

@@ -1,17 +1,4 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   Client.hpp                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/13 11:16:20 by mel-houd          #+#    #+#             */
-/*   Updated: 2024/12/09 23:44:36 by mel-houd         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-#ifndef CLIENT_HPP
-#define CLIENT_HPP
+#pragma once
 
 #include "HttpRequest.hpp"
 #include <string>
@@ -53,5 +40,3 @@ public:
 	bool    shouldClose() const;
 	void    reset();
 };
-
-#endif

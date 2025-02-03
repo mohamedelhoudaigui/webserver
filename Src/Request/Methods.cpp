@@ -39,7 +39,7 @@ bool POST::validateMethod(const std::string& method) const {
 
 void POST::parseHeaders(std::istringstream& stream) {
     Request::parseHeaders(stream);
-    
+
     // Check Content-Type for multipart
     std::map<std::string, std::string>::const_iterator it = headers.find("Content-Type");
     if (it != headers.end()) {
@@ -52,7 +52,7 @@ void POST::parseHeaders(std::istringstream& stream) {
                 throw std::runtime_error("Multipart form-data missing boundary");
         }
     }
-    
+
     // Require Content-Length or chunked for POST
     if (!chunked && headers.find("Content-Length") == headers.end())
         throw std::runtime_error("POST request requires Content-Length or chunked encoding");
@@ -69,11 +69,11 @@ void POST::parseMultipartBody(std::istringstream& stream) {
     std::string line;
     std::string current_part;
     bool in_part = false;
-    
+
     while (std::getline(stream, line)) {
         if (line[line.length() - 1] == '\r')
             line.erase(line.length() - 1);
-            
+
         if (line == "--" + boundary) {
             if (in_part) {
                 parts.push_back(current_part);
@@ -120,4 +120,4 @@ void DELETE::parseBody(std::istringstream& stream) {
     // DELETE requests may have a body, but it's uncommon
     if (content_length > 0 || chunked)
         Request::parseBody(stream);
-} 
+}

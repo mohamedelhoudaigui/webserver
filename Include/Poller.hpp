@@ -1,17 +1,4 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   Poller.hpp                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/22 11:17:27 by mel-houd          #+#    #+#             */
-/*   Updated: 2025/01/22 13:04:38 by mel-houd         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-#ifndef POLLER_HPP
-#define POLLER_HPP
+#pragma once
 
 #include <vector>
 #include <sys/epoll.h>
@@ -52,5 +39,3 @@ class Poller
         std::map<unsigned int, Client> clients;
 };
 
-
-#endif
