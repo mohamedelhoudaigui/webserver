@@ -42,6 +42,7 @@ class Request {
 	public:
 
 		Request();
+		Request(const Request& req);
 		virtual ~Request();
 		const   std::string& getMethod() const;
 		const   std::string& getUri() const;
