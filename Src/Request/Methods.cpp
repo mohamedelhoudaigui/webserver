@@ -54,7 +54,7 @@ void POST::parseHeaders(std::istringstream& stream) {
     }
     
     // Require Content-Length or chunked for POST
-    if (!chunked && content_length == 0)
+    if (!chunked && headers.find("Content-Length") == headers.end())
         throw std::runtime_error("POST request requires Content-Length or chunked encoding");
 }
 

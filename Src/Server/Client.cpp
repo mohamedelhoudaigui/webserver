@@ -51,8 +51,8 @@ int Client::Recv(int BufferSize) {
     
     if (count <= 0)
         return count;
-    Buffer[count - 1] = '\0';
-    request_buffer.append(Buffer);
+    // Buffer[count - 1] = '\0';
+    request_buffer.append(Buffer, count);
 
     try {
         processRequest();
