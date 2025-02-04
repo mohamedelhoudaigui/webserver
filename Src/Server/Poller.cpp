@@ -12,7 +12,7 @@
 
 #include "../../Include/Poller.hpp"
 
-Poller::Poller(std::vector<unsigned int>& ServerSockets): ServerSockets(ServerSockets)
+Poller::Poller(std::vector<unsigned int>& ServerSockets, Config& config): ServerSockets(ServerSockets), config(config)
 {
     epoll_fd = epoll_create1(0);
     if (epoll_fd == -1)
@@ -87,33 +87,11 @@ void Poller::ClientAct(struct epoll_event event)
 
     if (clients.find(event.data.fd) == clients.end())
     {
-        clients[event.data.fd] = Client();
+        clients[event.data.fd] = Client(&config);
         clients[event.data.fd].SetFd(event.data.fd);
     }
     Client& client = clients[event.data.fd];
     client.Recv(1024);
-    /*int ret = req.ReadBuffer(event); // read and parse 1 recv buffer*/
-    /*if (ret == -1) // recv consumed all the request*/
-    /*    ClientPurge(event);*/
-    /*else*/
-    /*{*/
-    /*    switch (req.status)*/
-    /*    {*/
-    /*        case INIT:*/
-    /*            std::cout << "INIT" << std::endl;*/
-    /*            break ;*/
-    /*        case OK:*/
-    /*            std::cout << "OK" << std::endl;*/
-    /*            break ;*/
-    /*        case PENDING:*/
-    /*            std::cout << "PENDING" << std::endl;*/
-    /*            break ;*/
-    /*        case INVALID:*/
-    /*            std::cout << "INVALID" << std::endl;*/
-    /*            break ;*/
-    /*    }*/
-    /*}*/
-    //print_info(req.GetResult());
 }
 
 void    Poller::Run()

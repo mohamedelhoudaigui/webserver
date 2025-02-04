@@ -7,6 +7,7 @@
 #include "HttpRequest.hpp"
 
 //product:
+class Request;
 
 class	HttpResponse
 {
@@ -53,7 +54,5 @@ class	HttpResponseBuilder : public AHttpResponseBuilder
 		void	BuildStatus();
 		void	BuildHeader();
 		void	BuildBody();
-	private:
-		Request	Request;
 };
 
