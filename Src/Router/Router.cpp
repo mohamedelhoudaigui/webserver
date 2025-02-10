@@ -26,7 +26,7 @@ bool Router::isMethodAllowed(RouteConf &route, std::string &method) {
 std::string Router::getFullPath(RouteConf &route, std::string &path) {
   std::string server_root = route.GetRoot();
   server_root += path;
-  if (server_root.back() == '/' && route.CheckAutoIndex())
+  if (server_root[server_root.size() - 1] == '/' && route.CheckAutoIndex())
     server_root += route.GetIndex();
   return (server_root);
 }
@@ -44,10 +44,10 @@ RouteConf &Router::route(Request &request) {
   ServerConf &server = findMatchingServer(hostname, port);
 
   // Find matching location
-  RouteConf &location = findMatchingLocation(server, const_cast(request.getPath()));
+  RouteConf &location = findMatchingLocation(server, const_cast<std::string&>(request.getPath()));
 
   // Check if method is allowed
-  if (!isMethodAllowed(location, request.getMethod())) {
+  if (!isMethodAllowed(location, const_cast<std::string&>(request.getMethod()))) {
     throw std::runtime_error("Method not allowed");
   }
 
