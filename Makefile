@@ -12,6 +12,7 @@ SRCS =	Src/main.cpp \
 	Src/Request/HttpHeaders.cpp \
 	Src/Request/Methods.cpp \
 	Src/Request/UriValidator.cpp \
+	Src/Router/Router.cpp \
 	Tests/Config/RunConfigTest.cpp
 	# Tests/CGI/CGI_test.cpp \
 
@@ -21,6 +22,7 @@ HEAD = Include/Server.hpp \
 		Include/Client.hpp \
 		Include/CGI.hpp \
 		Include/Tools.hpp \
+		Include/Router.hpp \
 		Include/Types.hpp \
 		Include/HttpRequest.hpp \
 		Include/HttpHeaders.hpp \

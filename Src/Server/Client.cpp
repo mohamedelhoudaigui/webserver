@@ -83,8 +83,8 @@ void Client::processRequest() {
 
 
         current_request->parseRequest(request_buffer);
-
-        Router router(config->GetResult());
+        ConfigFile config_file = config->GetResult();
+        Router router(&config_file);
         RouteConf& location = router.route(*current_request);
         if (location.CheckIsCgi())
             handleCGI(location);
@@ -92,9 +92,7 @@ void Client::processRequest() {
             handleStaticFile(location);
         buildResponse();
         requests_handled++;
-        
         keep_alive = current_request->isKeepAlive();
-        
         delete current_request;
         current_request = NULL; // Use helper method instead of direct delete
         request_buffer.clear();
