@@ -135,8 +135,8 @@ typedef struct ServerConf
 	std::string&						GetServerName();
 	bool								CheckPort(unsigned int Port);
 	bool								CheckLocation(std::string& LocationPath);
+    RouteConf& 							GetLocation(std::string& LocationPath); // throws
 	std::string&						GetErrorPage(unsigned int ErrorCode); // throws
-	RouteConf& 							GetLocation(std::string& LocationPath); // throws
 	
 }	ServerConf;
 
