@@ -15,19 +15,49 @@ Client::~Client() {
     /*delete current_request;*/
 }
 
-Client::Client(const Client& other) {
-    *this = other;
+Client::Client(const Client& other) 
+    : fd(-1)
+    , requests_handled(0)
+    , last_activity(time(NULL))
+    , keep_alive(true)
+    , config(other.config)
+    , current_request(NULL)
+{
+    if (other.current_request) {
+        // Deep copy based on type
+        if (dynamic_cast<GET*>(other.current_request))
+            current_request = new GET(*dynamic_cast<GET*>(other.current_request));
+        else if (dynamic_cast<POST*>(other.current_request))
+            current_request = new POST(*dynamic_cast<POST*>(other.current_request));
+        else if (dynamic_cast<DELETE*>(other.current_request))
+            current_request = new DELETE(*dynamic_cast<DELETE*>(other.current_request));
+    }
+    request_buffer = other.request_buffer;
+    response = other.response;
 }
 
 Client& Client::operator=(const Client& other) {
     if (this != &other) {
+        delete current_request;
+        current_request = NULL;
+        
+        if (other.current_request) {
+            // Deep copy based on type
+            if (dynamic_cast<GET*>(other.current_request))
+                current_request = new GET(*dynamic_cast<GET*>(other.current_request));
+            else if (dynamic_cast<POST*>(other.current_request))
+                current_request = new POST(*dynamic_cast<POST*>(other.current_request));
+            else if (dynamic_cast<DELETE*>(other.current_request))
+                current_request = new DELETE(*dynamic_cast<DELETE*>(other.current_request));
+        }
+        
         fd = other.fd;
         request_buffer = other.request_buffer;
         response = other.response;
-        current_request = other.current_request;
         requests_handled = other.requests_handled;
         last_activity = other.last_activity;
         keep_alive = other.keep_alive;
+        config = other.config;
     }
     return *this;
 }
