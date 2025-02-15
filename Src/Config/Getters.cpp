@@ -73,7 +73,7 @@ std::string&		ServerConf::GetErrorPage(unsigned int ErrorCode)
 	std::map<unsigned int, std::string>::iterator it;
 	it = this->ErrorPage.find(ErrorCode);
 	if (it == this->ErrorPage.end())
-		return (this->Default->GetDefaultErrorPage());
+		return (this->Default.GetDefaultErrorPage());
 	return (it->second);
 }
 

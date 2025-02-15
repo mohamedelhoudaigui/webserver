@@ -48,10 +48,11 @@ class Request {
 		const   std::string& getQuery() const;
 		const   std::string& getPath() const;
 		const   std::string& getBody() const;
+		const	std::string& getContentType() const;
 		const   std::map<std::string, std::string>& getHeaders() const;
 		bool    isChunked() const;
 		size_t	getContentLength() const;
-		bool isKeepAlive() const;
+		bool	isKeepAlive() const;
 		time_t getKeepAliveTimeout() const;
 		size_t getMaxKeepAliveRequests() const;
 		time_t getLastActivityTime() const;

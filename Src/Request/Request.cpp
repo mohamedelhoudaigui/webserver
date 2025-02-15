@@ -11,6 +11,15 @@ Request::Request()
 
 Request::~Request() {}
 
+const std::string& Request::getContentType() const {
+      std::map<std::string, std::string>::const_iterator it = headers.find("Content-Type");
+    if (it != headers.end()) {
+        return it->second;
+    } else {
+        return "";
+    }
+}
+
 void Request::reset() {
     method.clear();
     uri.clear();

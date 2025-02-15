@@ -45,7 +45,7 @@ class Config
 
 		//Getters.cpp
 		ConfigLines		GetLines();
-		ConfigFile		GetResult();
+		ConfigFile&		GetResult();
 		std::fstream&	GetLog();
 
 	private:

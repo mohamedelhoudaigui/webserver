@@ -121,7 +121,7 @@ typedef struct RouteConf
 
 typedef struct ServerConf
 {
-	DefaultConf*						Default;
+	DefaultConf						Default;
 
 	std::string							Host;
 	std::string							ServerName;

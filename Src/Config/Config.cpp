@@ -56,7 +56,7 @@ ConfigLines	Config::GetLines()
 	return (this->ConfLines);
 }
 
-ConfigFile	Config::GetResult()
+ConfigFile& Config::GetResult()
 {
 	return (this->Result);
 }

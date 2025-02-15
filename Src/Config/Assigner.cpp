@@ -43,7 +43,7 @@ void	Config::AssignServer(Token& Key, std::vector<Token>& Tokens)
 	if (Key.Token == "Server")
 	{
 		ServerConf	Server;
-		Server.Default = &Result.Default;
+		Server.Default = this->Result.Default;
 		this->Result.servers.push_back(Server);
 		return ;
 	}
