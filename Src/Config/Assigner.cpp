@@ -6,7 +6,7 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 18:32:18 by mel-houd          #+#    #+#             */
-/*   Updated: 2025/01/26 15:11:35 by mel-houd         ###   ########.fr       */
+/*   Updated: 2025/02/17 00:58:01 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,37 +57,32 @@ void	Config::AssignServer(Token& Key, std::vector<Token>& Tokens)
 // assign server scope from config file
 void	Config::AssignLocation(Token& Key, std::vector<Token>& Tokens)
 {
-	(void)Key;
-	(void)Tokens;
-	// if (Key.Token == "Location")
-	// {
-	// 	RouteConf	Location;
-	// 	Location.Location = Tokens[1].Token;
-	// 	Location.AutoIndex = false;
-	// 	Location.DirList = false;
-	// 	Location.Default = &Result.Default;
-	// 	Location.IsCgi = false;
-	// 	Location.Root = this->Result.servers.back().Root;
-	// 	this->Result.servers.back().Routes.push_back(Location);
-	// 	return ;
-	// }
-	
-	// if (Key.Token == "Index")
-	// 	this->Result.servers.back().Routes.back().Index = PairValueStr(Tokens, "Index");
-	// else if (Key.Token == "Redir")
-	// 	this->Result.servers.back().Routes.back().Redir = PairValueStr(Tokens, "Redir");
-	// else if (Key.Token == "UploadDir")
-	// 	this->Result.servers.back().Routes.back().UploadDir =  PairValueStr(Tokens, "UploadDir");
-	// else if (Key.Token == "AutoIndex")
-	// 	this->Result.servers.back().Routes.back().AutoIndex =  PairValueBool(Tokens, "AutoIndex");
-	// else if (Key.Token == "DirList")
-	// 	this->Result.servers.back().Routes.back().DirList =  PairValueBool(Tokens, "DirList");
-	// else if (Key.Token == "Methods")
-	// 	this->Result.servers.back().Routes.back().Methods =  MultiValueStr(Tokens, "Methods");
-	// else if (Key.Token == "IsCgi")
-	// 	this->Result.servers.back().Routes.back().Root =  PairValueBool(Tokens, "IsCgi");
-    // else if (Key.Token == "CgiName")
-	// 	this->Result.servers.back().Routes.back().CgiName =  PairValueStr(Tokens, "CgiName");
+	if (Key.Token == "Location")
+	{
+		ServerConf& last_server = this->Result.GetLastServer();
+		last_server.SetEmptyRoute();
+		return ;
+	}
+
+	ServerConf& last_server = this->Result.GetLastServer();
+	RouteConf& last_route = last_server.GetLastRoute();
+
+	if (Key.Token == "Index")
+		last_route.SetIndex(PairValueStr(Tokens, "Index"));
+	else if (Key.Token == "Redir")
+		last_route.SetRedirection(PairValueStr(Tokens, "Redir"));
+	else if (Key.Token == "UploadDir")
+		last_route.SetUploadDir(PairValueStr(Tokens, "UploadDir"));
+	else if (Key.Token == "AutoIndex")
+		last_route.SetAutoIndex(PairValueBool(Tokens, "AutoIndex"));
+	else if (Key.Token == "DirList")
+		last_route.SetDirList(PairValueBool(Tokens, "DirList"));
+	else if (Key.Token == "Methods")
+		last_route.SetMethods(MultiValueStr(Tokens, "Methods"));
+	else if (Key.Token == "IsCgi")
+		last_route.SetIsCgi(PairValueBool(Tokens, "IsCgi"));
+    else if (Key.Token == "CgiName")
+		last_route.SetCgiName(PairValueStr(Tokens, "CgiName"));
 
 }
 
@@ -95,83 +90,98 @@ void	Config::AssignLocation(Token& Key, std::vector<Token>& Tokens)
 void	Config::CheckResult()
 {
 	CheckServers();
+	CheckLocations();
 }
 
 //check server data
 void	Config::CheckServers()
 {
-	// std::vector<ServerConf>	Servers = Result.servers;
-	// std::vector<ServerConf>::iterator	it;
-	// std::vector<std::string>			ServerNames;
-
-	// for (it = Servers.begin(); it != Servers.end(); ++it)
-	// {
-	// 	if (it->ServerName.empty())
-	// 		throw std::runtime_error("Server without ServerName attribute");
-	// 	ServerNames.push_back(it->ServerName);
-	// }
-
-	// sort(ServerNames.begin(), ServerNames.end());
-
-	// for (size_t i = 1; i < ServerNames.size(); ++i)
-	// {
-	// 	if (ServerNames[i - 1] == ServerNames[i])
-	// 		throw std::runtime_error("Duplicated ServerName attribute");
-	// }
-
-	// for (it = Servers.begin(); it != Servers.end(); ++it)
-	// {
-	// 	if (it->Host.empty())
-	// 		throw std::runtime_error("Server params error invalid host");
-    //     if (it->Root.empty())
-	// 		throw std::runtime_error("Server params error invalid root");
-
-	// 	CheckLocations(it->Routes);
-	// }
+	CheckHost();
+	CheckServerName();
+	CheckRoot();
 }
 
-void	Config::CheckLocations(std::vector<RouteConf>& Locations)
-{
-	(void)Locations;
-	// for (std::vector<RouteConf>::iterator it = Locations.begin(); it != Locations.end(); ++it)
-	// {
-	// 	CheckMethods(*it);
-	// 	CheckAutoIndex(*it);
-	// }
+void	Config::CheckHost() {
+	const std::vector<ServerConf>	&Servers = Result.GetServers();
+	std::vector<ServerConf>::const_iterator	it;
+
+	for (it = Servers.cbegin(); it != Servers.cend(); ++it)
+	{
+		if (it->GetHost().empty())
+			throw std::runtime_error("Server without Host attribute");
+	}
 }
 
-void	Config::CheckAutoIndex(RouteConf& Location)
-{
-	(void)Location;
-	// if (Location.Index.empty())
-	// {
-	// 	if (Location.AutoIndex == true)
-	// 		Location.Index = "index.html";
-	// 	else
-	// 		throw std::runtime_error("Location params error: no index specified");
-	// }
-	// else
-	// 	std::string	FullPath = Location.Root + "/" + Location.Index;
+void	Config::CheckServerName() {
+	const std::vector<ServerConf>	&Servers = Result.GetServers();
+	std::vector<ServerConf>::const_iterator	it;
+
+	for (it = Servers.cbegin(); it != Servers.cend(); ++it)
+	{
+		if (it->GetServerName().empty())
+			throw std::runtime_error("Server without ServerName attribute");
+	}
+	
+}
+void	Config::CheckRoot() {
+	const std::vector<ServerConf>	&Servers = Result.GetServers();
+	std::vector<ServerConf>::const_iterator	it;
+
+	for (it = Servers.cbegin(); it != Servers.cend(); ++it)
+	{
+		if (it->GetRoot().empty())
+			throw std::runtime_error("Server without Root attribute");
+	}
 }
 
+//------------------------------------------
 
-void	Config::CheckMethods(RouteConf& Location)
+
+void	Config::CheckLocations()
 {
-	(void)Location;
-	// std::vector<std::string>::iterator it;
-	// for (it = Loaction.Methods.begin(); it !=Loaction.Methods.end(); ++it)
-	// {
-	// 	if (*it != "GET" && *it != "POST" && *it != "DELETE" && *it != "PUT")
-	// 		throw std::runtime_error("Location params error invalid HTPP method: " + *it);
-	// }
+	const std::vector<ServerConf>	&Servers = Result.GetServers();
+	std::vector<ServerConf>::const_iterator	server_it;
+	
+	for (server_it = Servers.cbegin(); server_it != Servers.cend(); ++server_it)
+	{
+		const std::vector<RouteConf>	&Routes = server_it->GetRoutes();
+		std::vector<RouteConf>::const_iterator	route_it;
+		for (route_it = Routes.cbegin(); route_it != Routes.cend(); ++route_it)
+		{
+			CheckIndex(*route_it);
+			CheckCgi(*route_it);
+			
+		}
+	}
 }
 
-void    Config::CheckCgiData(RouteConf& Location)
+void	Config::CheckIndex(const RouteConf& Location)
 {
-	(void)Location;
-    // if (Location.IsCgi == true)
-    // {
-    //     if (Location.CgiName.empty())
-    //         throw std::runtime_error("cgi is on, put no CgiName is provided");
-    // }
+	if (!Location.GetIsCgi())
+	{
+		if (Location.GetIndex().empty())
+		{
+			if (Location.GetAutoIndex() == false)
+				throw std::runtime_error("no index in location");
+		}
+	}
+}
+
+void	Config::CheckCgi(const RouteConf& Location)
+{
+	if (Location.GetIsCgi())
+	{
+		if (Location.GetCgiName().empty())
+			throw std::runtime_error("no CgiName in CGI location");
+	}
+}
+
+void	Config::CheckMethods(const RouteConf& Location)
+{
+	std::vector<std::string>::const_iterator it;
+	for (it = Location.GetMethods().cbegin(); it != Location.GetMethods().cend(); ++it)
+	{
+		if (*it != "GET" && *it != "POST" && *it != "DELETE" && *it != "PUT")
+			throw std::runtime_error("Location params error invalid HTPP method: " + *it);
+	}
 }

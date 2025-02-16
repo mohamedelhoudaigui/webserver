@@ -63,6 +63,10 @@ ServerConf::GetLocation(const std::string &LocationPath) const {
   throw std::runtime_error("No matching location");
 }
 
+RouteConf& ServerConf::GetLastRoute() {
+  return (this->Routes.back());
+}
+
 //----------------
 
 void ServerConf::SetHost(const std::string &Host) { this->Host = Host; }
@@ -75,10 +79,10 @@ void ServerConf::SetRoot(const std::string &Root) { this->Root = Root; }
 
 void ServerConf::SetPort(unsigned int Port) { this->Port = Port; }
 
-void ServerConf::SetRoute(const RouteConf &Route) {
-  this->Routes.push_back(Route);
-}
-
 void ServerConf::SetErrorPage(const std::pair<unsigned int, std::string> &ErrorPage) {
   this->ErrorPages.insert(ErrorPage);
+}
+
+void  ServerConf::SetEmptyRoute() {
+  this->Routes.push_back(RouteConf());
 }

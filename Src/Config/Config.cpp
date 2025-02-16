@@ -6,12 +6,13 @@
 /*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 04:29:25 by mel-houd          #+#    #+#             */
-/*   Updated: 2025/01/26 11:16:57 by mel-houd         ###   ########.fr       */
+/*   Updated: 2025/02/16 23:50:41 by mel-houd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../Include/Config.hpp"
 
+Config::Config() {}
 
 Config::Config(std::string FileName)
 {
@@ -40,12 +41,19 @@ Config::Config(std::string FileName)
 	LocationKeys.push_back("Redir");
 }
 
-void	Config::Parse() // main parser
+Config::~Config() {
+	File.close();
+}
+
+
+//--------------------------
+
+void	Config::Parse()
 {
 	Tokeniser();
 	CheckSyntaxError();
 	AssignTokens();
-	// CheckResult();
+	CheckResult();
 	Logger(DEBUG, "parsing config file is done");
 }
 
@@ -54,7 +62,7 @@ ConfigLines	Config::GetLines()
 	return (this->ConfLines);
 }
 
-ConfigFile	Config::GetResult()
+ConfigFile&	Config::GetResult()
 {
 	return (this->Result);
 }

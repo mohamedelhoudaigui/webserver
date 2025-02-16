@@ -1,18 +1,4 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/10 11:43:46 by mel-houd          #+#    #+#             */
-/*   Updated: 2025/01/26 14:48:56 by mel-houd         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-// #include "../Include/Server.hpp"
 #include "../Include/Config.hpp"
-// #include "../Include/CGI.hpp"
 
 
 void	print_all_config(ConfigFile config) {
@@ -20,10 +6,32 @@ void	print_all_config(ConfigFile config) {
 	for (size_t i = 0; i < servers.size(); ++i)
 	{
 		std::cout << "Server: " << std::endl;
-		std::cout << "    host = " << servers[i].GetHost() << std::endl;
-		std::cout << "    port = " << servers[i].GetPort() << std::endl;
-		std::cout << "    server name = " << servers[i].GetServerName() << std::endl;
-		std::cout << "    root = " << servers[i].GetRoot() << std::endl;
+		std::cout << "	host = " << servers[i].GetHost() << std::endl;
+		std::cout << "	port = " << servers[i].GetPort() << std::endl;
+		std::cout << "	server name = " << servers[i].GetServerName() << std::endl;
+		std::cout << "	root = " << servers[i].GetRoot() << std::endl;
+
+		const std::vector<RouteConf> &Routes = servers[i].GetRoutes();
+		for (size_t j = 0 ; j < Routes.size(); ++j)
+		{
+			std::cout << "	Route: " << std::endl;
+			std::cout << "		Location = " << Routes[j].GetLocationPath() << std::endl;
+			std::cout << "		Index = " << Routes[j].GetIndex() << std::endl;
+			std::cout << "		AutoIndex = " << Routes[j].GetAutoIndex() << std::endl;
+			std::cout << "		DirList = " << Routes[j].GetDirectoryListen() << std::endl;
+			std::cout << "		IsCgi = " << Routes[j].GetIsCgi() << std::endl;
+			std::cout << "		CgiName = " << Routes[j].GetCgiName() << std::endl;
+			std::cout << "		Redir = " << Routes[j].GetRedirection() << std::endl;
+			std::cout << "		UplaodDir = " << Routes[j].GetUploadDir() << std::endl;
+
+			const std::vector<std::string> &Methods = Routes[j].GetMethods();
+			std::vector<std::string>::const_iterator it = Methods.cbegin();
+			std::cout << "		Methods: " << std::endl;
+			std::cout << "			";
+			for (it = Methods.cbegin() ; it != Methods.cend(); ++it)
+				std::cout << *it << "-";
+			std::cout << std::endl;
+		}
 	}
 }
 

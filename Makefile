@@ -1,11 +1,11 @@
 SRCS =	Src/main.cpp \
-	Src/Tools.cpp \
-	Src/Config/Config.cpp \
-	Src/Config/Assigner.cpp \
-	Src/Config/Tokens.cpp \
-	Src/Config/ConfigFileStorage.cpp \
-	Src/Config/ServerStorage.cpp \
-	Src/Config/RouteStorage.cpp
+		Src/Tools.cpp \
+		Src/Config/Config.cpp \
+		Src/Config/Assigner.cpp \
+		Src/Config/Tokens.cpp \
+		Src/Config/ConfigFileStorage.cpp \
+		Src/Config/ServerStorage.cpp \
+		Src/Config/RouteStorage.cpp
 
 HEAD =  Include/Config.hpp \
 		Include/Tools.hpp \
@@ -20,7 +20,7 @@ CC = c++
 
 RM = rm -f
 
-CFLAGS = -std=c++98 -Wall -Wextra -Werror -g -fsanitize=address
+CFLAGS = -std=c++98 -Wall -Wextra -Werror -g -fsanitize=address -Ofast
 
 NAME = webserv
 
