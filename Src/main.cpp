@@ -10,10 +10,22 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../Include/Server.hpp"
+// #include "../Include/Server.hpp"
 #include "../Include/Config.hpp"
-#include "../Include/CGI.hpp"
+// #include "../Include/CGI.hpp"
 
+
+void	print_all_config(ConfigFile config) {
+	const std::vector<ServerConf>& servers = config.GetServers();
+	for (size_t i = 0; i < servers.size(); ++i)
+	{
+		std::cout << "Server: " << std::endl;
+		std::cout << "    host = " << servers[i].GetHost() << std::endl;
+		std::cout << "    port = " << servers[i].GetPort() << std::endl;
+		std::cout << "    server name = " << servers[i].GetServerName() << std::endl;
+		std::cout << "    root = " << servers[i].GetRoot() << std::endl;
+	}
+}
 
 int main(int ac, char **av)
 {
@@ -23,15 +35,7 @@ int main(int ac, char **av)
 		return (1);
 	}
 
-	try {
-		Config c(av[1]);
-		c.Parse();
-
-		SocketLayer server(c);
-		server.Run();
-	}
-	catch (const std::exception& e)
-	{
-		Logger(FATAL, e.what());
-	}
+	Config c(av[1]);
+	c.Parse();
+	print_all_config(c.GetResult());
 }

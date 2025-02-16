@@ -1,0 +1,30 @@
+Src/Config/Assigner.cpp: In member function ‘void Config::AssignServer(Token&, std::vector<Token>&)’:
+Src/Config/Assigner.cpp:46:9: error: ‘else’ without a previous ‘if’
+   46 |         else if (Key.Token == "Listen")
+      |         ^~~~
+Src/Config/Assigner.cpp: In member function ‘void Config::CheckLocations(std::vector<RouteConf>&)’:
+Src/Config/Assigner.cpp:134:15: error: ‘Loactions’ was not declared in this scope; did you mean ‘Locations’?
+  134 |         (void)Loactions;
+      |               ^~~~~~~~~
+      |               Locations
+Src/Config/Assigner.cpp:132:56: error: unused parameter ‘Locations’ [-Werror=unused-parameter]
+  132 | void    Config::CheckLocations(std::vector<RouteConf>& Locations)
+      |                                ~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~
+Src/Config/Assigner.cpp: In member function ‘void Config::CheckAutoIndex(RouteConf&)’:
+Src/Config/Assigner.cpp:144:15: error: ‘Loaction’ was not declared in this scope; did you mean ‘Location’?
+  144 |         (void)Loaction;
+      |               ^~~~~~~~
+      |               Location
+Src/Config/Assigner.cpp:142:43: error: unused parameter ‘Location’ [-Werror=unused-parameter]
+  142 | void    Config::CheckAutoIndex(RouteConf& Location)
+      |                                ~~~~~~~~~~~^~~~~~~~
+Src/Config/Assigner.cpp: In member function ‘void Config::CheckCgiData(RouteConf&)’:
+Src/Config/Assigner.cpp:170:15: error: ‘Loaction’ was not declared in this scope; did you mean ‘Location’?
+  170 |         (void)Loaction;
+      |               ^~~~~~~~
+      |               Location
+Src/Config/Assigner.cpp:168:41: error: unused parameter ‘Location’ [-Werror=unused-parameter]
+  168 | void    Config::CheckCgiData(RouteConf& Location)
+      |                              ~~~~~~~~~~~^~~~~~~~
+cc1plus: all warnings being treated as errors
+make: *** [Makefile:34: Objects/Src/Config/Assigner.o] Error 1

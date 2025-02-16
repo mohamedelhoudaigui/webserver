@@ -12,9 +12,9 @@
 
 #include "Types.hpp"
 #include "Tools.hpp"
-#include "HttpRequest.hpp"
-#include "Client.hpp"
-#include "CGI.hpp"
+// #include "HttpRequest.hpp"
+// #include "Client.hpp"
+// #include "CGI.hpp"
 #include "Config.hpp"
 
 class Poller
@@ -37,7 +37,7 @@ class Poller
         struct epoll_event  event; // used to register an event before pushing it to events pool.
         struct epoll_event  events[MAX_EVENTS]; // main events pool.
         std::vector<unsigned int>& ServerSockets;
-        std::map<unsigned int, Client> clients;
+        // std::map<unsigned int, Client> clients;
         Config&                 config;
 };
 

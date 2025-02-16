@@ -21,7 +21,7 @@ Poller::Poller(std::vector<unsigned int>& ServerSockets, Config& config): Server
         throw std::runtime_error("error creating epoll instance");
     }
 
-    for (int i = 0; i < ServerSockets.size(); ++i)
+    for (size_t i = 0; i < ServerSockets.size(); ++i)
     {
         event.events = EPOLLIN;
         event.data.fd = ServerSockets[i];
@@ -84,14 +84,15 @@ void    Poller::ServerAct(struct epoll_event event)
 
 void Poller::ClientAct(struct epoll_event event)
 {
-
-    if (clients.find(event.data.fd) == clients.end())
-    {
-        clients[event.data.fd] = Client(&config);
-        clients[event.data.fd].SetFd(event.data.fd);
-    }
-    Client& client = clients[event.data.fd];
-    client.Recv(1024);
+    (void)event;
+    Logger(INFO, "Client act");
+    // if (clients.find(event.data.fd) == clients.end())
+    // {
+    //     clients[event.data.fd] = Client(&config);
+    //     clients[event.data.fd].SetFd(event.data.fd);
+    // }
+    // Client& client = clients[event.data.fd];
+    // client.Recv(1024);
 }
 
 void    Poller::Run()
@@ -112,7 +113,7 @@ void    Poller::Run()
 
 void    Poller::ClientPurge(struct epoll_event client)
 {
-    clients.erase(client.data.fd);
+    // clients.erase(client.data.fd);
     wrapper_delete(client.data.fd);
     close(client.data.fd);
     Logger(INFO, "client purged");

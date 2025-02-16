@@ -14,7 +14,7 @@
 
 void	CheckDigit(std::string& Token, std::string ConfName)
 {
-    for (int i = 0; i < Token.size(); ++i)
+    for (size_t i = 0; i < Token.size(); ++i)
     {
         if (!std::isdigit(Token[i]))
             throw std::runtime_error(ConfName + ": " + Token + " is not a valid number value");
@@ -25,7 +25,7 @@ std::string to_upper(const std::string& str)
 {
     std::string upper_str;
 
-    for (int i = 0; i < str.size(); ++i)
+    for (size_t i = 0; i < str.size(); ++i)
         upper_str += std::toupper(str[i]);
     return upper_str;
 }
@@ -77,7 +77,7 @@ std::vector<std::string>	MultiValueStr(std::vector<Token>& Tokens, std::string C
 	std::vector<std::string>	Values;
 	if (Tokens.size() <= 1)
 		throw std::runtime_error(ConfName + ": expecting value(s)");
-	for (int i = 1; i < Tokens.size(); ++i)
+	for (size_t i = 1; i < Tokens.size(); ++i)
 	{
 		Values.push_back(TrimAll(Tokens[i].Token));
 	}
@@ -89,7 +89,7 @@ void	MultiValueNum(std::vector<Token>& Tokens, std::string ConfName, std::vector
 	if (Tokens.size() <= 1)
 		throw std::runtime_error(ConfName + ": expecting value(s)");
 
-	for (int i = 1; i < Tokens.size(); ++i)
+	for (size_t i = 1; i < Tokens.size(); ++i)
 	{
 		CheckDigit(Tokens[i].Token, ConfName);
 		std::string& Value = Tokens[i].Token;
@@ -119,7 +119,7 @@ void	ParseErrorPage(std::vector<Token>& Tokens, std::map<unsigned int, std::stri
 	if (Tokens.size() <= 2)
 		throw std::runtime_error("ErrorPage: expecting value(s)");
 	std::string& File = Tokens.back().Token;
-	for (int i = 1; i < Tokens.size() - 1; ++i)
+	for (size_t i = 1; i < Tokens.size() - 1; ++i)
 	{
         CheckDigit(Tokens[i].Token, "ErrorCode");
 		unsigned int ErrorCode = static_cast<unsigned int>(atoll(Tokens[i].Token.c_str()));
@@ -179,7 +179,7 @@ void	Logger(LOG_STATE s, std::string log_msg)
 
 void	close_sockets(std::vector<unsigned int>& sockets)
 {
-	for (int i = 0; i < sockets.size(); ++i)
+	for (size_t i = 0; i < sockets.size(); ++i)
 	{
 		close(sockets[i]);
 	}
@@ -187,7 +187,7 @@ void	close_sockets(std::vector<unsigned int>& sockets)
 
 void    print_ascii(const std::string& str)
 {
-    for (int i = 0; i < str.size(); ++i)
+    for (size_t i = 0; i < str.size(); ++i)
         std::cout << static_cast<int>(str[i]) << " ";
     std::cout << std::endl;
 }

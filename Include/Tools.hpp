@@ -10,7 +10,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 
-#include "../Include/Types.hpp"
+#include "Types.hpp"
 
 
 std::string					TrimAll(const std::string& Line);

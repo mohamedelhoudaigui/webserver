@@ -1,5 +1,10 @@
 #pragma once
 
+
+#include "Tools.hpp"
+#include "Types.hpp"
+#include "Storage.hpp"
+
 #include <string>
 #include <iostream> 
 #include <vector>
@@ -9,9 +14,6 @@
 #include <stdexcept>
 #include <algorithm>
 #include <unistd.h>
-
-#include "Tools.hpp"
-#include "Types.hpp"
 
 
 class Config
@@ -35,7 +37,7 @@ class Config
 		void		CheckServers();
 		void		CheckAutoIndex(RouteConf& Location);
 		void		CheckMethods(RouteConf& Location);
-		void		CheckLocations(std::vector<RouteConf>& Locations, ServerConf& Server);
+		void		CheckLocations(std::vector<RouteConf>& Locations);
         void        CheckCgiData(RouteConf& Location);
 
 		//Syntax.cpp
