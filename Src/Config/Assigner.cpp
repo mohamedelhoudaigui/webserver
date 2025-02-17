@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   Assigner.cpp                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mel-houd <mel-houd@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/14 18:32:18 by mel-houd          #+#    #+#             */
-/*   Updated: 2025/02/17 00:58:01 by mel-houd         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../../Include/Config.hpp"
 
 void Config::AssignTokens() {
@@ -38,6 +26,7 @@ void Config::AssignServer(Token &Key, std::vector<Token> &Tokens) {
     this->Result.SetEmptyServer();
     return;
   }
+
   ServerConf &last_server = this->Result.GetLastServer();
 
   if (Key.Token == "Listen")
@@ -121,6 +110,7 @@ void Config::CheckServerName() {
       throw std::runtime_error("Server without ServerName attribute");
   }
 }
+
 void Config::CheckRoot() {
   const std::vector<ServerConf> &Servers = Result.GetServers();
   std::vector<ServerConf>::const_iterator it;
@@ -143,6 +133,7 @@ void Config::CheckLocations() {
     for (route_it = Routes.begin(); route_it != Routes.end(); ++route_it) {
       CheckIndex(*route_it);
       CheckCgi(*route_it);
+      CheckMethods(*route_it);
     }
   }
 }
@@ -167,8 +158,10 @@ void Config::CheckMethods(const RouteConf &Location) {
   std::vector<std::string>::const_iterator it;
   for (it = Location.GetMethods().begin(); it != Location.GetMethods().end();
        ++it) {
-    if (*it != "GET" && *it != "POST" && *it != "DELETE" && *it != "PUT")
-      throw std::runtime_error("Location params error invalid HTPP method: " +
+    if (*it != "GET" && *it != "POST" && *it != "DELETE")
+      throw std::runtime_error("location params error invalid HTPP method: " +
                                *it);
   }
+  if (Location.GetMethods().size() == 0)
+    throw std::runtime_error("location wiht no methods");
 }

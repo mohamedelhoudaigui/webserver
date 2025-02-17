@@ -1,6 +1,4 @@
 #include "../Include/Config.hpp"
-#include <exception>
-#include <sys/types.h>
 
 void print_all_config(ConfigFile config) {
   const std::vector<ServerConf> &servers = config.GetServers();
