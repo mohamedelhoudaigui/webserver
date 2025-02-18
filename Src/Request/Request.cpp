@@ -11,6 +11,10 @@ Request::Request()
 
 Request::~Request() {}
 
+Request::Request(const Request& other) {
+    *this = other;
+}
+
 const std::string& Request::getContentType() const {
       std::map<std::string, std::string>::const_iterator it = headers.find("Content-Type");
     if (it != headers.end()) {
